@@ -47,6 +47,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <a href="/export.csv" className="hidden rounded-md px-2.5 py-1.5 hover:bg-white/10 hover:text-chrome-ink sm:block">
                 Export CSV
               </a>
+              <Link href="/developers" className="rounded-md px-2.5 py-1.5 hover:bg-white/10 hover:text-chrome-ink">
+                API
+              </Link>
             </nav>
             <a href="https://github.com/krishnanbhupathi/docwise-extract" className="ml-auto text-sm text-chrome-muted hover:text-chrome-ink">
               Source

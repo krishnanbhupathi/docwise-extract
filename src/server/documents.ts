@@ -60,6 +60,57 @@ export async function startUpload(db: Database, storage: FileStorage, input: Sta
   return { ok: true, id, uploadUrl };
 }
 
+/** API uploads arrive in the request body, which Vercel caps at 4.5 MB. */
+export const API_MAX_BYTES = 4 * 1024 * 1024;
+
+/** The file's real type from its first bytes, whatever the request claimed. */
+export function sniffMediaType(data: Uint8Array): MediaType | null {
+  const starts = (bytes: number[], at = 0) => bytes.every((b, i) => data[at + i] === b);
+  if (starts([0x25, 0x50, 0x44, 0x46])) return "application/pdf"; // %PDF
+  if (starts([0xff, 0xd8, 0xff])) return "image/jpeg";
+  if (starts([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) return "image/png";
+  if (starts([0x52, 0x49, 0x46, 0x46]) && starts([0x57, 0x45, 0x42, 0x50], 8)) return "image/webp"; // RIFF....WEBP
+  return null;
+}
+
+export type ReceiveUploadResult = { ok: true; id: string } | { ok: false; status: number; code: string; error: string };
+
+/**
+ * An upload whose bytes the server already holds (the API): the same checks
+ * as the browser's two steps, then the file is stored and the document queued.
+ * Nothing is stored for a file that fails a check.
+ */
+export async function receiveUpload(
+  db: Database,
+  storage: FileStorage,
+  { workspaceId, fileName, data }: { workspaceId: string; fileName: string; data: Uint8Array },
+  caps: CapOptions = {},
+): Promise<ReceiveUploadResult> {
+  if (!data.byteLength) return { ok: false, status: 400, code: "empty_file", error: "The file is empty." };
+  if (data.byteLength > API_MAX_BYTES) return { ok: false, status: 413, code: "file_too_large", error: "Files sent through the API can be up to 4 MB." };
+  const mediaType = sniffMediaType(data);
+  if (!mediaType) return { ok: false, status: 415, code: "unsupported_type", error: "Send a PDF, or a JPEG, PNG or WebP photo." };
+  const closed = await capReached(db, "upload", caps);
+  if (closed) return { ok: false, status: 429, code: "daily_cap_reached", error: closed };
+
+  let pages = 1;
+  if (mediaType === "application/pdf") {
+    try {
+      pages = await pdfPageCount(data);
+    } catch {
+      return { ok: false, status: 422, code: "unreadable_pdf", error: "This PDF couldn't be opened. It may be damaged or password-protected." };
+    }
+    if (pages > MAX_PAGES) return { ok: false, status: 422, code: "too_many_pages", error: `This PDF has ${pages} pages; the demo reads invoices of up to ${MAX_PAGES} pages.` };
+  }
+
+  const id = newDocumentId();
+  const name = fileName.slice(0, 200) || "invoice";
+  const fileKey = `uploads/${id}/${storageName(name, mediaType)}`;
+  await storage.put(fileKey, data, mediaType);
+  await db.insert(documents).values({ id, workspaceId, fileKey, fileName: name, mediaType, sizeBytes: data.byteLength, pages, status: "queued" });
+  return { ok: true, id };
+}
+
 export type ConfirmUploadResult = { ok: true; queued: boolean } | { ok: false; error: string };
 
 /**

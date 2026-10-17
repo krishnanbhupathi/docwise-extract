@@ -14,12 +14,12 @@ import { currentInvoice, extractedInvoice } from "./documents";
  * tell what the model said from what the reviewer fixed.
  */
 
-const text = z.string().max(500);
-const reviewLine = z.object({ description: text, quantity: text.nullable(), unit_price: text.nullable(), amount: text });
+export const reviewText = z.string().max(500);
+export const reviewLine = z.object({ description: reviewText, quantity: reviewText.nullable(), unit_price: reviewText.nullable(), amount: reviewText });
 
 export const reviewInput = z.object({
   data: z.object({
-    ...(Object.fromEntries(HEADER_FIELDS.map((name) => [name, text.nullable()])) as Record<HeaderField, z.ZodNullable<typeof text>>),
+    ...(Object.fromEntries(HEADER_FIELDS.map((name) => [name, reviewText.nullable()])) as Record<HeaderField, z.ZodNullable<typeof reviewText>>),
     line_items: z.array(reviewLine).max(200),
   }),
   /** The reviewer confirmed the invoice itself is inconsistent (checks still fail). */
@@ -28,7 +28,7 @@ export const reviewInput = z.object({
 
 export type ReviewInput = z.infer<typeof reviewInput>;
 
-export type ApproveResult = { ok: true } | { ok: false; error: string; problems?: string[] };
+export type ApproveResult = { ok: true } | { ok: false; reason: "invalid_values" | "checks_fail" | "not_waiting"; error: string; problems?: string[] };
 
 const sameLines = (a: LineItem[], b: LineItem[]) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -41,9 +41,14 @@ export async function approveDocument(db: Database, { workspaceId, id, input, no
   const data = normalizeReview(input.data);
   const { failures } = checkInvoice(data);
   const problems = blockingProblems(data, failures);
-  if (problems.length) return { ok: false, error: "Fix these before approving.", problems };
+  if (problems.length) return { ok: false, reason: "invalid_values", error: "Fix these before approving.", problems };
   if (failures.length && !input.acceptFailingRules) {
-    return { ok: false, error: "Some checks still fail. Tick the box to confirm the invoice itself is inconsistent, or fix the values." };
+    return {
+      ok: false,
+      reason: "checks_fail",
+      error: "Some checks still fail. Tick the box to confirm the invoice itself is inconsistent, or fix the values.",
+      problems: failures.map((f) => f.message),
+    };
   }
 
   return db.transaction(async (tx) => {
@@ -52,7 +57,7 @@ export async function approveDocument(db: Database, { workspaceId, id, input, no
       .set({ status: "approved", approval: "review", approvedAt: now, updatedAt: now })
       .where(and(eq(documents.id, id), eq(documents.workspaceId, workspaceId), eq(documents.status, "needs_review")))
       .returning({ id: documents.id });
-    if (!doc) return { ok: false as const, error: "This invoice isn't waiting for review." };
+    if (!doc) return { ok: false as const, reason: "not_waiting" as const, error: "This invoice isn't waiting for review." };
 
     const [fieldRows, items] = await Promise.all([
       tx.select().from(fields).where(eq(fields.documentId, id)),

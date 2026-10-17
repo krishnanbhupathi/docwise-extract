@@ -9,7 +9,8 @@ import { db } from "@/db";
 import { confirmUpload, processDocument, retryDocument, startUpload } from "@/server/documents";
 import { capReached, clientIp, hit, ipSubject, type RateLimit, RATE_LIMITS } from "@/server/limits";
 import { getModel } from "@/server/model";
-import { approveDocument, reviewInput, type ApproveResult } from "@/server/review";
+import { createApiKey, revokeApiKey } from "@/server/api-keys";
+import { approveDocument, reviewInput } from "@/server/review";
 import { copySample } from "@/server/samples";
 import { getStorage } from "@/server/storage";
 import { ensureWorkspace, readWorkspace } from "@/server/workspace";
@@ -24,7 +25,9 @@ const uploadInput = z.object({
 /** The message to show when this visitor's IP is over `limit`, or null. */
 async function overLimit(limit: RateLimit, what: string): Promise<string | null> {
   const result = await hit(db, limit, ipSubject(clientIp(await headers())));
-  return result.ok ? null : `Too many ${what} from your network. Try again in ${Math.ceil(result.retryAfterSeconds / 60)} minutes.`;
+  if (result.ok) return null;
+  const minutes = Math.ceil(result.retryAfterSeconds / 60);
+  return `Too many ${what} from your network. Try again in ${minutes > 90 ? `${Math.ceil(minutes / 60)} hours` : `${minutes} minutes`}.`;
 }
 
 export async function requestUpload(input: z.input<typeof uploadInput>) {
@@ -59,7 +62,7 @@ export async function retryExtraction(id: string) {
 }
 
 /** Approves a reviewed invoice with the reviewer's values. */
-export async function approveReview(id: string, input: unknown): Promise<ApproveResult> {
+export async function approveReview(id: string, input: unknown): Promise<{ ok: true } | { ok: false; error: string; problems?: string[] }> {
   const workspaceId = await readWorkspace();
   const parsed = reviewInput.safeParse(input);
   if (!workspaceId || typeof id !== "string") return { ok: false, error: "That document wasn't found." };
@@ -77,4 +80,21 @@ export async function trySample(id: string) {
   const copy = await copySample(db, { workspaceId: await ensureWorkspace(), id });
   if (!copy) return { ok: false as const, error: "This sample has nothing to review." };
   redirect(`/documents/${copy}`);
+}
+
+/** Creates an API key for this browser's workspace; the key is returned once and never stored. */
+export async function createKey(label: string) {
+  if (typeof label !== "string") return { ok: false as const, error: "Invalid label." };
+  const limited = await overLimit(RATE_LIMITS.keysPerIp, "new API keys");
+  if (limited) return { ok: false as const, error: limited };
+  const result = await createApiKey(db, { workspaceId: await ensureWorkspace(), label });
+  if (result.ok) refresh();
+  return result;
+}
+
+export async function revokeKey(id: string) {
+  const workspaceId = await readWorkspace();
+  if (!workspaceId || typeof id !== "string" || !(await revokeApiKey(db, { workspaceId, id }))) return { ok: false as const, error: "That key wasn't found." };
+  refresh();
+  return { ok: true as const };
 }

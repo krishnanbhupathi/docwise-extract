@@ -58,7 +58,7 @@ describe("approveDocument", () => {
   it("needs a tick to approve an invoice whose checks still fail", async () => {
     const id = await needsReview();
     const refused = await approveDocument(db, { workspaceId: "ws-1", id, input: review({}) });
-    expect(refused).toMatchObject({ ok: false, error: expect.stringContaining("Tick the box") });
+    expect(refused).toMatchObject({ ok: false, reason: "checks_fail", error: expect.stringContaining("Tick the box") });
     expect((await db.select().from(documents))[0].status).toBe("needs_review");
 
     expect(await approveDocument(db, { workspaceId: "ws-1", id, input: review({}, true) })).toEqual({ ok: true });
@@ -75,6 +75,7 @@ describe("approveDocument", () => {
     });
     expect(result).toEqual({
       ok: false,
+      reason: "invalid_values",
       error: "Fix these before approving.",
       problems: [
         "Supplier: Not found on the invoice",
@@ -89,7 +90,7 @@ describe("approveDocument", () => {
     const id = await needsReview();
     expect(await approveDocument(db, { workspaceId: "ws-2", id, input: review({ total: "1500.00" }) })).toMatchObject({ ok: false });
     expect(await approveDocument(db, { workspaceId: "ws-1", id, input: review({ total: "1500.00" }) })).toEqual({ ok: true });
-    expect(await approveDocument(db, { workspaceId: "ws-1", id, input: review({ total: "1500.00" }) })).toMatchObject({ ok: false, error: "This invoice isn't waiting for review." });
+    expect(await approveDocument(db, { workspaceId: "ws-1", id, input: review({ total: "1500.00" }) })).toMatchObject({ ok: false, reason: "not_waiting", error: "This invoice isn't waiting for review." });
   });
 });
 
