@@ -2,9 +2,9 @@
 
 Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 Mon 19 Oct → Day 5 Fri 23 Oct 2026 (Day 1 started Sat 17 Oct).
 
-## Status: Day 1 (in progress)
+## Status: Day 1 done (17 Oct)
 
-Goal: one invoice goes from upload to validated fields on the live URL.
+Goal met: one invoice went from upload to validated fields on the live URL.
 
 **Done (17 Oct):**
 - **Live:** https://docwise-extract.vercel.app (deploys from `main`; migrations run in the build against Neon `docwise`).
@@ -14,7 +14,9 @@ Goal: one invoice goes from upload to validated fields on the live URL.
 - **Tests:** 41 Vitest (rules, money, extraction retry/validation, upload checks and daily cap, pipeline on PGlite, access scoping, generator determinism and arithmetic).
 - **R2:** private bucket `docwise-uploads`, CORS limited to the production origin and `localhost:3000` (PUT/GET, `content-type` header only).
 
-**Left for Day 1:** one real invoice through Claude on the live URL. Waiting on the two keys below.
+**Live smoke run (17 Oct, one invoice, not a measurement):** `inv-001` uploaded on https://docwise-extract.vercel.app went to R2, was queued, and Claude Opus 5.5 extracted it in one call (accepted on the first attempt). All 8 header fields and 7 line items match `test-set/truth/inv-001.json`; every rule passed. The extraction log on the page shows the call's tokens, time and estimated cost. Real figures come from `npm run eval` (Day 3).
+
+**Next (Day 2, Tue 20 Oct):** confidence per field and routing (approved vs needs_review), review queue with corrections, CSV export, the rest of the 60-invoice test set including the hard slice.
 
 ### Plan
 1. **Scaffold:** Next.js 16.4.1 (App Router), TypeScript, Drizzle on Neon (`docwise` database), Vitest with PGlite, Tailwind. Same foundations as Slotwise and Formwise.
@@ -43,8 +45,12 @@ Goal: one invoice goes from upload to validated fields on the live URL.
 | 17 Oct | `.npmrc` sets `legacy-peer-deps` | npm 10 crashes resolving vitest's optional jsdom → canvas peer chain |
 
 ### Blocked on Krishna
-- `ANTHROPIC_API_KEY` (new key `docwise`) in Vercel Production.
-- R2 API token for `docwise-uploads` (Object Read & Write): `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` in Vercel Production.
+- Nothing.
+
+### Set up (17 Oct)
+- Vercel Production env: `DATABASE_URL` (Neon pooled), `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` (Account API token `docwise-extract`, Object Read & Write on `docwise-uploads` only), `ANTHROPIC_API_KEY` (key `docwise`). Values were piped from the clipboard; none are in the repo.
 
 ### Known issues
+- A failed extraction shows its raw error to the visitor (e.g. a missing-configuration message). Day 2: a plain message for visitors, details in the log.
+- No automatic retry for a document stuck in `extracting` if the function dies (planned for Day 2).
 - R2 bucket created with location hint `enam` (near the functions in `cle1`), but `wrangler r2 bucket info` still reports APAC. Read latency gets measured rather than assumed.
