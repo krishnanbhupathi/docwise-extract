@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Cobalt Peak Workshop Enterprises\",\"invoice_number\":\"GST-10673\",\"invoice_date\":\"2026-02-24\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"261482.00\",\"tax\":\"31377.84\",\"total\":\"292859.84\",\"line_items\":[{\"description\":\"Pallet delivery\",\"quantity\":\"1\",\"unit_price\":\"5615.00\",\"amount\":\"5615.00\"},{\"description\":\"Pallet delivery (extra)\",\"quantity\":\"6\",\"unit_price\":\"12425.00\",\"amount\":\"74550.00\"},{\"description\":\"Customs handling fee\",\"quantity\":\"20\",\"unit_price\":\"7060.00\",\"amount\":\"141200.00\"},{\"description\":\"Courier, same day\",\"quantity\":\"3\",\"unit_price\":\"5995.00\",\"amount\":\"17985.00\"},{\"description\":\"Customs handling fee (second batch)\",\"quantity\":\"1\",\"unit_price\":\"9958.00\",\"amount\":\"9958.00\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"1\",\"unit_price\":\"3246.00\",\"amount\":\"3246.00\"},{\"description\":\"Installation\",\"quantity\":null,\"unit_price\":null,\"amount\":\"8928.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4042,
+    "outputTokens": 409,
+    "fallbackUsed": false,
+    "ms": 3360
+  }
+]

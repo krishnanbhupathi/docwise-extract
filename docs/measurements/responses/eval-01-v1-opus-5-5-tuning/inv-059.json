@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Northwind Lane Office Solutions Pvt. Ltd.\",\"invoice_number\":\"GST-41402\",\"invoice_date\":\"2026-07-15\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"429308.50\",\"tax\":\"77275.53\",\"total\":\"506584.03\",\"line_items\":[{\"description\":\"Front-end development\",\"quantity\":\"12\",\"unit_price\":\"5291.00\",\"amount\":\"63492.00\"},{\"description\":\"QA testing\",\"quantity\":\"7.5\",\"unit_price\":\"16471.00\",\"amount\":\"123532.50\"},{\"description\":\"QA testing (additional)\",\"quantity\":\"3\",\"unit_price\":\"16997.00\",\"amount\":\"50991.00\"},{\"description\":\"Project management\",\"quantity\":\"20\",\"unit_price\":\"7837.00\",\"amount\":\"156740.00\"},{\"description\":\"Password manager seat (annual)\",\"quantity\":\"5\",\"unit_price\":\"449.00\",\"amount\":\"2245.00\"},{\"description\":\"Design review\",\"quantity\":\"4\",\"unit_price\":\"8077.00\",\"amount\":\"32308.00\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3490,
+    "outputTokens": 635,
+    "fallbackUsed": false,
+    "ms": 6330
+  }
+]

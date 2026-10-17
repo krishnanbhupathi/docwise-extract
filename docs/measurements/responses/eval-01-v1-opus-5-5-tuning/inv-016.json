@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Copperleaf Workshop Inc.\",\"invoice_number\":\"2026-0861\",\"invoice_date\":\"2026-02-03\",\"due_date\":null,\"currency\":\"USD\",\"subtotal\":\"4442.30\",\"tax\":null,\"total\":\"4442.30\",\"line_items\":[{\"description\":\"Customs handling fee\",\"quantity\":\"5\",\"unit_price\":\"133.20\",\"amount\":\"666.00\"},{\"description\":\"Pallet delivery\",\"quantity\":\"1\",\"unit_price\":\"123.30\",\"amount\":\"123.30\"},{\"description\":\"Courier, same day\",\"quantity\":\"1\",\"unit_price\":\"233.00\",\"amount\":\"233.00\"},{\"description\":\"Courier, same day (extra)\",\"quantity\":\"1\",\"unit_price\":\"130.00\",\"amount\":\"130.00\"},{\"description\":\"Pallet delivery (second batch)\",\"quantity\":\"40\",\"unit_price\":\"82.25\",\"amount\":\"3290.00\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3750,
+    "outputTokens": 389,
+    "fallbackUsed": false,
+    "ms": 4507
+  }
+]

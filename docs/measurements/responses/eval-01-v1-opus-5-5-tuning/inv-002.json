@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Cobalt Peak Hardware GmbH\",\"invoice_number\":\"2026/099\",\"invoice_date\":\"2026-04-25\",\"due_date\":null,\"currency\":\"EUR\",\"subtotal\":\"21569.85\",\"tax\":\"4313.97\",\"total\":\"25883.82\",\"line_items\":[{\"description\":\"Sticky notes, 76 × 76 mm (12 pads)\",\"quantity\":\"10\",\"unit_price\":\"267.00\",\"amount\":\"2670.00\"},{\"description\":\"Whiteboard markers (set of 8)\",\"quantity\":\"1\",\"unit_price\":\"199.00\",\"amount\":\"199.00\"},{\"description\":\"Toner cartridge, black\",\"quantity\":\"4\",\"unit_price\":\"227.45\",\"amount\":\"909.80\"},{\"description\":\"Monitor stand\",\"quantity\":\"4\",\"unit_price\":\"154.45\",\"amount\":\"617.80\"},{\"description\":\"Ergonomic office chair\",\"quantity\":\"20\",\"unit_price\":\"239.15\",\"amount\":\"4783.00\"},{\"description\":\"Toner cartridge, black (replacement)\",\"quantity\":\"4\",\"unit_price\":\"197.40\",\"amount\":\"789.60\"},{\"description\":\"Monitor stand (replacement)\",\"quantity\":\"2\",\"unit_price\":\"277.65\",\"amount\":\"555.30\"},{\"description\":\"Shredder bags (roll of 50)\",\"quantity\":\"3\",\"unit_price\":\"22.40\",\"amount\":\"67.20\"},{\"description\":\"Ballpoint pens (pack of 50)\",\"quantity\":\"2\",\"unit_price\":\"110.15\",\"amount\":\"220.30\"},{\"description\":\"Lever arch files (pack of 10)\",\"quantity\":\"20\",\"unit_price\":\"190.00\",\"amount\":\"3800.00\"},{\"description\":\"A4 copier paper, 80 gsm (box of 5 reams)\",\"quantity\":\"25\",\"unit_price\":\"276.00\",\"amount\":\"6900.00\"},{\"description\":\"Shredder bags (roll of 50) (additional)\",\"quantity\":\"1\",\"unit_price\":\"57.85\",\"amount\":\"57.85\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4076,
+    "outputTokens": 945,
+    "fallbackUsed": false,
+    "ms": 8160
+  }
+]

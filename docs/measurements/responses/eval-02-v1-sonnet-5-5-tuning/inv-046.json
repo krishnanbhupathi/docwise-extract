@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Northwind Lane Logistics Inc.\",\"invoice_number\":\"2026-0489\",\"invoice_date\":\"2026-06-19\",\"due_date\":\"2026-07-19\",\"currency\":\"USD\",\"subtotal\":\"8057.93\",\"tax\":\"483.48\",\"total\":\"8541.41\",\"line_items\":[{\"description\":\"Data migration\",\"quantity\":\"2.5\",\"unit_price\":\"197.85\",\"amount\":\"494.63\"},{\"description\":\"Design review\",\"quantity\":\"37.5\",\"unit_price\":\"100.30\",\"amount\":\"3761.25\"},{\"description\":\"Project management\",\"quantity\":\"3\",\"unit_price\":\"160.60\",\"amount\":\"481.80\"},{\"description\":\"Copywriting\",\"quantity\":\"1\",\"unit_price\":\"102.00\",\"amount\":\"102.00\"},{\"description\":\"Design review (extra)\",\"quantity\":\"7.5\",\"unit_price\":\"140.70\",\"amount\":\"1055.25\"},{\"description\":\"Data migration (second batch)\",\"quantity\":\"10\",\"unit_price\":\"210.00\",\"amount\":\"2100.00\"},{\"description\":\"Installation\",\"quantity\":null,\"unit_price\":null,\"amount\":\"63.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3469,
+    "outputTokens": 380,
+    "fallbackUsed": false,
+    "ms": 3429
+  }
+]

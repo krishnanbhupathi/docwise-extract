@@ -1,0 +1,948 @@
+{
+  "run": "eval-02-v1-sonnet-5-5-tuning",
+  "mode": "live",
+  "ranAt": "2026-10-17T19:03:06.082Z",
+  "promptVersion": "v1",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "split": "tuning",
+  "complete": true,
+  "metrics": {
+    "documents": 40,
+    "routes": {
+      "approved": 38,
+      "needsReview": 2,
+      "failed": 0
+    },
+    "fieldAccuracy": {
+      "supplier_name": 1,
+      "invoice_number": 1,
+      "invoice_date": 1,
+      "due_date": 1,
+      "currency": 1,
+      "subtotal": 1,
+      "tax": 1,
+      "total": 1,
+      "line_items": 1
+    },
+    "headerFieldAccuracy": 1,
+    "lineItems": {
+      "matched": 307,
+      "extracted": 307,
+      "truth": 307,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    "fullyCorrect": {
+      "count": 40,
+      "rate": 1
+    },
+    "reviewRate": 0.05,
+    "escapedErrors": {
+      "fields": 0,
+      "documents": 0
+    },
+    "routing": {
+      "approvedCorrect": 38,
+      "approvedWrong": 0,
+      "reviewedNeeded": 2,
+      "reviewedUnneeded": 0
+    },
+    "costUsd": {
+      "total": 0.5087360000000002,
+      "median": 0.011124,
+      "p95": 0.01729
+    },
+    "seconds": {
+      "median": 3.077,
+      "p95": 5.019
+    },
+    "byKind": {
+      "clean": {
+        "documents": 30,
+        "fullyCorrect": 30,
+        "reviewed": 0,
+        "escapedFields": 0,
+        "escapedDocuments": 0
+      },
+      "scan": {
+        "documents": 3,
+        "fullyCorrect": 3,
+        "reviewed": 0,
+        "escapedFields": 0,
+        "escapedDocuments": 0
+      },
+      "photo": {
+        "documents": 2,
+        "fullyCorrect": 2,
+        "reviewed": 0,
+        "escapedFields": 0,
+        "escapedDocuments": 0
+      },
+      "multipage": {
+        "documents": 2,
+        "fullyCorrect": 2,
+        "reviewed": 0,
+        "escapedFields": 0,
+        "escapedDocuments": 0
+      },
+      "handwritten": {
+        "documents": 1,
+        "fullyCorrect": 1,
+        "reviewed": 0,
+        "escapedFields": 0,
+        "escapedDocuments": 0
+      },
+      "mismatch": {
+        "documents": 2,
+        "fullyCorrect": 2,
+        "reviewed": 2,
+        "escapedFields": 0,
+        "escapedDocuments": 0
+      }
+    }
+  },
+  "documents": [
+    {
+      "id": "inv-001",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.012046,
+      "seconds": 3.88,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-002",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 12,
+        "extracted": 12,
+        "truth": 12,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.014812,
+      "seconds": 4.14,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-004",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 2,
+        "extracted": 2,
+        "truth": 2,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.009896,
+      "seconds": 2.54,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-005",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 3,
+        "extracted": 3,
+        "truth": 3,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010234,
+      "seconds": 2.39,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-007",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.01187,
+      "seconds": 3.2,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-008",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.011864,
+      "seconds": 3.22,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-010",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.011862,
+      "seconds": 3.08,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-011",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.009978,
+      "seconds": 2.57,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-013",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010386,
+      "seconds": 2.68,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-014",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 15,
+        "extracted": 15,
+        "truth": 15,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.01729,
+      "seconds": 5.02,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-016",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 5,
+        "extracted": 5,
+        "truth": 5,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.0106,
+      "seconds": 2.44,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-017",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 5,
+        "extracted": 5,
+        "truth": 5,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.011062,
+      "seconds": 2.66,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-019",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 10,
+        "extracted": 10,
+        "truth": 10,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.014326,
+      "seconds": 4.13,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-020",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010422,
+      "seconds": 2.73,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-022",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 3,
+        "extracted": 3,
+        "truth": 3,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010124,
+      "seconds": 2.37,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-023",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 10,
+        "extracted": 10,
+        "truth": 10,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.013534,
+      "seconds": 3.82,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-025",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010462,
+      "seconds": 2.61,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-026",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 1,
+        "extracted": 1,
+        "truth": 1,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.00885,
+      "seconds": 2.25,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-028",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 12,
+        "extracted": 12,
+        "truth": 12,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.014686,
+      "seconds": 4.36,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-029",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 15,
+        "extracted": 15,
+        "truth": 15,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.017218,
+      "seconds": 4.93,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-031",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 2,
+        "extracted": 2,
+        "truth": 2,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.0094,
+      "seconds": 2.05,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-032",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 8,
+        "extracted": 8,
+        "truth": 8,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.012672,
+      "seconds": 4.18,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-034",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.012174,
+      "seconds": 3.36,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-035",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 5,
+        "extracted": 5,
+        "truth": 5,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.011124,
+      "seconds": 2.63,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-037",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 15,
+        "extracted": 15,
+        "truth": 15,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.015996,
+      "seconds": 4.55,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-038",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.0104,
+      "seconds": 2.89,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-040",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 2,
+        "extracted": 2,
+        "truth": 2,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.009222,
+      "seconds": 2.23,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-041",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010214,
+      "seconds": 2.75,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-043",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 15,
+        "extracted": 15,
+        "truth": 15,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.01589,
+      "seconds": 4.94,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-044",
+      "kind": "clean",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 6,
+        "extracted": 6,
+        "truth": 6,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.01191,
+      "seconds": 3.2,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-046",
+      "kind": "scan",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010738,
+      "seconds": 3.43,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-047",
+      "kind": "scan",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 3,
+        "extracted": 3,
+        "truth": 3,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.00924,
+      "seconds": 2.62,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-049",
+      "kind": "photo",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 1,
+        "extracted": 1,
+        "truth": 1,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.013252,
+      "seconds": 2.33,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-050",
+      "kind": "photo",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 6,
+        "extracted": 6,
+        "truth": 6,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.015482,
+      "seconds": 3.18,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-052",
+      "kind": "multipage",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 35,
+        "extracted": 35,
+        "truth": 35,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.030224,
+      "seconds": 8.71,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-053",
+      "kind": "multipage",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 32,
+        "extracted": 32,
+        "truth": 32,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.028148,
+      "seconds": 7.82,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-055",
+      "kind": "handwritten",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 1,
+        "extracted": 1,
+        "truth": 1,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.00856,
+      "seconds": 2.39,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-056",
+      "kind": "mismatch",
+      "route": "needs_review",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 4,
+        "extracted": 4,
+        "truth": 4,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.010282,
+      "seconds": 2.47,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-058",
+      "kind": "mismatch",
+      "route": "needs_review",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 7,
+        "extracted": 7,
+        "truth": 7,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.011736,
+      "seconds": 3.54,
+      "attempts": 1,
+      "fallbackUsed": false
+    },
+    {
+      "id": "inv-059",
+      "kind": "scan",
+      "route": "approved",
+      "fullyCorrect": true,
+      "escapedFields": [],
+      "escaped": false,
+      "error": null,
+      "wrong": [],
+      "lines": {
+        "matched": 6,
+        "extracted": 6,
+        "truth": 6,
+        "missed": [],
+        "extra": []
+      },
+      "costUsd": 0.01055,
+      "seconds": 3.29,
+      "attempts": 1,
+      "fallbackUsed": false
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Bluestone Catering Ltd\",\"invoice_number\":\"#009703\",\"invoice_date\":\"2026-05-04\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"3873.40\",\"tax\":null,\"total\":\"3873.40\",\"line_items\":[{\"description\":\"Backup service (monthly)\",\"quantity\":\"20\",\"unit_price\":\"137.00\",\"amount\":\"2740.00\"},{\"description\":\"Video conferencing seat (monthly)\",\"quantity\":\"5\",\"unit_price\":\"118.20\",\"amount\":\"591.00\"},{\"description\":\"Cloud storage, 1 TB (monthly)\",\"quantity\":\"3\",\"unit_price\":\"141.00\",\"amount\":\"423.00\"},{\"description\":\"Password manager seat (annual)\",\"quantity\":\"2\",\"unit_price\":\"59.70\",\"amount\":\"119.40\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3790,
+    "outputTokens": 522,
+    "fallbackUsed": false,
+    "ms": 6050
+  }
+]

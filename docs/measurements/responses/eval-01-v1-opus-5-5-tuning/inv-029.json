@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Oakhollow Workshop Pvt. Ltd.\",\"invoice_number\":\"INV/26-27/0792\",\"invoice_date\":\"2026-05-16\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"5226464.00\",\"tax\":\"940763.52\",\"total\":\"6167227.52\",\"line_items\":[{\"description\":\"USB-C cables, 2 m (pack of 5)\",\"quantity\":\"1\",\"unit_price\":\"99113.00\",\"amount\":\"99113.00\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"2\",\"unit_price\":\"3914.00\",\"amount\":\"7828.00\"},{\"description\":\"27-inch 4K monitor\",\"quantity\":\"5\",\"unit_price\":\"60386.00\",\"amount\":\"301930.00\"},{\"description\":\"Laptop docking station\",\"quantity\":\"20\",\"unit_price\":\"28951.00\",\"amount\":\"579020.00\"},{\"description\":\"Label printer\",\"quantity\":\"2\",\"unit_price\":\"63179.00\",\"amount\":\"126358.00\"},{\"description\":\"Wireless keyboard and mouse set (extra)\",\"quantity\":\"1\",\"unit_price\":\"14418.00\",\"amount\":\"14418.00\"},{\"description\":\"Network switch, 24-port\",\"quantity\":\"1\",\"unit_price\":\"6047.00\",\"amount\":\"6047.00\"},{\"description\":\"Label printer (second batch)\",\"quantity\":\"1\",\"unit_price\":\"115826.00\",\"amount\":\"115826.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5) (replacement)\",\"quantity\":\"1\",\"unit_price\":\"118673.00\",\"amount\":\"118673.00\"},{\"description\":\"Laptop docking station (second batch)\",\"quantity\":\"25\",\"unit_price\":\"52871.00\",\"amount\":\"1321775.00\"},{\"description\":\"Network switch, 24-port (extra)\",\"quantity\":\"2\",\"unit_price\":\"47030.00\",\"amount\":\"94060.00\"},{\"description\":\"Network switch, 24-port (replacement)\",\"quantity\":\"40\",\"unit_price\":\"38232.00\",\"amount\":\"1529280.00\"},{\"description\":\"Laptop docking station (additional)\",\"quantity\":\"1\",\"unit_price\":\"88374.00\",\"amount\":\"88374.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5) (second batch)\",\"quantity\":\"1\",\"unit_price\":\"46162.00\",\"amount\":\"46162.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5) (additional)\",\"quantity\":\"40\",\"unit_price\":\"19440.00\",\"amount\":\"777600.00\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4414,
+    "outputTokens": 839,
+    "fallbackUsed": false,
+    "ms": 7768
+  }
+]

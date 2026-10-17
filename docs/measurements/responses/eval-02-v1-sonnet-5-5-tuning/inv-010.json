@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Fernhill Consulting Inc.\",\"invoice_number\":\"58226\",\"invoice_date\":\"2026-09-29\",\"due_date\":\"2026-11-13\",\"currency\":\"CAD\",\"subtotal\":\"7096.50\",\"tax\":\"354.83\",\"total\":\"7451.33\",\"line_items\":[{\"description\":\"Fresh fruit platter (serves 10)\",\"quantity\":\"13\",\"unit_price\":\"9.00\",\"amount\":\"117.00\"},{\"description\":\"Afternoon pastries (per person)\",\"quantity\":\"7\",\"unit_price\":\"64.00\",\"amount\":\"448.00\"},{\"description\":\"Fresh fruit platter (serves 10) (extra)\",\"quantity\":\"23\",\"unit_price\":\"64.80\",\"amount\":\"1490.40\"},{\"description\":\"Project management\",\"quantity\":\"3\",\"unit_price\":\"239.00\",\"amount\":\"717.00\"},{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"62\",\"unit_price\":\"45.00\",\"amount\":\"2790.00\"},{\"description\":\"Strategy workshop\",\"quantity\":\"8\",\"unit_price\":\"173.95\",\"amount\":\"1391.60\"},{\"description\":\"Front-end development\",\"quantity\":\"1.5\",\"unit_price\":\"95.00\",\"amount\":\"142.50\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3866,
+    "outputTokens": 413,
+    "fallbackUsed": false,
+    "ms": 3077
+  }
+]

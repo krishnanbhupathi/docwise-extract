@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Ashgrove Logistics Ltd\",\"invoice_number\":\"SI00614\",\"invoice_date\":\"2026-05-31\",\"due_date\":\"2026-06-14\",\"currency\":\"GBP\",\"subtotal\":\"25173.95\",\"tax\":\"1258.70\",\"total\":\"26432.65\",\"line_items\":[{\"description\":\"Pallet delivery\",\"quantity\":\"40\",\"unit_price\":\"29.00\",\"amount\":\"1160.00\"},{\"description\":\"Courier, same day\",\"quantity\":\"1\",\"unit_price\":\"40.00\",\"amount\":\"40.00\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"20\",\"unit_price\":\"202.00\",\"amount\":\"4040.00\"},{\"description\":\"Packaging materials\",\"quantity\":\"3\",\"unit_price\":\"156.95\",\"amount\":\"470.85\"},{\"description\":\"Packaging materials (additional)\",\"quantity\":\"25\",\"unit_price\":\"160.15\",\"amount\":\"4003.75\"},{\"description\":\"Customs handling fee\",\"quantity\":\"40\",\"unit_price\":\"68.45\",\"amount\":\"2738.00\"},{\"description\":\"Pallet delivery (extra)\",\"quantity\":\"25\",\"unit_price\":\"199.00\",\"amount\":\"4975.00\"},{\"description\":\"Customs handling fee (replacement)\",\"quantity\":\"1\",\"unit_price\":\"50.85\",\"amount\":\"50.85\"},{\"description\":\"Courier, same day (additional)\",\"quantity\":\"10\",\"unit_price\":\"74.00\",\"amount\":\"740.00\"},{\"description\":\"Courier, same day (extra)\",\"quantity\":\"10\",\"unit_price\":\"68.00\",\"amount\":\"680.00\"},{\"description\":\"Customs handling fee (second batch)\",\"quantity\":\"1\",\"unit_price\":\"123.00\",\"amount\":\"123.00\"},{\"description\":\"Warehouse storage (per pallet per week) (second batch)\",\"quantity\":\"25\",\"unit_price\":\"54.00\",\"amount\":\"1350.00\"},{\"description\":\"Warehouse storage (per pallet per week) (replacement)\",\"quantity\":\"12\",\"unit_price\":\"137.00\",\"amount\":\"1644.00\"},{\"description\":\"Packaging materials (replacement)\",\"quantity\":\"12\",\"unit_price\":\"187.00\",\"amount\":\"2244.00\"},{\"description\":\"Pallet delivery (replacement)\",\"quantity\":\"10\",\"unit_price\":\"91.45\",\"amount\":\"914.50\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4085,
+    "outputTokens": 772,
+    "fallbackUsed": false,
+    "ms": 6365
+  }
+]

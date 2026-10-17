@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Cobalt Peak Studio Inc.\",\"invoice_number\":\"2026-0282\",\"invoice_date\":\"2026-07-27\",\"due_date\":null,\"currency\":\"USD\",\"subtotal\":\"6265.70\",\"tax\":\"516.92\",\"total\":\"6728.62\",\"line_items\":[{\"description\":\"Breakfast buffet (per person)\",\"quantity\":\"34\",\"unit_price\":\"59.40\",\"amount\":\"2019.60\"},{\"description\":\"Accessibility audit\",\"quantity\":\"20\",\"unit_price\":\"158.35\",\"amount\":\"3167.00\"},{\"description\":\"Afternoon pastries (per person)\",\"quantity\":\"14\",\"unit_price\":\"47.35\",\"amount\":\"662.90\"},{\"description\":\"QA testing\",\"quantity\":\"4\",\"unit_price\":\"104.05\",\"amount\":\"416.20\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3766,
+    "outputTokens": 556,
+    "fallbackUsed": false,
+    "ms": 6405
+  }
+]

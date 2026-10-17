@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Brightfield Digital Ltd.\",\"invoice_number\":\"78928\",\"invoice_date\":\"2026-01-16\",\"due_date\":\"2026-02-15\",\"currency\":\"CAD\",\"subtotal\":\"13257.60\",\"tax\":\"1723.49\",\"total\":\"14981.09\",\"line_items\":[{\"description\":\"A4 copier paper, 80 gsm (box of 5 reams)\",\"quantity\":\"12\",\"unit_price\":\"208.55\",\"amount\":\"2502.60\"},{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"23\",\"unit_price\":\"45.00\",\"amount\":\"1035.00\"},{\"description\":\"Ergonomic office chair\",\"quantity\":\"3\",\"unit_price\":\"104.00\",\"amount\":\"312.00\"},{\"description\":\"Lever arch files (pack of 10)\",\"quantity\":\"20\",\"unit_price\":\"389.00\",\"amount\":\"7780.00\"},{\"description\":\"Breakfast buffet (per person)\",\"quantity\":\"22\",\"unit_price\":\"74.00\",\"amount\":\"1628.00\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3837,
+    "outputTokens": 345,
+    "fallbackUsed": false,
+    "ms": 3945
+  }
+]

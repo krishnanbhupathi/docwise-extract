@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Kestrel Digital LLP\",\"invoice_number\":\"GST-54546\",\"invoice_date\":\"2026-08-13\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"572891.00\",\"tax\":\"103120.38\",\"total\":\"676011.38\",\"line_items\":[{\"description\":\"Breakfast buffet (per person)\",\"quantity\":\"51\",\"unit_price\":\"419.00\",\"amount\":\"21369.00\"},{\"description\":\"Breakfast buffet (per person) (second batch)\",\"quantity\":\"6\",\"unit_price\":\"4768.00\",\"amount\":\"28608.00\"},{\"description\":\"Afternoon pastries (per person)\",\"quantity\":\"11\",\"unit_price\":\"4715.00\",\"amount\":\"51865.00\"},{\"description\":\"Working lunch (per person)\",\"quantity\":\"46\",\"unit_price\":\"3304.00\",\"amount\":\"151984.00\"},{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"55\",\"unit_price\":\"4597.00\",\"amount\":\"252835.00\"},{\"description\":\"Coffee and tea service (per person) (extra)\",\"quantity\":\"37\",\"unit_price\":\"1790.00\",\"amount\":\"66230.00\"}],\"uncertain\":[]}",
+    "model": "claude-opus-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4015,
+    "outputTokens": 388,
+    "fallbackUsed": false,
+    "ms": 3815
+  }
+]
