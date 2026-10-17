@@ -5,6 +5,7 @@ import { FieldRow, Sheet, TotalRow } from "@/components/audit-sheet";
 import { AutoRefresh } from "@/components/auto-refresh";
 import { MarkChips, MarkLegend } from "@/components/marks";
 import { RetryButton } from "@/components/retry-button";
+import { TrySampleButton } from "@/components/try-sample-button";
 import { ReviewForm } from "@/components/review-form";
 import { StatusTag } from "@/components/status";
 import { db } from "@/db";
@@ -14,6 +15,7 @@ import { flagged, footings, marksFor, type Mark } from "@/lib/marks";
 import { groupDigits } from "@/lib/money";
 import { costUsd } from "@/lib/pricing";
 import { checkInvoice } from "@/lib/rules";
+import { SAMPLE_RUN, sampleFor } from "@/lib/samples";
 import { MAX_RUNS, canRetry, currentInvoice, extractedInvoice, getDocument, type DocumentView } from "@/server/documents";
 import { getStorage } from "@/server/storage";
 import { readWorkspace } from "@/server/workspace";
@@ -70,6 +72,7 @@ export default async function DocumentPage({ params }: Props) {
             <h1 className="min-w-0 truncate text-2xl font-semibold tracking-tight">{doc.fileName}</h1>
             <StatusTag doc={doc} />
           </div>
+          <Provenance doc={doc} />
         </div>
 
         {working && !stuck && (
@@ -101,8 +104,11 @@ export default async function DocumentPage({ params }: Props) {
             <p>
               {own
                 ? "Some values need a person. Compare the highlighted ones with the original, correct anything that's wrong, and approve."
-                : "Some values need a person to check them."}
+                : doc.source === "demo"
+                  ? "Some values need a person to check them. Every visitor sees this sample, so the review happens on your own copy."
+                  : "Some values need a person to check them."}
             </p>
+            {!own && doc.source === "demo" && <TrySampleButton documentId={doc.id} />}
           </Banner>
         )}
 
@@ -122,6 +128,36 @@ export default async function DocumentPage({ params }: Props) {
         {view.extractions.length > 0 && <ExtractionLog view={view} />}
       </section>
     </main>
+  );
+}
+
+const REPORTS = "https://github.com/krishnanbhupathi/docwise-extract/blob/main/docs/measurements";
+
+/** Where a sample (or a visitor's copy of one) came from, and why opening it cost nothing. */
+function Provenance({ doc }: { doc: DocumentView["doc"] }) {
+  const sample = sampleFor(doc.source === "demo" ? doc.id : (doc.copiedFrom ?? ""));
+  if (!sample) return null;
+  return (
+    <p className="text-sm text-muted">
+      {doc.source === "demo" ? (
+        <>
+          Sample: {sample.label.toLowerCase()}, {sample.detail.toLowerCase()}. Test-set invoice <span className="figures">{sample.invoice}</span>, read with the
+          model&rsquo;s saved answer from{" "}
+          <a href={`${REPORTS}/${SAMPLE_RUN}.md`} className="underline underline-offset-4 hover:text-ink">
+            {SAMPLE_RUN.slice(0, 7)}
+          </a>
+          , so this page made no model call.
+        </>
+      ) : (
+        <>
+          Your private copy of sample{" "}
+          <Link href={`/documents/${doc.copiedFrom}`} className="figures underline underline-offset-4 hover:text-ink">
+            {sample.invoice}
+          </Link>{" "}
+          ({sample.label.toLowerCase()}). Your corrections and approval stay in this browser.
+        </>
+      )}
+    </p>
   );
 }
 

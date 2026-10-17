@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 import { db } from "@/db";
@@ -9,6 +10,7 @@ import { confirmUpload, processDocument, retryDocument, startUpload } from "@/se
 import { capReached, clientIp, hit, ipSubject, type RateLimit, RATE_LIMITS } from "@/server/limits";
 import { getModel } from "@/server/model";
 import { approveDocument, reviewInput, type ApproveResult } from "@/server/review";
+import { copySample } from "@/server/samples";
 import { getStorage } from "@/server/storage";
 import { ensureWorkspace, readWorkspace } from "@/server/workspace";
 
@@ -65,4 +67,14 @@ export async function approveReview(id: string, input: unknown): Promise<Approve
   const result = await approveDocument(db, { workspaceId, id, input: parsed.data });
   if (result.ok) refresh();
   return result;
+}
+
+/** Copies a sample that waits for review into this browser's workspace, then opens the copy. */
+export async function trySample(id: string) {
+  if (typeof id !== "string") return { ok: false as const, error: "That sample wasn't found." };
+  const limited = await overLimit(RATE_LIMITS.copiesPerIp, "copies");
+  if (limited) return { ok: false as const, error: limited };
+  const copy = await copySample(db, { workspaceId: await ensureWorkspace(), id });
+  if (!copy) return { ok: false as const, error: "This sample has nothing to review." };
+  redirect(`/documents/${copy}`);
 }

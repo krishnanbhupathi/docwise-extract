@@ -4,7 +4,9 @@ import { StatusTag } from "@/components/status";
 import { UploadForm } from "@/components/upload-form";
 import { db } from "@/db";
 import type { Mark } from "@/lib/marks";
+import { groupDigits } from "@/lib/money";
 import { listDocuments } from "@/server/documents";
+import { listSamples } from "@/server/samples";
 import { readWorkspace } from "@/server/workspace";
 
 // Upload actions run extraction in after(), which lives within this function's time limit.
@@ -21,7 +23,7 @@ const SPECIMEN: { label: string; value: string; marks: Mark[]; flagged?: boolean
 
 export default async function Inbox() {
   const workspaceId = await readWorkspace();
-  const docs = workspaceId ? await listDocuments(db, workspaceId) : [];
+  const [docs, samples] = await Promise.all([workspaceId ? listDocuments(db, workspaceId) : [], listSamples(db)]);
 
   return (
     <main className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-10 sm:py-14">
@@ -57,6 +59,38 @@ export default async function Inbox() {
           <MarkLegend className="mt-4 border-t border-line pt-4" />
         </figure>
       </section>
+
+      {samples.length > 0 && (
+        <section aria-labelledby="samples" className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 id="samples" className="eyebrow">
+              Try a sample
+            </h2>
+            <p className="text-xs text-muted">Invoices from the test set with the model&rsquo;s saved answers, so opening one makes no model call.</p>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {samples.map(({ sample, doc, supplier, currency, total }) => (
+              <li key={doc.id}>
+                <Link href={`/documents/${doc.id}`} className="flex h-full flex-col gap-2 rounded-2xl border border-line bg-sheet p-4 hover:border-cobalt/60">
+                  <span className="flex items-center justify-between gap-3">
+                    <span className="eyebrow">{sample.label}</span>
+                    <StatusTag doc={doc} />
+                  </span>
+                  <span className="min-w-0 truncate font-medium">{supplier ?? doc.fileName}</span>
+                  <span className="flex items-baseline justify-between gap-3 text-sm text-muted">
+                    <span className="min-w-0 truncate">{sample.detail}</span>
+                    {total && (
+                      <span className="figures shrink-0 text-ink">
+                        {currency} {groupDigits(total)}
+                      </span>
+                    )}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <UploadForm />
 

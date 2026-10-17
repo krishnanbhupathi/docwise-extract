@@ -15,6 +15,8 @@ export interface FileStorage {
   /** A URL the browser PUTs the file to; only that type and size are accepted. */
   createUploadUrl(key: string, file: { contentType: string; contentLength: number }): Promise<string>;
   createDownloadUrl(key: string): Promise<string>;
+  /** Stores a file the server already holds (an API upload, a seeded sample). */
+  put(key: string, data: Uint8Array, contentType: string): Promise<void>;
   head(key: string): Promise<{ size: number } | null>;
   get(key: string): Promise<Uint8Array>;
   delete(key: string): Promise<void>;
@@ -37,6 +39,9 @@ export function r2Storage(env: { accountId: string; accessKeyId: string; secretA
         signableHeaders: new Set(["content-type", "content-length"]),
       }),
     createDownloadUrl: (key) => getSignedUrl(client, new GetObjectCommand({ Bucket, Key: key }), { expiresIn: URL_TTL_SECONDS }),
+    async put(key, data, contentType) {
+      await client.send(new PutObjectCommand({ Bucket, Key: key, Body: data, ContentType: contentType }));
+    },
     async head(key) {
       try {
         const object = await client.send(new HeadObjectCommand({ Bucket, Key: key }));
@@ -71,6 +76,7 @@ export function diskStorage(root: string, secret: string): FileStorage {
   return {
     createUploadUrl: async (key, f) => signed("PUT", key, { type: f.contentType, length: String(f.contentLength) }),
     createDownloadUrl: async (key) => signed("GET", key),
+    put: (key, data) => writeLocalFile(root, key, data),
     async head(key) {
       try {
         return { size: (await stat(file(key))).size };

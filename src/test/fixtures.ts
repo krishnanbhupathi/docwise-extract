@@ -13,6 +13,7 @@ export function memoryStorage() {
   const storage: FileStorage = {
     createUploadUrl: async (key) => `https://upload.test/${key}`,
     createDownloadUrl: async (key) => `https://download.test/${key}`,
+    put: async (key, data) => void files.set(key, data),
     head: async (key) => (files.has(key) ? { size: files.get(key)!.byteLength } : null),
     get: async (key) => {
       const file = files.get(key);
