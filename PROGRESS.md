@@ -2,7 +2,44 @@
 
 Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 → Day 5.
 
-## Status: Day 2 done
+## Status: Day 3 done
+
+Goal met: a report with every metric is in `docs/measurements/` (three runs on the tuning split).
+
+**Done:**
+- **`npm run eval`** (`scripts/eval.ts`, `src/eval/`). Each invoice goes through the app's own steps (`prepareForModel`, `pdfText`, `extractInvoice` with its retry, `scoreConfidence`, routing) and is scored against its truth file. Metrics: per-field accuracy after normalising, line-item precision / recall / F1 (lines matched in any order), documents fully correct, review rate, escaped errors (fields and documents), a routing 2×2 table, cost and time per document (median, p95), all broken down by kind.
+- **Reports:** numbered runs `eval-NN-<prompt>-<model>-<split>`, as JSON (the record, with every wrong value and the run time) and markdown, comparing each run with the previous one on the same split and model. The model's raw answers are in `docs/measurements/responses/<run>/`.
+- **Replay:** `npm run eval -- --replay <run>` re-scores saved answers for free. The tests replay every saved live report and expect identical metrics, so CI checks the scoring with saved answers and no key.
+- **Guards:** the held-out split only runs with `--final`; a `--max-usd` cap (default $3) stops starting new invoices once reached.
+- **Prompts are versioned** (`PROMPTS` in `src/extraction/prompt.ts`); the app uses `v1`. `bare` is an ablation the app never uses.
+- **Model:** the app now uses Sonnet 5.5 (`DOCWISE_MODEL` still overrides it).
+- **Tests:** 134 Vitest, including the replay of all three saved runs.
+
+**Results (tuning split, 40 invoices):**
+
+| Run | Fully correct | Escaped (fields / docs) | Review rate | Cost median / p95 | Time median / p95 |
+|---|---|---|---|---|---|
+| [eval-01](docs/measurements/eval-01-v1-opus-5-5-tuning.md): v1, Opus 5.5 | 40/40 | 0 / 0 | 5.0% | $0.0254 / $0.0390 | 5.0 s / 9.0 s |
+| [eval-02](docs/measurements/eval-02-v1-sonnet-5-5-tuning.md): v1, Sonnet 5.5 | 40/40 | 0 / 0 | 5.0% | $0.0111 / $0.0173 | 3.1 s / 5.0 s |
+| [eval-03](docs/measurements/eval-03-bare-sonnet-5-5-tuning.md): bare, Sonnet 5.5 | 40/40 | 0 / 0 | 12.5% | $0.0251 / $0.0417 | 6.3 s / 14.0 s |
+
+- v1 sent only the two invoices that don't add up on purpose (`inv-056`, `inv-058`) to review, on both models.
+- **Tuning found nothing to fix:** v1 read every tuning invoice correctly, so there was no v2. The prompt stays v1.
+- **The before/after for the case study is the ablation.** Without v1's rules for values, all 40 first answers had amounts as printed (`$4,040.05`) and 38 had dates as printed (`04/21/2026`). All 40 failed validation, and the retry fixed every one. Same accuracy, but two calls per invoice and three more reviews: the model listed ambiguous dates and payment-terms-only due dates as uncertain.
+- **Spend:** $2.70 across the three reports, plus about $0.05 for a two-invoice smoke run whose output was deleted.
+
+**Next (Day 4):** API with keys, demo mode with sample invoices, per-IP rate limit and daily cost cap, Playwright tests, CI.
+
+### Plan
+1. Eval runner that reuses the app's own steps (no second pipeline to drift).
+2. Scoring: field normalisation, line matching, escaped errors, routing, cost and time percentiles.
+3. Reports (JSON + markdown) and saved answers; replay in the tests for CI.
+4. Guards: held-out needs `--final`, spend cap per run.
+5. First full score on the 40 tuning invoices with prompt v1.
+6. Tune (tuning split only): compare Sonnet 5.5 within the $10 budget.
+7. Update PROGRESS and the README, then deploy.
+
+## Day 2 done
 
 Goal met: a low-confidence invoice lands in review and can be fixed and approved (checked on the live URL, see below).
 
@@ -84,6 +121,13 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 | Day 2 | Retry limit: 3 runs per document; a run is "dropped" after 6 minutes | Each run can cost up to two model calls on the public key; the function's own limit is 300 s |
 | Day 2 | UI identity: the audit workbench (tick marks per value, document on a bench) | Krishna chose it over "lightbox inspection" and "Swiss data sheet". The marks are the confidence reasons in an auditor's vocabulary, so the UI explains itself |
 | Day 2 | Demo documents are read-only for visitors (no shared approvals) | One visitor's approval would change the demo for everyone; Day 4 decides how visitors try review on samples |
+| Day 3 | Eval budget: up to $10 for Day 3 | Krishna. Spent $2.70 on the three reports |
+| Day 3 | Reports are numbered runs (`eval-01-v1-opus-5-5-tuning.json` + `.md`); the run time is inside the JSON | Krishna. Sorts by run, and the name says what was run |
+| Day 3 | Reports in the repo are the record of eval runs; the `eval_runs` table stays unused | Every cited number must link to a file in git; a database row would duplicate it |
+| Day 3 | The eval calls the app's own functions, not a copy of the pipeline | A separate pipeline would drift, and the scores would stop describing the app |
+| Day 3 | Model: Sonnet 5.5 instead of Opus 5.5 | Krishna, after eval-01 vs eval-02: same accuracy on tuning at under half the cost. Caveat: tuning has only 10 hard invoices |
+| Day 3 | No v2 prompt; the before/after is an ablation (`bare` vs `v1`) | Krishna. v1 was already right on every tuning invoice, so a v2 had nothing to fix. The ablation measures what v1's rules do |
+| Day 3 | The tests replay every saved live report, not only the newest | The README and case study cite all of them, so each must still reproduce |
 
 ### Blocked on Krishna
 - Nothing.

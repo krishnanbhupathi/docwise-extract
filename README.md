@@ -2,9 +2,9 @@
 
 AI extraction of supplier invoices that you can check. Upload a PDF or a photo; Docwise returns the supplier, dates, amounts and line items, checks every value with business rules, and sends anything it isn't sure of to a person instead of straight into the books.
 
-The app is the demo; the evaluation is the proof. A generated, labelled test set and `npm run eval` will report per-field accuracy, line-item F1, review rate and **escaped errors** (wrong values marked high confidence), with every number linked to a report in [`docs/measurements`](docs/measurements).
+The app is the demo; the evaluation is the proof. A generated, labelled test set and `npm run eval` report per-field accuracy, line-item F1, review rate and **escaped errors** (wrong values marked high confidence), with every number linked to a report in [`docs/measurements`](docs/measurements).
 
-> **Status: in progress (Day 2 of 5).** Upload, extraction, validation, rule checks, per-field confidence, automatic approval, the review queue with corrections, CSV export and the full 60-invoice test set work. The eval, the API and the public demo mode come next. See [PROGRESS.md](PROGRESS.md).
+> **Status: in progress (Day 3 of 5).** Upload, extraction, validation, rule checks, per-field confidence, automatic approval, the review queue with corrections, CSV export, the full 60-invoice test set and the eval work. The API, the public demo mode and the final held-out score come next. See [PROGRESS.md](PROGRESS.md).
 
 ## How one invoice is processed
 
@@ -34,6 +34,35 @@ A failed or interrupted extraction can be retried, up to three runs per document
 
 The split is fixed: every third invoice is held out (20 of 60, including one of each hard kind). Prompts and checks are tuned on the other 40 only. The held-out invoices are scored once, for the final report.
 
+## Evaluation
+
+`npm run eval` runs every invoice of a split through the same steps as the app (input preparation, extraction with its retry, confidence, routing) and scores the outcome against the truth files:
+
+- **Per-field accuracy** after normalising: amounts by value, dates as ISO dates, names ignoring case and spacing.
+- **Line-item F1**: extracted lines are matched to true lines in any order, on description, quantity, unit price and amount.
+- **Documents fully correct**: every field and every line right.
+- **Review rate** and **escaped errors**: wrong values marked high confidence, and invoices approved automatically although a value was wrong or the invoice doesn't add up.
+- **Cost and time per document**, median and p95.
+
+Each run writes a JSON report (the record), a markdown summary and the model's raw answers to [`docs/measurements`](docs/measurements). The tests re-score every saved run from those answers and expect the same metrics, so CI checks the scoring with no API key and no model calls.
+
+**Tuning split** (40 invoices; the prompt was written against these, so treat them as an upper bound):
+
+| | [Opus 5.5, prompt v1](docs/measurements/eval-01-v1-opus-5-5-tuning.md) | [Sonnet 5.5, prompt v1](docs/measurements/eval-02-v1-sonnet-5-5-tuning.md) | [Sonnet 5.5, bare prompt](docs/measurements/eval-03-bare-sonnet-5-5-tuning.md) |
+|---|---|---|---|
+| Header fields correct | 100.0% | 100.0% | 100.0% |
+| Line-item F1 | 100.0% | 100.0% | 100.0% |
+| Documents fully correct | 40/40 | 40/40 | 40/40 |
+| Review rate | 5.0% | 5.0% | 12.5% |
+| Escaped errors (fields / documents) | 0 / 0 | 0 / 0 | 0 / 0 |
+| Cost per document (median / p95) | $0.0254 / $0.0390 | $0.0111 / $0.0173 | $0.0251 / $0.0417 |
+| Time per document (median / p95) | 5.0 s / 9.0 s | 3.1 s / 5.0 s | 6.3 s / 14.0 s |
+
+- With prompt v1, the only invoices sent to review were the two that don't add up on purpose (`inv-056`, `inv-058`). Every other invoice was approved automatically, and every one of them was right.
+- Sonnet 5.5 matched Opus 5.5 at under half the cost per invoice, so the app uses Sonnet 5.5.
+- The **bare prompt** is v1 without its rules for values (date and number formats, currency codes, supplier vs customer, split tax, copy rather than correct). Without them Sonnet copied dates and amounts as printed (`04/21/2026`, `$4,040.05`). Every first answer failed validation, and the retry, which sends back the exact errors, fixed all 40. The values came out right, but it took two calls per invoice, more than doubling cost and time. Three more invoices went to review, because the model listed dates like `10/03/2026` as ambiguous and a due date given only as payment terms as uncertain; v1 settles both. The rules make the first answer usable.
+- The tuning split has only 10 hard invoices (3 scans, 2 photos, 2 multi-page, 1 handwritten, 2 that don't add up). The 20 held-out invoices are scored once, on Day 5.
+
 ## Run it locally
 
 Needs Node 20.9+ and Postgres.
@@ -50,9 +79,15 @@ npm run typecheck
 npm run lint
 ```
 
+```bash
+npm run eval -- --max-usd 3                                # tuning split, the app's prompt and model (needs ANTHROPIC_API_KEY)
+npm run eval -- --model claude-opus-5-5 --prompt bare      # another model or prompt version
+npm run eval -- --replay eval-02-v1-sonnet-5-5-tuning      # re-score saved answers: free, no API calls
+```
+
 ## Stack
 
-Next.js 16 (App Router, server actions) · TypeScript · Postgres (Neon) with Drizzle · Claude Opus 5.5 via the Anthropic API (structured outputs, PDF and image input) · Zod · Cloudflare R2 · Tailwind CSS · Vitest + PGlite · Playwright · Vercel.
+Next.js 16 (App Router, server actions) · TypeScript · Postgres (Neon) with Drizzle · Claude Sonnet 5.5 via the Anthropic API (structured outputs, PDF and image input) · Zod · Cloudflare R2 · Tailwind CSS · Vitest + PGlite · Playwright · Vercel.
 
 ## License
 
