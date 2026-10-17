@@ -2,7 +2,32 @@
 
 Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 → Day 5.
 
-## Status: Day 3 done
+## Status: Day 4 done
+
+Goal met: the public demo works with no sign-up (checked on the live URL, see below).
+
+**Done:**
+- **Samples:** nine tuning invoices (clean US, German format, Indian GST, scan, phone photo, two pages, handwritten notes, two that don't add up) on the home page. `npm run seed:samples` runs each one through the app's own extraction steps with the model's saved answer from [eval-02](docs/measurements/eval-02-v1-sonnet-5-5-tuning.md), so opening a sample makes no model call. Stable ids (`sample-001` …). Each sample page says where its values came from.
+- **Try the review:** a sample waiting for review can be copied into the visitor's browser workspace (`documents.copied_from`; no model call) and corrected and approved there, without changing it for anyone else.
+- **API v1:** `POST /api/v1/invoices` (multipart, ≤ 4 MB, type from the bytes), `GET /api/v1/invoices[/:id]`, `POST /api/v1/invoices/:id/approve` (partial corrections, `accept_failing_checks`). JSON errors with stable codes. `/developers` documents it with curl examples built from the real limits.
+- **API keys:** self-serve on `/developers`, shown once, SHA-256 hash stored, up to 3 per browser, revocable. A key acts for the browser that created it, so API invoices appear in its inbox.
+- **Cost caps** (`server/limits.ts`): $2 of estimated model use and 50 uploads per rolling 24 hours across the demo (browser and API); retries stop at the budget. 10 uploads an hour per network, 60 API requests a minute per key, 10 new keys a day per network, 30 sample copies an hour per network. Counters are a Postgres table (one upsert per hit). Samples and copies count toward nothing.
+- **Playwright** (`e2e/`): a production build with the fake model, local storage and its own database, port and build folder (so it runs beside `next dev`). Covers opening a sample, reviewing a copy through to the CSV, an upload reaching the review queue, the API round trip (key, send, poll, refused and accepted approval, sample read-only, revoke), and phone width on four pages.
+- **CI:** a second job runs the Playwright tests against a Postgres service.
+- **Tests:** 154 Vitest, 8 Playwright.
+
+**Live check (not a measurement):** on https://docwise-extract.vercel.app with no cookie: the home page lists the nine samples; the scan sample shows "Approved automatically" and its provenance line, and its original PDF comes back from R2 through a signed URL; the phone-photo sample's image loads. "Review your own copy" on `sample-056` made a private copy; approving it as printed worked, and it came out of `/export.csv`. `/developers` renders, and the API answers 401 without a key. No page errors, and no sideways scroll at 390 px on three pages. The copy was then deleted from production (only its row: it shares the sample's file); the database holds the nine samples.
+
+**Next (Day 5):** the final held-out eval (`--final`, once), architecture diagram and data model in the README, ~90 s video, case-study page on bhupathi.dev.
+
+### Plan
+1. Demo samples: tuning invoices seeded with eval-02's saved answers; a private copy to try the review.
+2. Cost caps: daily spend cap on top of the upload cap, page and run limits; per-IP and per-key rate limits in Postgres.
+3. API v1 with self-serve keys, and a `/developers` page.
+4. Playwright tests and a CI job with Postgres.
+5. Docs, deploy, seed the samples in production, check the live URL.
+
+## Day 3 done
 
 Goal met: a report with every metric is in `docs/measurements/` (three runs on the tuning split).
 
@@ -128,6 +153,14 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 | Day 3 | Model: Sonnet 5.5 instead of Opus 5.5 | Krishna, after eval-01 vs eval-02: same accuracy on tuning at under half the cost. Caveat: tuning has only 10 hard invoices |
 | Day 3 | No v2 prompt; the before/after is an ablation (`bare` vs `v1`) | Krishna. v1 was already right on every tuning invoice, so a v2 had nothing to fix. The ablation measures what v1's rules do |
 | Day 3 | The tests replay every saved live report, not only the newest | The README and case study cite all of them, so each must still reproduce |
+| Day 4 | Samples show eval-02's saved answers; a sample waiting for review can be copied into the visitor's browser to review | Krishna. Free per visit and identical for everyone; the copy lets visitors try the review without changing the shared sample |
+| Day 4 | API keys are self-serve, one browser's workspace each | Krishna. The demo stays sign-up free, and API invoices show up in the UI |
+| Day 4 | Daily cap: $2 of estimated model use per rolling 24 hours | Krishna. Roughly 180 invoices at Sonnet's median cost |
+| Day 4 | Rate-limit counters in Postgres, fixed windows | No extra service. Trade-off: a burst at a window boundary can reach twice the limit |
+| Day 4 | The spend cap is checked before a run starts | Runs already started finish, so the cap can be overshot by the runs in flight (a few cents) |
+| Day 4 | API uploads come in the request body (≤ 4 MB), not through a signed URL | One call for developers. Vercel caps request bodies at 4.5 MB; bigger files go through the browser |
+| Day 4 | `copied_from` has no foreign key | Re-seeding a sample must not turn visitors' copies into uploads that count toward the caps |
+| Day 4 | The e2e tests run on a production build with their own database, port and build folder | Closer to production than `next dev`, and they don't disturb a running dev server |
 
 ### Blocked on Krishna
 - Nothing.
@@ -136,5 +169,6 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 - Vercel Production env: `DATABASE_URL` (Neon pooled), `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` (Account API token `docwise-extract`, Object Read & Write on `docwise-uploads` only), `ANTHROPIC_API_KEY` (key `docwise`). Values were piped from the clipboard; none are in the repo.
 
 ### Known issues
+- The spend cap can be overshot by runs already in flight when it's reached (see Decisions).
 - A dropped run is only retried when someone opens the document and clicks "Try again"; nothing sweeps stale documents on its own.
 - R2 bucket created with location hint `enam` (near the functions in `cle1`), but `wrangler r2 bucket info` still reports APAC. Read latency gets measured rather than assumed.

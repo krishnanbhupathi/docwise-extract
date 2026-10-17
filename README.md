@@ -4,18 +4,22 @@ AI extraction of supplier invoices that you can check. Upload a PDF or a photo; 
 
 The app is the demo; the evaluation is the proof. A generated, labelled test set and `npm run eval` report per-field accuracy, line-item F1, review rate and **escaped errors** (wrong values marked high confidence), with every number linked to a report in [`docs/measurements`](docs/measurements).
 
-> **Status: in progress (Day 3 of 5).** Upload, extraction, validation, rule checks, per-field confidence, automatic approval, the review queue with corrections, CSV export, the full 60-invoice test set and the eval work. The API, the public demo mode and the final held-out score come next. See [PROGRESS.md](PROGRESS.md).
+> **Status: in progress (Day 4 of 5).** Upload, extraction, validation, rule checks, per-field confidence, automatic approval, the review queue with corrections, CSV export, the 60-invoice test set, the eval, the public demo with samples, the JSON API and the cost caps work. The final held-out score and the case study come next. See [PROGRESS.md](PROGRESS.md).
+
+## Try it
+
+**https://docwise-extract.vercel.app**: no sign-up. Nine samples from the test set open straight away: a clean PDF, a German-format one, an Indian GST invoice, a scan, a phone photo, two pages, handwritten notes, and two that don't add up. They show the model's saved answers from [eval-02](docs/measurements/eval-02-v1-sonnet-5-5-tuning.md), so opening one makes no model call. A sample that waits for review can be copied into your browser and reviewed there, without changing it for anyone else. You can also upload your own invoice, or create an API key on [/developers](https://docwise-extract.vercel.app/developers).
 
 ## How one invoice is processed
 
-1. **Upload:** the browser sends the file straight to a private Cloudflare R2 bucket through a signed URL. The server then checks the stored file (type, size, page count) and queues it.
+1. **Upload:** the browser sends the file straight to a private Cloudflare R2 bucket through a signed URL. The server then checks the stored file (type, size, page count) and queues it. Through the API, the file comes in the request body and gets the same checks, with its type judged by its bytes rather than its name.
 2. **Extract:** Claude reads the PDF or image and answers in a strict JSON schema (structured outputs). The raw response, tokens and time of every call are logged.
 3. **Validate:** the answer is parsed with Zod. A malformed answer goes back to the model once with the exact errors; a second failure is reported, never stored. **The model never writes to the database:** only validated values reach it.
 4. **Check:** rules flag values that can't be right: impossible dates, a due date before the invoice date, a non-ISO currency, an amount the currency can't express, quantity × unit price ≠ amount, line items that don't add up to the subtotal, subtotal + tax ≠ total.
 5. **Score confidence:** each field is **high** only if no rule implicates it, the model didn't list it as uncertain, and (for PDFs with a text layer) its value is actually printed in the document. Numbers and dates are matched by value, so `1.234,56 €` matches `1234.56`. A field the model left empty is low if the text shows one (a tax line, a date after "due"). Scans and photos have no text layer and rely on the first two signals. The reasons are stored with each field.
 6. **Route:** every field high → **approved** automatically. Anything low → **needs review**.
 7. **Review:** the reviewer sees the original on a "bench" next to an audit sheet, where every value carries an auditor's tick marks: ✓ vouched (found on the document), × extended (quantity × price = amount), Σ footed (the lines add up), ⊕ cross-footed (subtotal + tax = total), ? the model was unsure. A failed mark highlights the value. Flagged fields say why they were flagged. Line items can be edited, added and removed, and the rules re-run as you type. Changed values are stored as corrections next to the extracted ones, never over them. Approving while a check still fails (the invoice itself is wrong) needs an explicit tick. Values nothing downstream could use (an amount like `1,500.00`, a date that isn't one) block approval.
-8. **Export:** approved invoices download as CSV, one row per line item with the invoice fields repeated, corrections applied. Text cells that a spreadsheet would run as a formula are neutralised.
+8. **Export:** approved invoices download as CSV, one row per line item with the invoice fields repeated, corrections applied. Text cells that a spreadsheet would run as a formula are neutralised. The API returns the same values as JSON.
 
 A failed or interrupted extraction can be retried, up to three runs per document. Visitors see a plain message; the exact error stays in the extraction log.
 
@@ -63,18 +67,48 @@ Each run writes a JSON report (the record), a markdown summary and the model's r
 - The **bare prompt** is v1 without its rules for values (date and number formats, currency codes, supplier vs customer, split tax, copy rather than correct). Without them Sonnet copied dates and amounts as printed (`04/21/2026`, `$4,040.05`). Every first answer failed validation, and the retry, which sends back the exact errors, fixed all 40. The values came out right, but it took two calls per invoice, more than doubling cost and time. Three more invoices went to review, because the model listed dates like `10/03/2026` as ambiguous and a due date given only as payment terms as uncertain; v1 settles both. The rules make the first answer usable.
 - The tuning split has only 10 hard invoices (3 scans, 2 photos, 2 multi-page, 1 handwritten, 2 that don't add up). The 20 held-out invoices are scored once, on Day 5.
 
+## API
+
+The same flow as JSON. Create a key on [/developers](https://docwise-extract.vercel.app/developers). It is shown once and stored as a SHA-256 hash, and it acts for the browser that created it, so invoices sent with it also appear in that browser's inbox and review queue.
+
+| Endpoint | What it does |
+|---|---|
+| `POST /api/v1/invoices` | Sends a file (multipart, field `file`, up to 4 MB). Answers 202; the model reads it in the background |
+| `GET /api/v1/invoices/:id` | Status, the values with corrections applied, what the model read, each field's confidence and why, failing checks, tokens, time and cost |
+| `GET /api/v1/invoices?status=needs_review` | This key's invoices, newest first |
+| `POST /api/v1/invoices/:id/approve` | Approves with partial corrections (`{"invoice": {"total": "6782.62"}}`), or `"accept_failing_checks": true` for an invoice that doesn't add up as printed |
+
+```bash
+curl -X POST https://docwise-extract.vercel.app/api/v1/invoices -H "Authorization: Bearer $DOCWISE_KEY" -F file=@invoice.pdf
+curl https://docwise-extract.vercel.app/api/v1/invoices/sample-056 -H "Authorization: Bearer $DOCWISE_KEY"
+```
+
+Errors are JSON (`{"error": {"code", "message", "details"}}`) with a stable code: 401 bad key, 403 approving a sample, 404, 409 not waiting for review, 413/415 file size or type, 422 can't read or can't approve, 429 rate limit or daily cap (with `Retry-After`).
+
+## Cost control
+
+The public demo spends one API key, so:
+
+- **Daily caps across all visitors** (browser and API together, rolling 24 hours): 50 uploads, and $2 of model use estimated from the logged tokens at list prices. Retries count toward the budget.
+- **Rate limits:** 10 uploads an hour per network, 60 API requests a minute per key, 3 keys per browser.
+- **Size limits:** PDFs up to 5 pages; 10 MB from the browser, 4 MB through the API; 3 extraction runs per document.
+- **Samples are free:** samples and visitors' copies of them make no model call and count toward none of the caps.
+
+The counters live in a Postgres table, one upsert per request, so there is no extra service to run.
+
 ## Run it locally
 
 Needs Node 20.9+ and Postgres.
 
 ```bash
 npm install && cp .env.example .env.local   # then set DATABASE_URL, and DOCWISE_FAKE_MODEL=1 + STORAGE_DRIVER=local to run without keys
-npm run db:migrate
+npm run db:migrate && npm run seed:samples
 npm run dev
 ```
 
 ```bash
 npm test             # unit and database tests (PGlite, in-process Postgres; the model is faked)
+npm run test:e2e     # Playwright on a production build: fake model, local storage, its own database (E2E_DATABASE_URL)
 npm run typecheck
 npm run lint
 ```

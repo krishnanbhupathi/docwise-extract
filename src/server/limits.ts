@@ -43,8 +43,10 @@ export async function hit(db: Database, limit: RateLimit, subject: string, now =
     .values({ bucket, windowStart, count: 1 })
     .onConflictDoUpdate({ target: [rateLimits.bucket, rateLimits.windowStart], set: { count: sql`${rateLimits.count} + 1` } })
     .returning({ count: rateLimits.count });
-  // Earlier windows of this bucket are no longer needed.
+  // Earlier windows of this bucket are no longer needed, and now and then every
+  // expired row goes (subjects that never come back would otherwise stay).
   await db.delete(rateLimits).where(and(eq(rateLimits.bucket, bucket), lt(rateLimits.windowStart, windowStart)));
+  if (Math.random() < 0.01) await db.delete(rateLimits).where(lt(rateLimits.windowStart, new Date(now.getTime() - 2 * DAY_MS)));
   if (row.count <= limit.max) return { ok: true };
   return { ok: false, retryAfterSeconds: Math.max(1, Math.ceil((start + limit.windowMs - now.getTime()) / 1000)) };
 }
