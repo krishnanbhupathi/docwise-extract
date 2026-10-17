@@ -2,7 +2,26 @@
 
 Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 → Day 5.
 
-## Status: Day 4 done
+## Status: Day 5 done
+
+Goal met: the held-out score is in and every number in the README links to its report. The case study is on a bhupathi.dev preview, waiting for Krishna's review.
+
+**Done:**
+- **Held-out eval, run once** with `--final`, prompt v1 on Sonnet 5.5: [eval-04](docs/measurements/eval-04-v1-sonnet-5-5-held_out.md). 20 of 20 fully correct, header fields and line-item F1 100%, review rate 5% (`inv-060`, whose line items don't add up to its printed subtotal), 0 escaped errors, cost per invoice median $0.0115 (p95 $0.0170), time median 3.1 s (p95 5.6 s). The run cost $0.2568. Nothing was tuned on the held-out invoices, before or after.
+- **README:** architecture diagram, data model, the held-out table with its limits, and the tuning table with the before/after (bare prompt against v1).
+- **Video:** an 86 s narrated walkthrough in the same style as Slotwise and Formwise, built in `case-study-videos`: Playwright records a local production build with the real model, Remotion adds the cards, captions and voice. The figures on its cards come from eval-02, eval-03 and eval-04.
+- **Bench:** PDFs open without the viewer's thumbnail pane (`#navpanes=0&view=FitH`), so the invoice fills the bench.
+- **Case study:** `/work/docwise` and a third card on the home page of bhupathi.dev, on a Vercel preview (branch `docwise`). Every number there links to a report in `docs/measurements` or to this file.
+- **Tests:** 155 Vitest (the held-out report added a replay), 8 Playwright.
+
+### Plan
+1. Held-out eval, once, with `--final`.
+2. README: architecture diagram, data model, final score.
+3. ~90 s video in the style of the first two.
+4. Case-study page and a home-page card on bhupathi.dev, preview first.
+5. Docs, deploy, CI green.
+
+## Day 4 done
 
 Goal met: the public demo works with no sign-up (checked on the live URL, see below).
 
@@ -161,9 +180,13 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 | Day 4 | API uploads come in the request body (≤ 4 MB), not through a signed URL | One call for developers. Vercel caps request bodies at 4.5 MB; bigger files go through the browser |
 | Day 4 | `copied_from` has no foreign key | Re-seeding a sample must not turn visitors' copies into uploads that count toward the caps |
 | Day 4 | The e2e tests run on a production build with their own database, port and build folder | Closer to production than `next dev`, and they don't disturb a running dev server |
+| Day 5 | The held-out run used the production API key, pulled into a temporary file and deleted after | Krishna. The key never went into the repo |
+| Day 5 | The video is recorded in branded Chrome, not Playwright's bundled Chromium | Headless Chromium can't display PDFs, and the bench shows the original invoice |
+| Day 5 | The case study is built in bhupathi-dev and goes to a Vercel preview first | Krishna. Production when he says so |
 
 ### Blocked on Krishna
-- Nothing.
+- Review the bhupathi.dev preview, then release it to production.
+- Approve uploading the video to videos.bhupathi.dev, so this README can link it like the other two.
 
 ### Set up (Day 1)
 - Vercel Production env: `DATABASE_URL` (Neon pooled), `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` (Account API token `docwise-extract`, Object Read & Write on `docwise-uploads` only), `ANTHROPIC_API_KEY` (key `docwise`). Values were piped from the clipboard; none are in the repo.
