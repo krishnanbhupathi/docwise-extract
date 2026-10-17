@@ -1,12 +1,38 @@
 # Progress
 
-Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 Mon 19 Oct → Day 5 Fri 23 Oct 2026 (Day 1 started Sat 17 Oct).
+Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 → Day 5.
 
-## Status: Day 1 done (17 Oct)
+## Status: Day 2 done
+
+Goal met: a low-confidence invoice lands in review and can be fixed and approved (checked on the live URL, see below).
+
+**Done:**
+- **Confidence per field** (`lib/confidence.ts`, pure, shared with the eval). A field is high only if no rule implicates it, the model didn't list it as uncertain, and, for PDFs with a text layer, its value is printed in the document (`lib/text-check.ts`: numbers and dates match by value across formats; a null tax, due date or subtotal is low when the text shows one). Reasons are stored per field (`fields.confidence_reasons`).
+- **Routing:** every field high → `approved` with `approval = auto`; anything low → `needs_review`.
+- **Review:** an editable form on the document page with the original alongside. Flagged fields say why. Line items can be edited, added and removed, and the rules re-run as you type. Corrections go in `fields.corrected_value` / `corrected_at`, with line items as the corrected list on the `line_items` row; extracted values are never overwritten. Approving with failing checks needs a tick; unusable values (`1,500.00`, `01/10/2026`, a missing supplier) block approval.
+- **Review queue** (`/review`): this browser's invoices waiting for review, oldest first, with the fields to check and why.
+- **CSV export** (`/export.csv`): approved invoices (this browser's and the demo's), one row per line item, corrections applied, formula-safe text cells, UTF-8 BOM, CRLF.
+- **Day 1 leftovers:** plain error messages for visitors (details stay in the extraction log); retry for failed or dropped runs (stale after 6 minutes), up to 3 runs per document.
+- **Test set:** all 60 invoices. `inv-021`–`inv-045` clean; `inv-046`–`inv-060` hard: 4 scans, 3 phone photos, 3 multi-page, 2 handwritten, 3 deliberate mismatches. 40 tuning / 20 held out; one of each hard kind is held out.
+- **Tests:** 110 Vitest. Added: text check, confidence (including the true values of every tuning invoice with a text layer, scored against its own PDF: no false alarms), routing, retry, approval and corrections, queue, export, CSV escaping, generator (hard slice, mismatches, committed truth files unchanged), manifest.
+
+**Live check (two tuning invoices, not a measurement):** on https://docwise-extract.vercel.app, `inv-001` was approved automatically (every field high). `inv-056`, whose printed total is wrong on purpose, went to review with subtotal, tax and total flagged ("Subtotal 6265.70 + tax 516.92 = 6782.62, but the total is 6728.62"); the extraction matched `test-set/truth/inv-056.json` exactly. Approve stayed disabled until "approve as printed" was ticked, then the invoice was approved and both invoices came out of `/export.csv` (11 line-item rows). My Day 1 and Day 2 test uploads (4 documents and their R2 files) were then deleted from production.
+
+**Next (Day 3):** `npm run eval` (per-field accuracy, line-item F1, docs fully correct, review rate, escaped errors, cost and time per document) with reports in `docs/measurements/`; tune the prompt on the tuning split only.
+
+### Plan
+1. **Confidence per field** (`lib/confidence.ts`, pure, shared with the eval). A field is **high** only if no rule implicates it, the model didn't list it as uncertain, and (for PDFs with a text layer) its value appears in the document's own text. Otherwise **low**, with the reasons stored.
+2. **Routing:** every field high → `approved` (automatic); any low → `needs_review`.
+3. **Review:** an editable form on the document page (header fields + line items: edit, add, remove), rules re-run live, approve. Corrections go in `fields.corrected_value` (line items as the corrected list on the `line_items` row); the original values stay. Approving with failing rules (an invoice that is itself wrong) needs an explicit tick.
+4. **Review queue** page and **CSV export** of approved invoices (one row per line item, corrected values, formula-safe).
+5. **Test set:** `inv-021`–`inv-045` clean; `inv-046`–`inv-060` hard: 4 scanned-look (image-only PDFs: rotated, blurred, low contrast), 3 phone photos (JPEG: skew, shadow, background), 3 multi-page, 2 with handwritten notes, 3 whose totals don't add up on purpose. Split unchanged: every third invoice is held out (one of each hard kind lands there).
+6. **Day 1 leftovers:** plain error messages for visitors, retry for failed or stuck documents, remove my two production test uploads.
+
+## Day 1 done
 
 Goal met: one invoice went from upload to validated fields on the live URL.
 
-**Done (17 Oct):**
+**Done:**
 - **Live:** https://docwise-extract.vercel.app (deploys from `main`; migrations run in the build against Neon `docwise`).
 - **Repo:** https://github.com/krishnanbhupathi/docwise-extract (public, MIT), CI on every push (lint, typecheck, tests, build).
 - **Pipeline:** signed upload → server checks the stored file → extraction in `after()` → Zod → rules → `fields` / `line_items`. Locally verified end to end with the fake model and local storage.
@@ -14,9 +40,9 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 - **Tests:** 41 Vitest (rules, money, extraction retry/validation, upload checks and daily cap, pipeline on PGlite, access scoping, generator determinism and arithmetic).
 - **R2:** private bucket `docwise-uploads`, CORS limited to the production origin and `localhost:3000` (PUT/GET, `content-type` header only).
 
-**Live smoke run (17 Oct, one invoice, not a measurement):** `inv-001` uploaded on https://docwise-extract.vercel.app went to R2, was queued, and Claude Opus 5.5 extracted it in one call (accepted on the first attempt). All 8 header fields and 7 line items match `test-set/truth/inv-001.json`; every rule passed. The extraction log on the page shows the call's tokens, time and estimated cost. Real figures come from `npm run eval` (Day 3).
+**Live smoke run (one invoice, not a measurement):** `inv-001` uploaded on https://docwise-extract.vercel.app went to R2, was queued, and Claude Opus 5.5 extracted it in one call (accepted on the first attempt). All 8 header fields and 7 line items match `test-set/truth/inv-001.json`; every rule passed. The extraction log on the page shows the call's tokens, time and estimated cost. Real figures come from `npm run eval` (Day 3).
 
-**Next (Day 2, Tue 20 Oct):** confidence per field and routing (approved vs needs_review), review queue with corrections, CSV export, the rest of the 60-invoice test set including the hard slice.
+**Next (Day 2):** confidence per field and routing (approved vs needs_review), review queue with corrections, CSV export, the rest of the 60-invoice test set including the hard slice.
 
 ### Plan
 1. **Scaffold:** Next.js 16.4.1 (App Router), TypeScript, Drizzle on Neon (`docwise` database), Vitest with PGlite, Tailwind. Same foundations as Slotwise and Formwise.
@@ -31,26 +57,35 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 ### Decisions
 | When | Decision | Why / trade-off |
 |---|---|---|
-| 17 Oct | Repo `docwise-extract`, public, MIT | Krishna |
-| 17 Oct | Storage: private Cloudflare R2 bucket `docwise-uploads`, signed URLs only | Krishna. Invoices are never at a public URL; costs one R2 API token |
-| 17 Oct | Model: Claude Opus 5.5 | Krishna. Cheaper models get compared later with eval numbers |
-| 17 Oct | Upload straight from the browser to R2 (signed PUT), not through a function | Vercel functions accept at most 4.5 MB of request body, and phone photos and scans exceed that. Cost: a CORS rule on the bucket and a two-step upload |
-| 17 Oct | Extraction runs in `after()` once the upload is confirmed; the page polls | No queue service to run. Trade-off: if the function dies mid-extraction, nothing retries automatically (a stale `extracting` document needs a retry, planned for Day 2) |
-| 17 Oct | Extra status `uploading` (row created before the file arrives) | Lets the server tie the upload to the browser that asked for it, and finish only uploads it handed out |
-| 17 Oct | Uploads are scoped to an anonymous browser cookie (`documents.workspace_id`) | The demo is public with no sign-up; without it, one visitor's invoices would be visible to everyone. Lose the cookie and you lose access (same as Formwise's edit links) |
-| 17 Oct | Line items get one `fields` row (`line_items`) | Gives line-item rule failures, confidence and corrections the same home as the header fields |
-| 17 Oct | Amounts are decimal strings, arithmetic in integer micro-units (BigInt) | No floating-point error in the sum and total checks; works for 0-decimal (JPY) and 3-decimal currencies |
-| 17 Oct | Day 1 sends every extraction to `needs_review` | Confidence and auto-approval are Day 2; nothing is approved until confidence exists |
-| 17 Oct | Daily cap and page limit from Day 1 (per-IP rate limit on Day 4) | The live URL is public as soon as it deploys, and it spends Krishna's API key |
-| 17 Oct | `.npmrc` sets `legacy-peer-deps` | npm 10 crashes resolving vitest's optional jsdom → canvas peer chain |
+| Day 1 | Repo `docwise-extract`, public, MIT | Krishna |
+| Day 1 | Storage: private Cloudflare R2 bucket `docwise-uploads`, signed URLs only | Krishna. Invoices are never at a public URL; costs one R2 API token |
+| Day 1 | Model: Claude Opus 5.5 | Krishna. Cheaper models get compared later with eval numbers |
+| Day 1 | Upload straight from the browser to R2 (signed PUT), not through a function | Vercel functions accept at most 4.5 MB of request body, and phone photos and scans exceed that. Cost: a CORS rule on the bucket and a two-step upload |
+| Day 1 | Extraction runs in `after()` once the upload is confirmed; the page polls | No queue service to run. Trade-off: if the function dies mid-extraction, nothing retries automatically (a stale `extracting` document needs a retry, planned for Day 2) |
+| Day 1 | Extra status `uploading` (row created before the file arrives) | Lets the server tie the upload to the browser that asked for it, and finish only uploads it handed out |
+| Day 1 | Uploads are scoped to an anonymous browser cookie (`documents.workspace_id`) | The demo is public with no sign-up; without it, one visitor's invoices would be visible to everyone. Lose the cookie and you lose access (same as Formwise's edit links) |
+| Day 1 | Line items get one `fields` row (`line_items`) | Gives line-item rule failures, confidence and corrections the same home as the header fields |
+| Day 1 | Amounts are decimal strings, arithmetic in integer micro-units (BigInt) | No floating-point error in the sum and total checks; works for 0-decimal (JPY) and 3-decimal currencies |
+| Day 1 | Day 1 sends every extraction to `needs_review` | Confidence and auto-approval are Day 2; nothing is approved until confidence exists |
+| Day 1 | Daily cap and page limit from Day 1 (per-IP rate limit on Day 4) | The live URL is public as soon as it deploys, and it spends Krishna's API key |
+| Day 2 | Confidence = rules + the model's own uncertainty + "value appears in the PDF's text layer" | Krishna. The text check is free and deterministic and catches made-up or swapped values; scans and photos have no text layer and rely on the other two signals |
+| Day 2 | Reviewers can edit, add and remove line items | Krishna. Needed to fix a sum mismatch caused by a misread line |
+| Day 2 | Hard slice: 4 scans, 3 photos, 3 multi-page, 2 handwritten, 3 deliberate mismatches | Krishna. Photos are first to cut if the day slips |
+| Day 2 | CSV: one row per line item, invoice fields repeated | Krishna. Imports into spreadsheets and bill-line importers |
+| Day 1 | `.npmrc` sets `legacy-peer-deps` | npm 10 crashes resolving vitest's optional jsdom → canvas peer chain |
+| Day 2 | A split tax (CGST + SGST) passes the text check when it equals the printed total minus the printed subtotal | The sum is never printed as one number on GST invoices; without this, every Indian invoice would go to review |
+| Day 2 | Handwritten-note invoices are colour scans (image-only), not PDFs with the notes as text | Real annotations are ink on paper, so they can't appear in a text layer |
+| Day 2 | Corrections are kept beside the extracted values, never over them | The eval and the log must always tell what the model said from what a person fixed |
+| Day 2 | Unusable values block approval even with the tick; arithmetic failures can be approved as printed | An invoice that doesn't add up is a fact about the invoice; `1,500.00` in an amount field is a typo nothing downstream can import |
+| Day 2 | Retry limit: 3 runs per document; a run is "dropped" after 6 minutes | Each run can cost up to two model calls on the public key; the function's own limit is 300 s |
+| Day 2 | Demo documents are read-only for visitors (no shared approvals) | One visitor's approval would change the demo for everyone; Day 4 decides how visitors try review on samples |
 
 ### Blocked on Krishna
 - Nothing.
 
-### Set up (17 Oct)
+### Set up (Day 1)
 - Vercel Production env: `DATABASE_URL` (Neon pooled), `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` (Account API token `docwise-extract`, Object Read & Write on `docwise-uploads` only), `ANTHROPIC_API_KEY` (key `docwise`). Values were piped from the clipboard; none are in the repo.
 
 ### Known issues
-- A failed extraction shows its raw error to the visitor (e.g. a missing-configuration message). Day 2: a plain message for visitors, details in the log.
-- No automatic retry for a document stuck in `extracting` if the function dies (planned for Day 2).
+- A dropped run is only retried when someone opens the document and clicks "Try again"; nothing sweeps stale documents on its own.
 - R2 bucket created with location hint `enam` (near the functions in `cle1`), but `wrangler r2 bucket info` still reports APAC. Read latency gets measured rather than assumed.
