@@ -1,7 +1,7 @@
 /**
  * Anthropic list prices in US dollars per million tokens, used to turn logged
  * token counts into cost per document. Source: Anthropic's published pricing,
- * checked 17 Oct 2026. Thinking tokens are billed (and counted) as output.
+ * checked on Day 1 of the build. Thinking tokens are billed (and counted) as output.
  */
 export const PRICES_PER_MTOK: Record<string, { input: number; output: number }> = {
   "claude-opus-5-5": { input: 4, output: 20 },

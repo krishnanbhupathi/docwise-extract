@@ -1,5 +1,6 @@
 import { PDFDocument } from "pdf-lib";
 import sharp from "sharp";
+import { extractText, getDocumentProxy } from "unpdf";
 import type { InvoiceFile, MediaType } from "./model";
 
 export const MAX_PAGES = 5;
@@ -25,4 +26,20 @@ export async function prepareForModel(data: Uint8Array, mediaType: MediaType): P
     .jpeg({ quality: 90 })
     .toBuffer();
   return { data: new Uint8Array(jpeg), mediaType: "image/jpeg" };
+}
+
+/**
+ * The PDF's own text layer, used to check that extracted values are printed on
+ * the document. Null for images, and for PDFs with no usable text (scans).
+ */
+export async function pdfText(data: Uint8Array, mediaType: MediaType): Promise<string | null> {
+  if (mediaType !== "application/pdf") return null;
+  try {
+    // pdf.js takes ownership of the buffer it's given, so hand it a copy.
+    const pdf = await getDocumentProxy(new Uint8Array(data));
+    const { text } = await extractText(pdf, { mergePages: true });
+    return text.replace(/\s+/g, "").length >= 20 ? text : null;
+  } catch {
+    return null;
+  }
 }
