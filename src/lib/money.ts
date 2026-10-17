@@ -55,3 +55,10 @@ export function minorDigits(currency: string): number {
 export function minorUnitMicros(currency: string): bigint {
   return 10n ** BigInt(SCALE - minorDigits(currency));
 }
+
+/** A plain decimal with thousands separators for display ("6265.70" → "6,265.70"); anything else is returned as is. */
+export function groupDigits(value: string): string {
+  const match = /^(-?)(\d+)(\.\d+)?$/.exec(value);
+  if (!match) return value;
+  return match[1] + match[2].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (match[3] ?? "");
+}

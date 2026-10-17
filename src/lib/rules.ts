@@ -21,7 +21,12 @@ export type RuleCode =
 
 export type RuleFailure = { rule: RuleCode; fields: FieldName[]; message: string };
 
-export type RuleResult = { failures: RuleFailure[]; byField: Record<FieldName, RuleCode[]> };
+export type RuleResult = {
+  failures: RuleFailure[];
+  byField: Record<FieldName, RuleCode[]>;
+  /** Per line: whether quantity × unit price matches the amount; null when the line has no quantity and price to check. */
+  lineExtends: (boolean | null)[];
+};
 
 const REQUIRED = ["supplier_name", "invoice_number", "invoice_date", "currency", "total"] as const;
 
@@ -68,12 +73,12 @@ export function checkInvoice(data: InvoiceData): RuleResult {
   const subtotal = amount(data.subtotal, "subtotal", "Subtotal");
   const tax = amount(data.tax, "tax", "Tax");
   const total = amount(data.total, "total", "Total");
+  const lineExtends: (boolean | null)[] = data.line_items.map(() => null);
 
   if (data.line_items.length === 0) {
     fail("no_line_items", ["line_items"], "No line items found");
   } else {
     let sum: bigint | null = 0n;
-    const mismatched: number[] = [];
     data.line_items.forEach((item, i) => {
       const lineAmount = amount(item.amount, "line_items", `Line ${i + 1} amount`);
       if (lineAmount === null) {
@@ -92,9 +97,10 @@ export function checkInvoice(data: InvoiceData): RuleResult {
       if (quantity !== null && price !== null) {
         const diff = multiplyMicros(quantity, price) - lineAmount;
         // Allow the half-unit of rounding a correct invoice can show.
-        if ((diff < 0n ? -diff : diff) * 2n > unit) mismatched.push(i + 1);
+        lineExtends[i] = (diff < 0n ? -diff : diff) * 2n <= unit;
       }
     });
+    const mismatched = lineExtends.flatMap((ok, i) => (ok === false ? [i + 1] : []));
     if (mismatched.length) {
       fail("line_amount_mismatch", ["line_items"], `Quantity × unit price doesn't match the amount on line${mismatched.length > 1 ? "s" : ""} ${mismatched.join(", ")}`);
     }
@@ -114,5 +120,5 @@ export function checkInvoice(data: InvoiceData): RuleResult {
 
   const byField = Object.fromEntries(FIELD_NAMES.map((f) => [f, [] as RuleCode[]])) as Record<FieldName, RuleCode[]>;
   for (const failure of failures) for (const field of failure.fields) if (!byField[field].includes(failure.rule)) byField[field].push(failure.rule);
-  return { failures, byField };
+  return { failures, byField, lineExtends };
 }
