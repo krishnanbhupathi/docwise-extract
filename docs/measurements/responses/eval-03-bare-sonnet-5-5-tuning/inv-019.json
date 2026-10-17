@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Fernhill Hardware Pvt. Ltd.\",\"invoice_number\":\"GST-50428\",\"invoice_date\":\"22-04-2026\",\"due_date\":\"22-05-2026\",\"currency\":\"INR\",\"subtotal\":\"₹14,48,084.00\",\"tax\":\"₹2,60,655.12\",\"total\":\"₹17,08,739.12\",\"line_items\":[{\"description\":\"Video conferencing seat (monthly)\",\"quantity\":\"40\",\"unit_price\":\"₹13,755.00\",\"amount\":\"₹5,50,200.00\"},{\"description\":\"Password manager seat (annual)\",\"quantity\":\"6\",\"unit_price\":\"₹3,328.00\",\"amount\":\"₹19,968.00\"},{\"description\":\"Design tool licence (annual)\",\"quantity\":\"20\",\"unit_price\":\"₹4,468.00\",\"amount\":\"₹89,360.00\"},{\"description\":\"Team plan seat (monthly)\",\"quantity\":\"10\",\"unit_price\":\"₹10,453.00\",\"amount\":\"₹1,04,530.00\"},{\"description\":\"Team plan seat (monthly) (replacement)\",\"quantity\":\"20\",\"unit_price\":\"₹14,391.00\",\"amount\":\"₹2,87,820.00\"},{\"description\":\"Backup service (monthly)\",\"quantity\":\"6\",\"unit_price\":\"₹8,628.00\",\"amount\":\"₹51,768.00\"},{\"description\":\"Design tool licence (annual) (extra)\",\"quantity\":\"12\",\"unit_price\":\"₹14,787.00\",\"amount\":\"₹1,77,444.00\"},{\"description\":\"Team plan seat (monthly) (second batch)\",\"quantity\":\"6\",\"unit_price\":\"₹12,353.00\",\"amount\":\"₹74,118.00\"},{\"description\":\"Backup service (monthly) (extra)\",\"quantity\":\"10\",\"unit_price\":\"₹6,545.00\",\"amount\":\"₹65,450.00\"},{\"description\":\"Backup service (monthly) (replacement)\",\"quantity\":\"6\",\"unit_price\":\"₹4,571.00\",\"amount\":\"₹27,426.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3756,
+    "outputTokens": 669,
+    "fallbackUsed": false,
+    "ms": 4170
+  },
+  {
+    "text": "{\"supplier_name\":\"Fernhill Hardware Pvt. Ltd.\",\"invoice_number\":\"GST-50428\",\"invoice_date\":\"2026-04-22\",\"due_date\":\"2026-05-22\",\"currency\":\"INR\",\"subtotal\":\"1448084.00\",\"tax\":\"260655.12\",\"total\":\"1708739.12\",\"line_items\":[{\"description\":\"Video conferencing seat (monthly)\",\"quantity\":\"40\",\"unit_price\":\"13755.00\",\"amount\":\"550200.00\"},{\"description\":\"Password manager seat (annual)\",\"quantity\":\"6\",\"unit_price\":\"3328.00\",\"amount\":\"19968.00\"},{\"description\":\"Design tool licence (annual)\",\"quantity\":\"20\",\"unit_price\":\"4468.00\",\"amount\":\"89360.00\"},{\"description\":\"Team plan seat (monthly)\",\"quantity\":\"10\",\"unit_price\":\"10453.00\",\"amount\":\"104530.00\"},{\"description\":\"Team plan seat (monthly) (replacement)\",\"quantity\":\"20\",\"unit_price\":\"14391.00\",\"amount\":\"287820.00\"},{\"description\":\"Backup service (monthly)\",\"quantity\":\"6\",\"unit_price\":\"8628.00\",\"amount\":\"51768.00\"},{\"description\":\"Design tool licence (annual) (extra)\",\"quantity\":\"12\",\"unit_price\":\"14787.00\",\"amount\":\"177444.00\"},{\"description\":\"Team plan seat (monthly) (second batch)\",\"quantity\":\"6\",\"unit_price\":\"12353.00\",\"amount\":\"74118.00\"},{\"description\":\"Backup service (monthly) (extra)\",\"quantity\":\"10\",\"unit_price\":\"6545.00\",\"amount\":\"65450.00\"},{\"description\":\"Backup service (monthly) (replacement)\",\"quantity\":\"6\",\"unit_price\":\"4571.00\",\"amount\":\"27426.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 5238,
+    "outputTokens": 588,
+    "fallbackUsed": false,
+    "ms": 3595
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Cobalt Peak Workshop Enterprises\",\"invoice_number\":\"GST-10673\",\"invoice_date\":\"24 Feb 2026\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"₹2,61,482.00\",\"tax\":\"₹31,377.84\",\"total\":\"₹2,92,859.84\",\"line_items\":[{\"description\":\"Pallet delivery\",\"quantity\":\"1\",\"unit_price\":\"₹5,615.00\",\"amount\":\"₹5,615.00\"},{\"description\":\"Pallet delivery (extra)\",\"quantity\":\"6\",\"unit_price\":\"₹12,425.00\",\"amount\":\"₹74,550.00\"},{\"description\":\"Customs handling fee\",\"quantity\":\"20\",\"unit_price\":\"₹7,060.00\",\"amount\":\"₹1,41,200.00\"},{\"description\":\"Courier, same day\",\"quantity\":\"3\",\"unit_price\":\"₹5,995.00\",\"amount\":\"₹17,985.00\"},{\"description\":\"Customs handling fee (second batch)\",\"quantity\":\"1\",\"unit_price\":\"₹9,958.00\",\"amount\":\"₹9,958.00\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"1\",\"unit_price\":\"₹3,246.00\",\"amount\":\"₹3,246.00\"},{\"description\":\"Installation\",\"quantity\":null,\"unit_price\":null,\"amount\":\"₹8,928.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3575,
+    "outputTokens": 465,
+    "fallbackUsed": false,
+    "ms": 3256
+  },
+  {
+    "text": "{\"supplier_name\":\"Cobalt Peak Workshop Enterprises\",\"invoice_number\":\"GST-10673\",\"invoice_date\":\"2026-02-24\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"261482.00\",\"tax\":\"31377.84\",\"total\":\"292859.84\",\"line_items\":[{\"description\":\"Pallet delivery\",\"quantity\":\"1\",\"unit_price\":\"5615.00\",\"amount\":\"5615.00\"},{\"description\":\"Pallet delivery (extra)\",\"quantity\":\"6\",\"unit_price\":\"12425.00\",\"amount\":\"74550.00\"},{\"description\":\"Customs handling fee\",\"quantity\":\"20\",\"unit_price\":\"7060.00\",\"amount\":\"141200.00\"},{\"description\":\"Courier, same day\",\"quantity\":\"3\",\"unit_price\":\"5995.00\",\"amount\":\"17985.00\"},{\"description\":\"Customs handling fee (second batch)\",\"quantity\":\"1\",\"unit_price\":\"9958.00\",\"amount\":\"9958.00\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"1\",\"unit_price\":\"3246.00\",\"amount\":\"3246.00\"},{\"description\":\"Installation\",\"quantity\":null,\"unit_price\":null,\"amount\":\"8928.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4746,
+    "outputTokens": 409,
+    "fallbackUsed": false,
+    "ms": 2831
+  }
+]

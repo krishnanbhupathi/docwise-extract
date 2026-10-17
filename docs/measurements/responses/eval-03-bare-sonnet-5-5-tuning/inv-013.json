@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Oakhollow Logistics Ltd\",\"invoice_number\":\"#008250\",\"invoice_date\":\"28 February 2026\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"£3,607.25\",\"tax\":\"£721.45\",\"total\":\"£4,328.70\",\"line_items\":[{\"description\":\"Laptop docking station\",\"quantity\":\"1\",\"unit_price\":\"£982.75\",\"amount\":\"£982.75\"},{\"description\":\"Laptop docking station (extra)\",\"quantity\":\"2\",\"unit_price\":\"£369.00\",\"amount\":\"£738.00\"},{\"description\":\"27-inch 4K monitor\",\"quantity\":\"5\",\"unit_price\":\"£60.50\",\"amount\":\"£302.50\"},{\"description\":\"27-inch 4K monitor (replacement)\",\"quantity\":\"4\",\"unit_price\":\"£396.00\",\"amount\":\"£1,584.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3326,
+    "outputTokens": 294,
+    "fallbackUsed": false,
+    "ms": 2471
+  },
+  {
+    "text": "{\"supplier_name\":\"Oakhollow Logistics Ltd\",\"invoice_number\":\"#008250\",\"invoice_date\":\"2026-02-28\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"3607.25\",\"tax\":\"721.45\",\"total\":\"4328.70\",\"line_items\":[{\"description\":\"Laptop docking station\",\"quantity\":\"1\",\"unit_price\":\"982.75\",\"amount\":\"982.75\"},{\"description\":\"Laptop docking station (extra)\",\"quantity\":\"2\",\"unit_price\":\"369.00\",\"amount\":\"738.00\"},{\"description\":\"27-inch 4K monitor\",\"quantity\":\"5\",\"unit_price\":\"60.50\",\"amount\":\"302.50\"},{\"description\":\"27-inch 4K monitor (replacement)\",\"quantity\":\"4\",\"unit_price\":\"396.00\",\"amount\":\"1584.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4117,
+    "outputTokens": 280,
+    "fallbackUsed": false,
+    "ms": 2275
+  }
+]

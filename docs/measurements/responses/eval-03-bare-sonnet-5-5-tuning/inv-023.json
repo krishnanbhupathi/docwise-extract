@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Ashgrove Hardware Ltd\",\"invoice_number\":\"#003222\",\"invoice_date\":\"10/03/2026\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"£31,875.55\",\"tax\":\"£6,375.11\",\"total\":\"£38,250.66\",\"line_items\":[{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"29\",\"unit_price\":\"£30.00\",\"amount\":\"£870.00\"},{\"description\":\"Breakfast buffet (per person)\",\"quantity\":\"59\",\"unit_price\":\"£39.25\",\"amount\":\"£2,315.75\"},{\"description\":\"Network switch, 24-port\",\"quantity\":\"2\",\"unit_price\":\"£554.45\",\"amount\":\"£1,108.90\"},{\"description\":\"Laptop docking station\",\"quantity\":\"40\",\"unit_price\":\"£505.40\",\"amount\":\"£20,216.00\"},{\"description\":\"Network switch, 24-port (second batch)\",\"quantity\":\"3\",\"unit_price\":\"£373.00\",\"amount\":\"£1,119.00\"},{\"description\":\"27-inch 4K monitor\",\"quantity\":\"2\",\"unit_price\":\"£201.00\",\"amount\":\"£402.00\"},{\"description\":\"UPS battery backup, 1500 VA\",\"quantity\":\"2\",\"unit_price\":\"£568.00\",\"amount\":\"£1,136.00\"},{\"description\":\"Coffee and tea service (per person) (second batch)\",\"quantity\":\"48\",\"unit_price\":\"£13.80\",\"amount\":\"£662.40\"},{\"description\":\"Fresh fruit platter (serves 10)\",\"quantity\":\"7\",\"unit_price\":\"£14.00\",\"amount\":\"£98.00\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"10\",\"unit_price\":\"£394.75\",\"amount\":\"£3,947.50\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3510,
+    "outputTokens": 967,
+    "fallbackUsed": false,
+    "ms": 6467
+  },
+  {
+    "text": "{\"supplier_name\":\"Ashgrove Hardware Ltd\",\"invoice_number\":\"#003222\",\"invoice_date\":\"2026-03-10\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"31875.55\",\"tax\":\"6375.11\",\"total\":\"38250.66\",\"line_items\":[{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"29\",\"unit_price\":\"30.00\",\"amount\":\"870.00\"},{\"description\":\"Breakfast buffet (per person)\",\"quantity\":\"59\",\"unit_price\":\"39.25\",\"amount\":\"2315.75\"},{\"description\":\"Network switch, 24-port\",\"quantity\":\"2\",\"unit_price\":\"554.45\",\"amount\":\"1108.90\"},{\"description\":\"Laptop docking station\",\"quantity\":\"40\",\"unit_price\":\"505.40\",\"amount\":\"20216.00\"},{\"description\":\"Network switch, 24-port (second batch)\",\"quantity\":\"3\",\"unit_price\":\"373.00\",\"amount\":\"1119.00\"},{\"description\":\"27-inch 4K monitor\",\"quantity\":\"2\",\"unit_price\":\"201.00\",\"amount\":\"402.00\"},{\"description\":\"UPS battery backup, 1500 VA\",\"quantity\":\"2\",\"unit_price\":\"568.00\",\"amount\":\"1136.00\"},{\"description\":\"Coffee and tea service (per person) (second batch)\",\"quantity\":\"48\",\"unit_price\":\"13.80\",\"amount\":\"662.40\"},{\"description\":\"Fresh fruit platter (serves 10)\",\"quantity\":\"7\",\"unit_price\":\"14.00\",\"amount\":\"98.00\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"10\",\"unit_price\":\"394.75\",\"amount\":\"3947.50\"}],\"uncertain\":[{\"field\":\"invoice_date\",\"reason\":\"Printed as 10/03/2026, which is ambiguous between day/month and month/day; interpreted as DD/MM/YYYY (10 March 2026) because the supplier is UK-based.\"},{\"field\":\"due_date\",\"reason\":\"No explicit due date is printed; only 'net 45 days' payment terms are given.\"}]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4933,
+    "outputTokens": 1045,
+    "fallbackUsed": false,
+    "ms": 7145
+  }
+]

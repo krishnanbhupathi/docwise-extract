@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Fernhill Office Solutions Pte. Ltd.\",\"invoice_number\":\"SG-2026-2032\",\"invoice_date\":\"9 Feb 2026\",\"due_date\":\"23 Feb 2026\",\"currency\":\"SGD\",\"subtotal\":\"S$17,554.00\",\"tax\":\"S$1,579.86\",\"total\":\"S$19,133.86\",\"line_items\":[{\"description\":\"Pallet delivery\",\"quantity\":\"40\",\"unit_price\":\"S$287.75\",\"amount\":\"S$11,510.00\"},{\"description\":\"Label printer\",\"quantity\":\"3\",\"unit_price\":\"S$1,183.00\",\"amount\":\"S$3,549.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5)\",\"quantity\":\"20\",\"unit_price\":\"S$114.00\",\"amount\":\"S$2,280.00\"},{\"description\":\"Delivery\",\"quantity\":null,\"unit_price\":null,\"amount\":\"S$215.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3324,
+    "outputTokens": 319,
+    "fallbackUsed": false,
+    "ms": 3010
+  },
+  {
+    "text": "{\"supplier_name\":\"Fernhill Office Solutions Pte. Ltd.\",\"invoice_number\":\"SG-2026-2032\",\"invoice_date\":\"2026-02-09\",\"due_date\":\"2026-02-23\",\"currency\":\"SGD\",\"subtotal\":\"17554.00\",\"tax\":\"1579.86\",\"total\":\"19133.86\",\"line_items\":[{\"description\":\"Pallet delivery\",\"quantity\":\"40\",\"unit_price\":\"287.75\",\"amount\":\"11510.00\"},{\"description\":\"Label printer\",\"quantity\":\"3\",\"unit_price\":\"1183.00\",\"amount\":\"3549.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5)\",\"quantity\":\"20\",\"unit_price\":\"114.00\",\"amount\":\"2280.00\"},{\"description\":\"Delivery\",\"quantity\":null,\"unit_price\":null,\"amount\":\"215.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4118,
+    "outputTokens": 288,
+    "fallbackUsed": false,
+    "ms": 2818
+  }
+]

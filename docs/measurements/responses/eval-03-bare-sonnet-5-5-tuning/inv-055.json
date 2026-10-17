@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Tidewater Catering Pty Ltd\",\"invoice_number\":\"INV-00522\",\"invoice_date\":\"10/08/2026\",\"due_date\":null,\"currency\":\"AUD\",\"subtotal\":\"$237.00\",\"tax\":\"$23.70\",\"total\":\"$260.70\",\"line_items\":[{\"description\":\"Cloud storage, 1 TB (monthly)\",\"quantity\":\"1\",\"unit_price\":\"$237.00\",\"amount\":\"$237.00\"}],\"uncertain\":[{\"field\":\"invoice_date\",\"reason\":\"Date 10/08/2026 is ambiguous between DD/MM and MM/DD; Australian invoice suggests 10 August 2026, but printed as-is.\"},{\"field\":\"due_date\",\"reason\":\"No explicit due date printed; only payment terms of net 14 days are stated.\"}]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3023,
+    "outputTokens": 270,
+    "fallbackUsed": false,
+    "ms": 2806
+  },
+  {
+    "text": "{\"supplier_name\":\"Tidewater Catering Pty Ltd\",\"invoice_number\":\"INV-00522\",\"invoice_date\":\"2026-08-10\",\"due_date\":null,\"currency\":\"AUD\",\"subtotal\":\"237.00\",\"tax\":\"23.70\",\"total\":\"260.70\",\"line_items\":[{\"description\":\"Cloud storage, 1 TB (monthly)\",\"quantity\":\"1\",\"unit_price\":\"237.00\",\"amount\":\"237.00\"}],\"uncertain\":[{\"field\":\"invoice_date\",\"reason\":\"Printed as 10/08/2026, which could be DD/MM or MM/DD; interpreted as 10 August 2026 because the supplier is Australian.\"},{\"field\":\"due_date\",\"reason\":\"No explicit due date printed; only payment terms of net 14 days are stated.\"}]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3538,
+    "outputTokens": 262,
+    "fallbackUsed": false,
+    "ms": 2861
+  }
+]

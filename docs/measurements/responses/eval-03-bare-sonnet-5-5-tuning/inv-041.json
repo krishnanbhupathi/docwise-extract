@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Kestrel Logistics LLC\",\"invoice_number\":\"INV-4127\",\"invoice_date\":\"04/11/2026\",\"due_date\":null,\"currency\":\"USD\",\"subtotal\":\"$45,130.60\",\"tax\":\"$2,707.84\",\"total\":\"$47,838.44\",\"line_items\":[{\"description\":\"Laptop docking station\",\"quantity\":\"2\",\"unit_price\":\"$1,078.80\",\"amount\":\"$2,157.60\"},{\"description\":\"Label printer\",\"quantity\":\"1\",\"unit_price\":\"$1,075.00\",\"amount\":\"$1,075.00\"},{\"description\":\"Data migration\",\"quantity\":\"4\",\"unit_price\":\"$85.00\",\"amount\":\"$340.00\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"40\",\"unit_price\":\"$1,038.95\",\"amount\":\"$41,558.00\"}],\"uncertain\":[{\"field\":\"invoice_date\",\"reason\":\"Date 04/11/2026 could be read as April 11 or 4 November; the format is not stated.\"},{\"field\":\"due_date\",\"reason\":\"No due date is printed; only 'net 45 days' terms are given, so the date cannot be computed reliably from the ambiguous invoice date.\"}]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3290,
+    "outputTokens": 596,
+    "fallbackUsed": false,
+    "ms": 5423
+  },
+  {
+    "text": "{\"supplier_name\":\"Kestrel Logistics LLC\",\"invoice_number\":\"INV-4127\",\"invoice_date\":\"2026-04-11\",\"due_date\":null,\"currency\":\"USD\",\"subtotal\":\"45130.60\",\"tax\":\"2707.84\",\"total\":\"47838.44\",\"line_items\":[{\"description\":\"Laptop docking station\",\"quantity\":\"2\",\"unit_price\":\"1078.80\",\"amount\":\"2157.60\"},{\"description\":\"Label printer\",\"quantity\":\"1\",\"unit_price\":\"1075.00\",\"amount\":\"1075.00\"},{\"description\":\"Data migration\",\"quantity\":\"4\",\"unit_price\":\"85.00\",\"amount\":\"340.00\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"40\",\"unit_price\":\"1038.95\",\"amount\":\"41558.00\"}],\"uncertain\":[{\"field\":\"invoice_date\",\"reason\":\"Printed as 04/11/2026 with no stated format; read as MM/DD/YYYY (April 11) because the supplier is US-based and bills in USD, but it could be 4 November.\"},{\"field\":\"due_date\",\"reason\":\"No due date is printed; only 'net 45 days' terms are given, and the invoice date format is ambiguous, so a due date was not calculated.\"}]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4183,
+    "outputTokens": 674,
+    "fallbackUsed": false,
+    "ms": 5185
+  }
+]

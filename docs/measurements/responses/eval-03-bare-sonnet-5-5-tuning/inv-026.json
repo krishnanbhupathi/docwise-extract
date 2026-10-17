@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Tidewater Consulting LLC\",\"invoice_number\":\"2026-0496\",\"invoice_date\":\"09/09/2026\",\"due_date\":\"10/24/2026\",\"currency\":\"USD\",\"subtotal\":\"$3,518.75\",\"tax\":null,\"total\":\"$3,518.75\",\"line_items\":[{\"description\":\"Customs handling fee\",\"quantity\":\"25\",\"unit_price\":\"$140.75\",\"amount\":\"$3,518.75\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3208,
+    "outputTokens": 157,
+    "fallbackUsed": false,
+    "ms": 1806
+  },
+  {
+    "text": "{\"supplier_name\":\"Tidewater Consulting LLC\",\"invoice_number\":\"2026-0496\",\"invoice_date\":\"2026-09-09\",\"due_date\":\"2026-10-24\",\"currency\":\"USD\",\"subtotal\":\"3518.75\",\"tax\":null,\"total\":\"3518.75\",\"line_items\":[{\"description\":\"Customs handling fee\",\"quantity\":\"25\",\"unit_price\":\"140.75\",\"amount\":\"3518.75\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3596,
+    "outputTokens": 150,
+    "fallbackUsed": false,
+    "ms": 1706
+  }
+]

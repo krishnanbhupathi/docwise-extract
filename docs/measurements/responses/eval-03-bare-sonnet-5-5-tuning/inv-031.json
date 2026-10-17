@@ -1,0 +1,20 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Tidewater Catering LLC\",\"invoice_number\":\"INV-3226\",\"invoice_date\":\"May 28, 2026\",\"due_date\":\"June 27, 2026\",\"currency\":\"USD\",\"subtotal\":\"$2,125.00\",\"tax\":\"$175.31\",\"total\":\"$2,300.31\",\"line_items\":[{\"description\":\"Courier, same day\",\"quantity\":\"10\",\"unit_price\":\"$211.70\",\"amount\":\"$2,117.00\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"1\",\"unit_price\":\"$8.00\",\"amount\":\"$8.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3248,
+    "outputTokens": 209,
+    "fallbackUsed": false,
+    "ms": 2272
+  },
+  {
+    "text": "{\"supplier_name\":\"Tidewater Catering LLC\",\"invoice_number\":\"INV-3226\",\"invoice_date\":\"2026-05-28\",\"due_date\":\"2026-06-27\",\"currency\":\"USD\",\"subtotal\":\"2125.00\",\"tax\":\"175.31\",\"total\":\"2300.31\",\"line_items\":[{\"description\":\"Courier, same day\",\"quantity\":\"10\",\"unit_price\":\"211.70\",\"amount\":\"2117.00\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"1\",\"unit_price\":\"8.00\",\"amount\":\"8.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3807,
+    "outputTokens": 197,
+    "fallbackUsed": false,
+    "ms": 1983
+  }
+]
