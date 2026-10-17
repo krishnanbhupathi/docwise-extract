@@ -55,18 +55,18 @@ describe("pool", () => {
   });
 });
 
-// CI's check against saved model answers: the newest live report of each split must
-// re-score to exactly its recorded metrics. A change that moves them needs a new report.
+// CI's check against saved model answers: every live report must re-score to exactly
+// its recorded metrics, since the README and case study cite them. A change that
+// moves them needs new reports.
 const reports: Report[] = existsSync(OUT)
   ? readdirSync(OUT)
       .filter((f) => /^eval-\d+-.*\.json$/.test(f))
       .map((f) => JSON.parse(readFileSync(path.join(OUT, f), "utf8")) as Report)
       .filter((r) => r.mode === "live" && r.complete)
   : [];
-const newest = [...new Map(reports.sort((a, b) => a.run.localeCompare(b.run)).map((r) => [r.split, r])).values()];
 
-describe.skipIf(newest.length === 0)("saved runs replay to their reported metrics", () => {
-  it.each(newest.map((r) => [r.run, r] as const))("%s", async (run, report) => {
+describe.skipIf(reports.length === 0)("saved runs replay to their reported metrics", () => {
+  it.each(reports.map((r) => [r.run, r] as const))("%s", async (run, report) => {
     const scored = await pool(
       report.documents.map((d) => entry(d.id)),
       4,

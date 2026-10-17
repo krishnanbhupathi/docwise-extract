@@ -107,7 +107,9 @@ async function main() {
     () => spent >= maxUsd,
   );
 
-  const previous = liveReports().filter((r) => r.split === split).at(-1);
+  // Compared with the latest earlier run on the same split, preferring the same model.
+  const earlier = liveReports().filter((r) => r.split === split);
+  const previous = earlier.filter((r) => r.model === model).at(-1) ?? earlier.at(-1);
   const report = buildReport(
     { run, mode: "live", ranAt: new Date().toISOString(), promptVersion, model, effort: EFFORT, split, complete: scored.length === entries.length },
     scored.sort((a, b) => a.score.id.localeCompare(b.score.id)),

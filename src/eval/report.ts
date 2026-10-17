@@ -86,7 +86,7 @@ export function reportMarkdown(report: Report, previous?: Report): string {
   const rows = headline(m);
   if (previous) {
     const before = headline(previous.metrics);
-    out.push(`| Metric | Before: ${previous.run} | After: ${report.run} |`, "|---|---|---|");
+    out.push(`| Metric | ${previous.run} | ${report.run} (this run) |`, "|---|---|---|");
     rows.forEach(([label, value], i) => out.push(`| ${label} | ${before[i][1]} | ${value} |`));
   } else {
     out.push("| Metric | Result |", "|---|---|");
