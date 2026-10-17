@@ -1,0 +1,30 @@
+{
+  "supplier_name": "Meridian Row Systems Pty Ltd",
+  "invoice_number": "INV-05782",
+  "invoice_date": "2026-05-30",
+  "due_date": null,
+  "currency": "AUD",
+  "subtotal": "8505.95",
+  "tax": "850.60",
+  "total": "9356.55",
+  "line_items": [
+    {
+      "description": "A4 copier paper, 80 gsm (box of 5 reams)",
+      "quantity": "25",
+      "unit_price": "311.55",
+      "amount": "7788.75"
+    },
+    {
+      "description": "Toner cartridge, black",
+      "quantity": "2",
+      "unit_price": "67.00",
+      "amount": "134.00"
+    },
+    {
+      "description": "Sticky notes, 76 × 76 mm (12 pads)",
+      "quantity": "6",
+      "unit_price": "97.20",
+      "amount": "583.20"
+    }
+  ]
+}

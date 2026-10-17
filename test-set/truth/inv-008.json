@@ -1,0 +1,54 @@
+{
+  "supplier_name": "Meridian Row Workshop Ltd",
+  "invoice_number": "INV05182",
+  "invoice_date": "2026-10-01",
+  "due_date": "2026-10-31",
+  "currency": "GBP",
+  "subtotal": "9234.95",
+  "tax": "461.75",
+  "total": "9696.70",
+  "line_items": [
+    {
+      "description": "Warehouse storage (per pallet per week)",
+      "quantity": "5",
+      "unit_price": "180.00",
+      "amount": "900.00"
+    },
+    {
+      "description": "Pallet delivery",
+      "quantity": "40",
+      "unit_price": "92.25",
+      "amount": "3690.00"
+    },
+    {
+      "description": "Customs handling fee",
+      "quantity": "1",
+      "unit_price": "11.00",
+      "amount": "11.00"
+    },
+    {
+      "description": "Courier, same day",
+      "quantity": "1",
+      "unit_price": "54.85",
+      "amount": "54.85"
+    },
+    {
+      "description": "Packaging materials",
+      "quantity": "25",
+      "unit_price": "72.00",
+      "amount": "1800.00"
+    },
+    {
+      "description": "Customs handling fee (extra)",
+      "quantity": "5",
+      "unit_price": "171.10",
+      "amount": "855.50"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week) (extra)",
+      "quantity": "12",
+      "unit_price": "160.30",
+      "amount": "1923.60"
+    }
+  ]
+}

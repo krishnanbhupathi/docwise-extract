@@ -1,0 +1,72 @@
+{
+  "supplier_name": "Fernhill Hardware Pvt. Ltd.",
+  "invoice_number": "GST-50428",
+  "invoice_date": "2026-04-22",
+  "due_date": "2026-05-22",
+  "currency": "INR",
+  "subtotal": "1448084.00",
+  "tax": "260655.12",
+  "total": "1708739.12",
+  "line_items": [
+    {
+      "description": "Video conferencing seat (monthly)",
+      "quantity": "40",
+      "unit_price": "13755.00",
+      "amount": "550200.00"
+    },
+    {
+      "description": "Password manager seat (annual)",
+      "quantity": "6",
+      "unit_price": "3328.00",
+      "amount": "19968.00"
+    },
+    {
+      "description": "Design tool licence (annual)",
+      "quantity": "20",
+      "unit_price": "4468.00",
+      "amount": "89360.00"
+    },
+    {
+      "description": "Team plan seat (monthly)",
+      "quantity": "10",
+      "unit_price": "10453.00",
+      "amount": "104530.00"
+    },
+    {
+      "description": "Team plan seat (monthly) (replacement)",
+      "quantity": "20",
+      "unit_price": "14391.00",
+      "amount": "287820.00"
+    },
+    {
+      "description": "Backup service (monthly)",
+      "quantity": "6",
+      "unit_price": "8628.00",
+      "amount": "51768.00"
+    },
+    {
+      "description": "Design tool licence (annual) (extra)",
+      "quantity": "12",
+      "unit_price": "14787.00",
+      "amount": "177444.00"
+    },
+    {
+      "description": "Team plan seat (monthly) (second batch)",
+      "quantity": "6",
+      "unit_price": "12353.00",
+      "amount": "74118.00"
+    },
+    {
+      "description": "Backup service (monthly) (extra)",
+      "quantity": "10",
+      "unit_price": "6545.00",
+      "amount": "65450.00"
+    },
+    {
+      "description": "Backup service (monthly) (replacement)",
+      "quantity": "6",
+      "unit_price": "4571.00",
+      "amount": "27426.00"
+    }
+  ]
+}

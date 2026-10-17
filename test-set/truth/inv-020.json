@@ -1,0 +1,36 @@
+{
+  "supplier_name": "Ashgrove Logistics GmbH",
+  "invoice_number": "R-487079",
+  "invoice_date": "2026-07-05",
+  "due_date": null,
+  "currency": "CHF",
+  "subtotal": "8270.43",
+  "tax": "669.90",
+  "total": "8940.33",
+  "line_items": [
+    {
+      "description": "Accessibility audit",
+      "quantity": "37.5",
+      "unit_price": "152.35",
+      "amount": "5713.13"
+    },
+    {
+      "description": "Accessibility audit (extra)",
+      "quantity": "1",
+      "unit_price": "186.70",
+      "amount": "186.70"
+    },
+    {
+      "description": "Pallet delivery",
+      "quantity": "10",
+      "unit_price": "186.00",
+      "amount": "1860.00"
+    },
+    {
+      "description": "Pallet delivery (second batch)",
+      "quantity": "3",
+      "unit_price": "170.20",
+      "amount": "510.60"
+    }
+  ]
+}

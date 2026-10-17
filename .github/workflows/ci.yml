@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      # Database tests run on PGlite (in-process Postgres) and the model is faked,
+      # so CI needs no database service, no API key and spends nothing.
+      - run: npm test
+      - run: npm run build
+        env:
+          # Build-time only; nothing connects during the build.
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci

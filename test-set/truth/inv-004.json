@@ -1,0 +1,24 @@
+{
+  "supplier_name": "Oakhollow Supplies Pvt. Ltd.",
+  "invoice_number": "TI/26-27/0859",
+  "invoice_date": "2026-04-26",
+  "due_date": "2026-06-10",
+  "currency": "INR",
+  "subtotal": "143554.00",
+  "tax": "25839.72",
+  "total": "169393.72",
+  "line_items": [
+    {
+      "description": "Pallet delivery",
+      "quantity": "12",
+      "unit_price": "11460.00",
+      "amount": "137520.00"
+    },
+    {
+      "description": "Pallet delivery (extra)",
+      "quantity": "1",
+      "unit_price": "6034.00",
+      "amount": "6034.00"
+    }
+  ]
+}

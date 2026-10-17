@@ -1,0 +1,54 @@
+{
+  "supplier_name": "Meridian Row Hardware B.V.",
+  "invoice_number": "RE-2026-1791",
+  "invoice_date": "2026-03-04",
+  "due_date": "2026-03-18",
+  "currency": "EUR",
+  "subtotal": "7382.75",
+  "tax": "1476.55",
+  "total": "8859.30",
+  "line_items": [
+    {
+      "description": "Fresh fruit platter (serves 10)",
+      "quantity": "10",
+      "unit_price": "40.00",
+      "amount": "400.00"
+    },
+    {
+      "description": "Front-end development",
+      "quantity": "10",
+      "unit_price": "163.00",
+      "amount": "1630.00"
+    },
+    {
+      "description": "Copywriting",
+      "quantity": "3",
+      "unit_price": "156.25",
+      "amount": "468.75"
+    },
+    {
+      "description": "Project management",
+      "quantity": "1.5",
+      "unit_price": "128.00",
+      "amount": "192.00"
+    },
+    {
+      "description": "Project management (extra)",
+      "quantity": "16",
+      "unit_price": "76.00",
+      "amount": "1216.00"
+    },
+    {
+      "description": "Fresh fruit platter (serves 10) (replacement)",
+      "quantity": "36",
+      "unit_price": "15.75",
+      "amount": "567.00"
+    },
+    {
+      "description": "Staff training session",
+      "quantity": "20",
+      "unit_price": "145.45",
+      "amount": "2909.00"
+    }
+  ]
+}
