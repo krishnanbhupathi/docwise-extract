@@ -6,6 +6,16 @@ Spec: "Docwise Build Plan" (Claude Doc). Timeline: Day 1 Mon 19 Oct → Day 5 Fr
 
 Goal: one invoice goes from upload to validated fields on the live URL.
 
+**Done (17 Oct):**
+- **Live:** https://docwise-extract.vercel.app (deploys from `main`; migrations run in the build against Neon `docwise`).
+- **Repo:** https://github.com/krishnanbhupathi/docwise-extract (public, MIT), CI on every push (lint, typecheck, tests, build).
+- **Pipeline:** signed upload → server checks the stored file → extraction in `after()` → Zod → rules → `fields` / `line_items`. Locally verified end to end with the fake model and local storage.
+- **Test set:** `inv-001`–`inv-020` (5 layouts; USD, EUR, GBP, INR, AUD, CAD, JPY, CHF; 1–15 line items; 14 tuning / 6 held out). True values in `test-set/truth/`, index in `test-set/manifest.json`.
+- **Tests:** 41 Vitest (rules, money, extraction retry/validation, upload checks and daily cap, pipeline on PGlite, access scoping, generator determinism and arithmetic).
+- **R2:** private bucket `docwise-uploads`, CORS limited to the production origin and `localhost:3000` (PUT/GET, `content-type` header only).
+
+**Left for Day 1:** one real invoice through Claude on the live URL. Waiting on the two keys below.
+
 ### Plan
 1. **Scaffold:** Next.js 16.4.1 (App Router), TypeScript, Drizzle on Neon (`docwise` database), Vitest with PGlite, Tailwind. Same foundations as Slotwise and Formwise.
 2. **Schema:** `documents`, `extractions`, `fields`, `line_items`, `api_keys`, `eval_runs` (the plan's data model, plus the additions listed under Decisions).
