@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { EFFORT, MODEL, SYSTEM_PROMPT } from "./prompt";
+import { EFFORT, MODEL, PROMPTS, PROMPT_VERSION } from "./prompt";
 import { modelJsonSchema } from "./schema";
 
 export const MEDIA_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"] as const;
@@ -34,7 +34,9 @@ export type CallModel = (request: ModelRequest) => Promise<ModelResponse>;
  * Refusal fallbacks are on ("default" routing): a safety-classifier decline is
  * re-run on Anthropic's recommended fallback model, and the response records it.
  */
-export function anthropicModel(apiKey: string, model = MODEL): CallModel {
+export function anthropicModel(apiKey: string, model = MODEL, promptVersion = PROMPT_VERSION): CallModel {
+  const system = PROMPTS[promptVersion];
+  if (!system) throw new Error(`Unknown prompt version ${promptVersion}`);
   const client = new Anthropic({ apiKey, timeout: 120_000, maxRetries: 2 });
   return async ({ file, retry }) => {
     const data = Buffer.from(file.data).toString("base64");
@@ -52,7 +54,7 @@ export function anthropicModel(apiKey: string, model = MODEL): CallModel {
     const response = await client.beta.messages.create({
       model,
       max_tokens: 16_000,
-      system: SYSTEM_PROMPT,
+      system,
       messages,
       output_config: { effort: EFFORT, format: { type: "json_schema", schema: modelJsonSchema } },
       betas: ["server-side-fallback-2026-07-01"],
