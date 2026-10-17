@@ -1,12 +1,11 @@
 import { eq } from "drizzle-orm";
-import { PDFDocument } from "pdf-lib";
 import sharp from "sharp";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { documents, extractions, fields, lineItems } from "@/db/schema";
-import type { CallModel, ModelResponse } from "@/extraction/model";
+import type { CallModel } from "@/extraction/model";
 import { createTestDb, resetTestDb, type TestDb } from "@/test/db";
-import { confirmUpload, getDocument, listDocuments, processDocument, startUpload, storageName } from "./documents";
-import type { FileStorage } from "./storage";
+import { answer, invoice, invoiceText, memoryStorage, modelReturning, queuedPdf, textPdf, uploadBlankPdf, type MemoryStorage } from "@/test/fixtures";
+import { FAILURE_MESSAGES, MAX_RUNS, STALE_AFTER_MS, canRetry, confirmUpload, getDocument, listDocuments, processDocument, retryDocument, startUpload, storageName } from "./documents";
 
 vi.mock("server-only", () => ({}));
 
@@ -20,66 +19,7 @@ beforeAll(async () => {
 afterAll(() => close());
 beforeEach(() => resetTestDb(db));
 
-/** In-memory storage; `uploaded` simulates the browser's PUT. */
-function memoryStorage() {
-  const files = new Map<string, Uint8Array>();
-  const storage: FileStorage = {
-    createUploadUrl: async (key) => `https://upload.test/${key}`,
-    createDownloadUrl: async (key) => `https://download.test/${key}`,
-    head: async (key) => (files.has(key) ? { size: files.get(key)!.byteLength } : null),
-    get: async (key) => {
-      const file = files.get(key);
-      if (!file) throw new Error(`missing ${key}`);
-      return file;
-    },
-    delete: async (key) => void files.delete(key),
-  };
-  return { storage, files };
-}
-
-async function pdf(pages: number) {
-  const doc = await PDFDocument.create();
-  for (let i = 0; i < pages; i++) doc.addPage();
-  return doc.save();
-}
-
-const invoice = {
-  supplier_name: "Copperleaf Studio Ltd",
-  invoice_number: "INV-2041",
-  invoice_date: "2026-10-01",
-  due_date: "2026-10-31",
-  currency: "GBP",
-  subtotal: "1250.00",
-  tax: "250.00",
-  total: "1500.00",
-  line_items: [
-    { description: "Design review", quantity: "10", unit_price: "100.00", amount: "1000.00" },
-    { description: "Travel", quantity: null, unit_price: null, amount: "250.00" },
-  ],
-  uncertain: [],
-};
-
-const answer = (body: unknown, patch: Partial<ModelResponse> = {}): ModelResponse => ({
-  text: typeof body === "string" ? body : JSON.stringify(body),
-  model: "claude-opus-5-5",
-  stopReason: "end_turn",
-  inputTokens: 2400,
-  outputTokens: 600,
-  fallbackUsed: false,
-  raw: { id: "msg_test" },
-  ...patch,
-});
-
-const modelReturning = (...answers: ModelResponse[]): CallModel => async () => answers.shift() ?? Promise.reject(new Error("no answer"));
-
-async function uploadPdf(storage: ReturnType<typeof memoryStorage>, workspaceId = "ws-1", pages = 1) {
-  const data = await pdf(pages);
-  const started = await startUpload(db, storage.storage, { workspaceId, fileName: "March invoice (final).pdf", mediaType: "application/pdf", sizeBytes: data.byteLength });
-  if (!started.ok) throw new Error(started.error);
-  const [doc] = await db.select().from(documents).where(eq(documents.id, started.id));
-  storage.files.set(doc.fileKey, data);
-  return { id: started.id, doc, data };
-}
+const uploadPdf = (storage: MemoryStorage, workspaceId = "ws-1", pages = 1) => uploadBlankPdf(db, storage, workspaceId, pages);
 
 describe("upload", () => {
   it("records the document, then queues it once the stored file checks out", async () => {
@@ -160,7 +100,8 @@ describe("processDocument", () => {
       ["line_items", "2"],
     ]);
     const total = view.fields.find((f) => f.name === "total")!;
-    expect(total).toMatchObject({ ruleFailures: ["total_mismatch"], modelUncertain: "Smudged", confidence: null });
+    expect(total).toMatchObject({ ruleFailures: ["total_mismatch"], modelUncertain: "Smudged", confidence: "low", confidenceReasons: ["rule:total_mismatch", "model_uncertain"] });
+    expect(view.fields.find((f) => f.name === "supplier_name")).toMatchObject({ confidence: "high", confidenceReasons: [] });
     expect(view.lineItems.map((l) => [l.position, l.quantity, l.amount])).toEqual([
       [1, "10", "1000.00"],
       [2, null, "250.00"],
@@ -173,8 +114,7 @@ describe("processDocument", () => {
     const { id, storage } = await queued();
     await processDocument(db, storage.storage, modelReturning(answer("not json"), answer({ ...invoice, total: "£1,500" })), id);
     const [doc] = await db.select().from(documents).where(eq(documents.id, id));
-    expect(doc.status).toBe("failed");
-    expect(doc.error).toContain("didn't match the format after 2 attempts");
+    expect(doc).toMatchObject({ status: "failed", error: FAILURE_MESSAGES.invalid_output });
     expect(await db.select().from(fields)).toEqual([]);
     expect(await db.select().from(lineItems)).toEqual([]);
     const logged = await db.select().from(extractions);
@@ -190,6 +130,40 @@ describe("processDocument", () => {
     await processDocument(db, storage.storage, model, id);
     await processDocument(db, storage.storage, model, id);
     expect(model).toHaveBeenCalledTimes(1);
+  });
+
+  it("approves an invoice automatically when every field is high", async () => {
+    const { id, storage } = await queued();
+    await processDocument(db, storage.storage, modelReturning(answer(invoice)), id);
+    const [doc] = await db.select().from(documents).where(eq(documents.id, id));
+    // A blank PDF has no text layer, so only the rules and the model's doubts count.
+    expect(doc).toMatchObject({ status: "approved", approval: "auto", hasText: false, runs: 1 });
+    expect(doc.approvedAt).toBeInstanceOf(Date);
+  });
+
+  it("checks values against the PDF's text and sends unprinted ones to review", async () => {
+    const storage = memoryStorage();
+    const printed = await queuedPdf(db, storage, { data: await textPdf(invoiceText) });
+    await processDocument(db, storage.storage, modelReturning(answer(invoice)), printed);
+    expect((await db.select().from(documents).where(eq(documents.id, printed)))[0]).toMatchObject({ status: "approved", hasText: true });
+
+    // Passes every rule, but the model swapped two digits of the invoice number.
+    const misread = await queuedPdf(db, storage, { data: await textPdf(invoiceText) });
+    await processDocument(db, storage.storage, modelReturning(answer({ ...invoice, invoice_number: "INV-2014" })), misread);
+    const view = (await getDocument(db, misread, "ws-1"))!;
+    expect(view.doc).toMatchObject({ status: "needs_review", approval: null, approvedAt: null });
+    expect(view.fields.filter((f) => f.confidence === "low").map((f) => [f.name, f.confidenceReasons])).toEqual([["invoice_number", ["not_in_text"]]]);
+  });
+
+  it("shows a plain message when the API fails, and keeps the details in the log", async () => {
+    const { id, storage } = await queued();
+    await processDocument(db, storage.storage, async () => {
+      throw new Error("401 invalid x-api-key");
+    }, id);
+    const [doc] = await db.select().from(documents).where(eq(documents.id, id));
+    expect(doc.error).toBe(FAILURE_MESSAGES.api_error);
+    const [logged] = await db.select().from(extractions);
+    expect(logged).toMatchObject({ rawJson: null, errors: ["401 invalid x-api-key"] });
   });
 
   it("marks the document failed if anything throws", async () => {
@@ -216,6 +190,54 @@ describe("processDocument", () => {
       return answer(invoice);
     }, started.id);
     expect(sent).toEqual({ mediaType: "image/jpeg", width: 2000 });
+  });
+});
+
+describe("retry", () => {
+  const failing: CallModel = async () => {
+    throw new Error("overloaded");
+  };
+
+  it("reads a failed document again, up to the run limit", async () => {
+    const storage = memoryStorage();
+    const id = await queuedPdf(db, storage);
+    for (let run = 1; run <= MAX_RUNS; run++) {
+      await processDocument(db, storage.storage, failing, id);
+      const [doc] = await db.select().from(documents).where(eq(documents.id, id));
+      expect(doc).toMatchObject({ status: "failed", runs: run });
+      expect(canRetry(doc)).toBe(run < MAX_RUNS);
+      expect(await retryDocument(db, { workspaceId: "ws-1", id })).toBe(run < MAX_RUNS);
+    }
+    expect(await db.select().from(extractions)).toHaveLength(MAX_RUNS);
+  });
+
+  it("succeeds on a retry and only for the browser that owns the document", async () => {
+    const storage = memoryStorage();
+    const id = await queuedPdf(db, storage);
+    await processDocument(db, storage.storage, failing, id);
+    expect(await retryDocument(db, { workspaceId: "ws-2", id })).toBe(false);
+    expect(await retryDocument(db, { workspaceId: "ws-1", id })).toBe(true);
+    expect(await retryDocument(db, { workspaceId: "ws-1", id })).toBe(false); // already queued
+    await processDocument(db, storage.storage, modelReturning(answer(invoice)), id);
+    expect((await db.select().from(documents).where(eq(documents.id, id)))[0]).toMatchObject({ status: "approved", runs: 2, error: null });
+  });
+
+  it("does not retry a file that failed its upload checks", async () => {
+    const storage = memoryStorage();
+    const long = await uploadPdf(storage, "ws-1", 6);
+    await confirmUpload(db, storage.storage, { workspaceId: "ws-1", id: long.id });
+    expect(await retryDocument(db, { workspaceId: "ws-1", id: long.id })).toBe(false);
+  });
+
+  it("requeues a run that was dropped mid-extraction, once it is stale", async () => {
+    const storage = memoryStorage();
+    const id = await queuedPdf(db, storage);
+    // The function died after claiming the document: it stays `extracting`.
+    await db.update(documents).set({ status: "extracting", runs: 1 }).where(eq(documents.id, id));
+    expect(await retryDocument(db, { workspaceId: "ws-1", id })).toBe(false);
+    const later = new Date(Date.now() + STALE_AFTER_MS + 1000);
+    expect(await retryDocument(db, { workspaceId: "ws-1", id, now: later })).toBe(true);
+    expect((await db.select().from(documents).where(eq(documents.id, id)))[0].status).toBe("queued");
   });
 });
 

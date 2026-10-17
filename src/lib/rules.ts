@@ -59,7 +59,8 @@ export function checkInvoice(data: InvoiceData): RuleResult {
     if (value === null) return null;
     const micros = toMicros(value);
     if (micros === null || micros % unit !== 0n) {
-      fail("invalid_amount", [field], `${what} "${value}" is not a valid${currency ? ` ${currency}` : ""} amount`);
+      // Header messages are shown after the field's label; line messages name their line.
+      fail("invalid_amount", [field], `${field === "line_items" ? `${what} ` : ""}"${value}" is not a valid${currency ? ` ${currency}` : ""} amount`);
       return null;
     }
     return micros;
@@ -80,16 +81,18 @@ export function checkInvoice(data: InvoiceData): RuleResult {
         return;
       }
       if (sum !== null) sum += lineAmount;
-      if (item.quantity !== null && item.unit_price !== null) {
-        const quantity = toMicros(item.quantity);
-        const price = toMicros(item.unit_price);
-        if (quantity === null || price === null) {
-          fail("invalid_amount", ["line_items"], `Line ${i + 1} quantity or unit price is not a number`);
-        } else {
-          const diff = multiplyMicros(quantity, price) - lineAmount;
-          // Allow the half-unit of rounding a correct invoice can show.
-          if ((diff < 0n ? -diff : diff) * 2n > unit) mismatched.push(i + 1);
-        }
+      const number = (value: string | null, what: string) => {
+        if (value === null) return null;
+        const micros = toMicros(value);
+        if (micros === null) fail("invalid_amount", ["line_items"], `Line ${i + 1} ${what} "${value}" is not a number`);
+        return micros;
+      };
+      const quantity = number(item.quantity, "quantity");
+      const price = number(item.unit_price, "unit price");
+      if (quantity !== null && price !== null) {
+        const diff = multiplyMicros(quantity, price) - lineAmount;
+        // Allow the half-unit of rounding a correct invoice can show.
+        if ((diff < 0n ? -diff : diff) * 2n > unit) mismatched.push(i + 1);
       }
     });
     if (mismatched.length) {

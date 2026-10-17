@@ -5,6 +5,8 @@ const createdAt = () => timestamp({ withTimezone: true }).notNull().defaultNow()
 /** `uploading`: the row exists, the file isn't confirmed yet. Then queued → extracting → needs_review / approved, or failed. */
 export const documentStatus = pgEnum("document_status", ["uploading", "queued", "extracting", "needs_review", "approved", "failed"]);
 export const documentSource = pgEnum("document_source", ["upload", "demo"]);
+/** How an approved document got approved: every field high (`auto`), or by a person (`review`). */
+export const approval = pgEnum("approval", ["auto", "review"]);
 
 export const documents = pgTable(
   "documents",
@@ -19,7 +21,14 @@ export const documents = pgTable(
     pages: integer(),
     status: documentStatus().notNull().default("uploading"),
     source: documentSource().notNull().default("upload"),
+    /** A plain message for the visitor; details stay in `extractions.errors`. */
     error: text(),
+    /** Extraction runs started (the first one plus retries); retries stop at a limit. */
+    runs: integer().notNull().default(0),
+    /** Whether the PDF had a text layer to check values against (null until extracted). */
+    hasText: boolean(),
+    approval: approval(),
+    approvedAt: timestamp({ withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   },
@@ -66,11 +75,17 @@ export const fields = pgTable(
       .references(() => extractions.id, { onDelete: "cascade" }),
     name: text().notNull(),
     value: text(),
-    /** high | low; set from Day 2 (rules + the model's own uncertainty). */
+    /** high | low, from `lib/confidence.ts`; the reasons say why a field is low. */
     confidence: text(),
+    confidenceReasons: jsonb().$type<string[]>().notNull().default([]),
     ruleFailures: jsonb().$type<string[]>().notNull().default([]),
     /** The model's reason when it listed this field as uncertain. */
     modelUncertain: text(),
+    /**
+     * A reviewer's value, set when it differs from the extracted one (null can be a
+     * correction: `corrected_at` says whether there is one). For `line_items`, the
+     * corrected list as JSON; the extracted lines stay in `line_items`.
+     */
     correctedValue: text(),
     correctedAt: timestamp({ withTimezone: true }),
   },

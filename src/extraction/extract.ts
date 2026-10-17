@@ -9,9 +9,11 @@ export type Attempt = {
   errors: string[];
 };
 
+export type FailureKind = "api_error" | "refused" | "truncated" | "invalid_output";
+
 export type ExtractResult =
   | { ok: true; data: ModelOutput; attempts: Attempt[] }
-  | { ok: false; error: string; attempts: Attempt[] };
+  | { ok: false; kind: FailureKind; error: string; attempts: Attempt[] };
 
 function parseJson(text: string): { ok: true; value: unknown } | { ok: false } {
   try {
@@ -40,17 +42,17 @@ export async function extractInvoice(file: InvoiceFile, callModel: CallModel, { 
       // The SDK has already retried transient API errors.
       const message = error instanceof Error ? error.message : String(error);
       attempts.push({ response: null, ms: Math.round(clock() - started), errors: [message] });
-      return { ok: false, error: `The model call failed: ${message}`, attempts };
+      return { ok: false, kind: "api_error", error: `The model call failed: ${message}`, attempts };
     }
     const ms = Math.round(clock() - started);
 
     if (response.stopReason === "refusal") {
       attempts.push({ response, ms, errors: ["The model declined to read this document"] });
-      return { ok: false, error: "The model declined to read this document", attempts };
+      return { ok: false, kind: "refused", error: "The model declined to read this document", attempts };
     }
     if (response.stopReason === "max_tokens") {
       attempts.push({ response, ms, errors: ["The answer was cut off at the output limit"] });
-      return { ok: false, error: "The answer was cut off at the output limit", attempts };
+      return { ok: false, kind: "truncated", error: "The answer was cut off at the output limit", attempts };
     }
 
     const json = parseJson(response.text);
@@ -67,5 +69,5 @@ export async function extractInvoice(file: InvoiceFile, callModel: CallModel, { 
     retry = { previousText: response.text, errors };
   }
 
-  return { ok: false, error: `The answer didn't match the format after ${maxAttempts} attempts: ${attempts.at(-1)!.errors.join("; ")}`, attempts };
+  return { ok: false, kind: "invalid_output", error: `The answer didn't match the format after ${maxAttempts} attempts: ${attempts.at(-1)!.errors.join("; ")}`, attempts };
 }

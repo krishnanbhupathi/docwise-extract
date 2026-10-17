@@ -89,6 +89,11 @@ describe("checkInvoice", () => {
     expect(rules(wholeYen)).toEqual([]);
   });
 
+  it("flags a quantity or unit price that isn't a number, even on its own", () => {
+    const lines = [{ description: "Design review", quantity: "ten", unit_price: null, amount: "1000.00" }, valid.line_items[1]];
+    expect(checkInvoice(with_({ line_items: lines })).failures).toEqual([{ rule: "invalid_amount", fields: ["line_items"], message: 'Line 1 quantity "ten" is not a number' }]);
+  });
+
   it("flags an invoice with no line items", () => {
     expect(rules(with_({ line_items: [] }))).toEqual(["no_line_items"]);
   });
