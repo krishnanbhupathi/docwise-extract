@@ -46,7 +46,7 @@ export default async function DocumentPage({ params }: Props) {
       <section aria-label="Original document" className="bench rounded-2xl p-3 sm:p-5 lg:sticky lg:top-4 lg:self-start">
         <div className="overflow-hidden rounded-md bg-white shadow-[0_24px_48px_-20px_rgb(0_0_0/0.7)]">
           {doc.mediaType === "application/pdf" ? (
-            <iframe src={`${fileUrl}#view=FitH`} title={doc.fileName} className="block h-[60vh] w-full lg:h-[calc(100dvh-10rem)]" />
+            <iframe src={`${fileUrl}#navpanes=0&view=FitH`} title={doc.fileName} className="block h-[60vh] w-full lg:h-[calc(100dvh-10rem)]" />
           ) : (
             // eslint-disable-next-line @next/next/no-img-element -- a short-lived signed URL; nothing for next/image to optimise or cache
             <img src={fileUrl} alt={`Uploaded invoice ${doc.fileName}`} className="max-h-[60vh] w-full object-contain lg:max-h-[calc(100dvh-10rem)]" />
