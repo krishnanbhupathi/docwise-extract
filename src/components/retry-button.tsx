@@ -17,11 +17,11 @@ export function RetryButton({ documentId }: { documentId: string }) {
             setError(result.ok ? null : result.error);
           })
         }
-        className="rounded-lg border border-line bg-panel px-3 py-1.5 text-sm font-medium hover:border-accent/60 disabled:opacity-50"
+        className="rounded-md border border-line bg-sheet px-3 py-1.5 text-sm font-medium text-ink hover:border-cobalt/60 disabled:opacity-50"
       >
-        {pending ? "Starting…" : "Try again"}
+        {pending ? "Starting…" : "↻ Try again"}
       </button>
-      {error && <span className="text-sm text-danger">{error}</span>}
+      {error && <span className="text-sm text-fail">{error}</span>}
     </div>
   );
 }

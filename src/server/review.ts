@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray, or } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, or } from "drizzle-orm";
 import { z } from "zod";
 import { documents, fields, lineItems } from "@/db/schema";
 import type { Database } from "@/db/types";
@@ -74,6 +74,15 @@ export async function approveDocument(db: Database, { workspaceId, id, input, no
     }
     return { ok: true as const };
   });
+}
+
+/** How many of this browser's invoices wait for review (the header's badge). */
+export async function countReviewQueue(db: Database, workspaceId: string): Promise<number> {
+  const [{ n }] = await db
+    .select({ n: count() })
+    .from(documents)
+    .where(and(eq(documents.workspaceId, workspaceId), eq(documents.status, "needs_review")));
+  return n;
 }
 
 /** This browser's invoices waiting for review, oldest first, with the fields that made them wait. */

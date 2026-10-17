@@ -1,43 +1,121 @@
 @import "tailwindcss";
 
 /*
- * Day 1 palette: quiet neutrals, one accent, and a separate "flag" colour for
- * anything a person must check. Tokens only, so the visual identity can be
- * replaced later without touching components.
+ * Docwise identity: the audit workbench.
+ * The original document sits on a graphite bench; beside it, the audit sheet
+ * lists every value with an auditor's tick marks (✓ vouched, × extended,
+ * Σ footed, ⊕ cross-footed). Cobalt is a mark that passed, a highlighter
+ * stroke is a value a person must look at, vermilion is a check that failed.
+ * Light and dark themes share one token set.
  */
 :root {
-  --paper: #fafaf7;
-  --panel: #ffffff;
-  --ink: #1c1d21;
-  --muted: #5d6068;
-  --line: #e2e1db;
-  --accent: #2346c6;
-  --accent-ink: #ffffff;
-  --flag: #a8530b;
-  --flag-bg: #fff4e5;
-  --ok: #1f7a4d;
-  --ok-bg: #e9f6ef;
-  --danger: #b42318;
+  --bg: #eceef2;
+  --sheet: #ffffff;
+  --sheet-2: #f6f7f9;
+  --ink: #14161b;
+  --muted: #5a606e;
+  --line: #d8dbe2;
+  --chrome: #1b1d22;
+  --chrome-ink: #eef0f4;
+  --chrome-muted: #9aa0ad;
+  --bench: #26292f;
+  --bench-ink: #d9dce3;
+  --cobalt: #2747d0;
+  --cobalt-ink: #ffffff;
+  --cobalt-tint: #e5eaff;
+  --highlight: #ffe066;
+  --flag: #7a4f00;
+  --flag-tint: #fff4cc;
+  --fail: #c8361a;
+  --fail-tint: #fde9e3;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1013;
+    --sheet: #16191e;
+    --sheet-2: #1c2026;
+    --ink: #e9ebf0;
+    --muted: #9ba1ae;
+    --line: #2b3039;
+    --chrome: #08090b;
+    --chrome-ink: #e9ebf0;
+    --chrome-muted: #8c93a1;
+    --bench: #07080a;
+    --bench-ink: #c3c8d2;
+    --cobalt: #8fa3ff;
+    --cobalt-ink: #0b1030;
+    --cobalt-tint: #1d2547;
+    --highlight: rgb(255 207 64 / 0.34);
+    --flag: #ffd25c;
+    --flag-tint: #2e2611;
+    --fail: #ff7a5c;
+    --fail-tint: #3a1b14;
+    color-scheme: dark;
+  }
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-panel: var(--panel);
+  --color-bg: var(--bg);
+  --color-sheet: var(--sheet);
+  --color-sheet-2: var(--sheet-2);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
-  --color-accent: var(--accent);
-  --color-accent-ink: var(--accent-ink);
+  --color-chrome: var(--chrome);
+  --color-chrome-ink: var(--chrome-ink);
+  --color-chrome-muted: var(--chrome-muted);
+  --color-bench: var(--bench);
+  --color-bench-ink: var(--bench-ink);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-ink: var(--cobalt-ink);
+  --color-cobalt-tint: var(--cobalt-tint);
+  --color-highlight: var(--highlight);
   --color-flag: var(--flag);
-  --color-flag-bg: var(--flag-bg);
-  --color-ok: var(--ok);
-  --color-ok-bg: var(--ok-bg);
-  --color-danger: var(--danger);
-  --font-sans: var(--font-plex-sans);
-  --font-mono: var(--font-plex-mono);
+  --color-flag-tint: var(--flag-tint);
+  --color-fail: var(--fail);
+  --color-fail-tint: var(--fail-tint);
+  --font-sans: var(--font-instrument), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-martian), ui-monospace, Menlo, monospace;
 }
 
 body {
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
+}
+
+/* Components sit in a layer so Tailwind utilities (text-xs, …) can still override them. */
+@layer components {
+  /* The workbench surface: graphite with a faint dot grid, like a cutting mat under a lamp. */
+  .bench {
+    background-color: var(--bench);
+    background-image: radial-gradient(color-mix(in oklab, var(--bench-ink) 16%, transparent) 1px, transparent 1.3px);
+    background-size: 18px 18px;
+    color: var(--bench-ink);
+  }
+
+  /* A highlighter stroke across the lower part of the text, as a reviewer marks a figure. */
+  .highlight {
+    background: linear-gradient(transparent 52%, var(--highlight) 52%, var(--highlight) 92%, transparent 92%);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Figures: tabular and a touch condensed, so columns of amounts line up. */
+  .figures {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-stretch: 87.5%;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
 }

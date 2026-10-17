@@ -16,7 +16,11 @@ Goal met: a low-confidence invoice lands in review and can be fixed and approved
 - **Test set:** all 60 invoices. `inv-021`–`inv-045` clean; `inv-046`–`inv-060` hard: 4 scans, 3 phone photos, 3 multi-page, 2 handwritten, 3 deliberate mismatches. 40 tuning / 20 held out; one of each hard kind is held out.
 - **Tests:** 110 Vitest. Added: text check, confidence (including the true values of every tuning invoice with a text layer, scored against its own PDF: no false alarms), routing, retry, approval and corrections, queue, export, CSV escaping, generator (hard slice, mismatches, committed truth files unchanged), manifest.
 
+- **UI: the audit workbench.** A new identity, distinct from Slotwise (school timetable) and Formwise (green-bar form paper): the original on a graphite bench, beside an audit sheet where each value carries auditor's tick marks (✓ vouched, × extended, Σ footed, ⊕ cross-footed, ? unsure; `lib/marks.ts`, tested). Failed marks highlight the value. Instrument Sans + Martian Mono, cobalt / highlighter / vermilion, light and dark themes, checked at phone width with no sideways scroll.
+
 **Live check (two tuning invoices, not a measurement):** on https://docwise-extract.vercel.app, `inv-001` was approved automatically (every field high). `inv-056`, whose printed total is wrong on purpose, went to review with subtotal, tax and total flagged ("Subtotal 6265.70 + tax 516.92 = 6782.62, but the total is 6728.62"); all 8 header fields matched `test-set/truth/inv-056.json` (line items weren't compared on this run). Approve stayed disabled until "approve as printed" was ticked, then the invoice was approved and both invoices came out of `/export.csv` (11 line-item rows). My Day 1 and Day 2 test uploads (4 documents and their R2 files) were then deleted from production.
+
+**Krishna's own test (six tuning invoices, not a measurement):** inv-001, 052, 055, 059 were approved automatically and inv-056, 058 went to review. Compared afterwards with `test-set/truth/`: every header field and line item matched on all six. The six uploads were then deleted from production.
 
 **Next (Day 3):** `npm run eval` (per-field accuracy, line-item F1, docs fully correct, review rate, escaped errors, cost and time per document) with reports in `docs/measurements/`; tune the prompt on the tuning split only.
 
@@ -78,6 +82,7 @@ Goal met: one invoice went from upload to validated fields on the live URL.
 | Day 2 | Corrections are kept beside the extracted values, never over them | The eval and the log must always tell what the model said from what a person fixed |
 | Day 2 | Unusable values block approval even with the tick; arithmetic failures can be approved as printed | An invoice that doesn't add up is a fact about the invoice; `1,500.00` in an amount field is a typo nothing downstream can import |
 | Day 2 | Retry limit: 3 runs per document; a run is "dropped" after 6 minutes | Each run can cost up to two model calls on the public key; the function's own limit is 300 s |
+| Day 2 | UI identity: the audit workbench (tick marks per value, document on a bench) | Krishna chose it over "lightbox inspection" and "Swiss data sheet". The marks are the confidence reasons in an auditor's vocabulary, so the UI explains itself |
 | Day 2 | Demo documents are read-only for visitors (no shared approvals) | One visitor's approval would change the demo for everyone; Day 4 decides how visitors try review on samples |
 
 ### Blocked on Krishna

@@ -52,12 +52,27 @@ export function UploadForm() {
           const file = e.dataTransfer.files[0];
           if (file && !state.busy) void upload(file);
         }}
-        className={`flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors ${
-          dragging ? "border-accent bg-accent/5" : "border-line bg-panel hover:border-accent/60"
-        } ${state.busy ? "pointer-events-none opacity-70" : ""}`}
+        className={`bench flex cursor-pointer flex-col items-center gap-3 rounded-2xl px-6 py-12 text-center transition-shadow ${
+          dragging ? "shadow-[inset_0_0_0_2px_var(--cobalt)]" : "shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--bench-ink)_22%,transparent)] hover:shadow-[inset_0_0_0_2px_color-mix(in_oklab,var(--cobalt)_70%,transparent)]"
+        } ${state.busy ? "pointer-events-none" : ""}`}
       >
-        <span className="text-base font-semibold">{state.busy ? state.step : "Drop an invoice here, or choose a file"}</span>
-        <span className="text-sm text-muted">PDF (up to 5 pages) or a photo · JPEG, PNG or WebP · up to 10 MB</span>
+        <svg viewBox="0 0 48 48" className="size-11 text-bench-ink/80" aria-hidden="true">
+          <path d="M14 6h14l8 8v28H14z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+          <path d="M28 6v8h8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+          <path d="M19 27l4 4 8-9" fill="none" stroke="var(--cobalt)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M18 37h14" stroke="#ffe066" strokeWidth="2.4" strokeLinecap="round" />
+        </svg>
+        <span className="text-lg font-semibold text-white">
+          {state.busy ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="size-2 animate-pulse rounded-full bg-[#ffe066]" aria-hidden="true" />
+              {state.step}
+            </span>
+          ) : (
+            "Drop an invoice on the bench, or choose a file"
+          )}
+        </span>
+        <span className="font-mono text-xs text-bench-ink/70">PDF up to 5 pages · JPEG, PNG or WebP photo · 10 MB max</span>
         <input
           ref={input}
           type="file"
@@ -72,7 +87,7 @@ export function UploadForm() {
         />
       </label>
       {state.error && (
-        <p role="alert" className="mt-3 text-sm font-medium text-danger">
+        <p role="alert" className="mt-3 text-sm font-medium text-fail">
           {state.error}
         </p>
       )}
