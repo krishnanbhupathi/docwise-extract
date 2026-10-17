@@ -1,4 +1,4 @@
-import { boolean, index, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 const createdAt = () => timestamp({ withTimezone: true }).notNull().defaultNow();
 
@@ -21,6 +21,8 @@ export const documents = pgTable(
     pages: integer(),
     status: documentStatus().notNull().default("uploading"),
     source: documentSource().notNull().default("upload"),
+    /** The sample this is a visitor's private copy of (to try the review on). No model call, so it counts toward no cap; no foreign key, so a re-seeded sample can't turn copies into uploads. */
+    copiedFrom: text(),
     /** A plain message for the visitor; details stay in `extractions.errors`. */
     error: text(),
     /** Extraction runs started (the first one plus retries); retries stop at a limit. */
@@ -112,13 +114,32 @@ export const lineItems = pgTable(
   (t) => [uniqueIndex().on(t.documentId, t.position)],
 );
 
-/** Only a hash of each key is stored. */
-export const apiKeys = pgTable("api_keys", {
-  id: uuid().primaryKey().defaultRandom(),
-  hash: text().notNull().unique(),
-  label: text().notNull(),
-  createdAt: createdAt(),
-});
+/** Only a hash of each key is stored. A key acts for the browser workspace that created it. */
+export const apiKeys = pgTable(
+  "api_keys",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    hash: text().notNull().unique(),
+    /** The key's first characters, so a list can tell keys apart without showing them. */
+    prefix: text().notNull(),
+    label: text().notNull(),
+    workspaceId: text().notNull(),
+    lastUsedAt: timestamp({ withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index().on(t.workspaceId)],
+);
+
+/** Fixed-window counters for rate limits (per IP, per API key), so no extra service is needed. */
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    bucket: text().notNull(),
+    windowStart: timestamp({ withTimezone: true }).notNull(),
+    count: integer().notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.bucket, t.windowStart] })],
+);
 
 export const evalRuns = pgTable("eval_runs", {
   id: uuid().primaryKey().defaultRandom(),

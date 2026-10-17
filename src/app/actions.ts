@@ -1,10 +1,12 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { headers } from "next/headers";
 import { after } from "next/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { confirmUpload, processDocument, retryDocument, startUpload } from "@/server/documents";
+import { capReached, clientIp, hit, ipSubject, type RateLimit, RATE_LIMITS } from "@/server/limits";
 import { getModel } from "@/server/model";
 import { approveDocument, reviewInput, type ApproveResult } from "@/server/review";
 import { getStorage } from "@/server/storage";
@@ -17,9 +19,17 @@ const uploadInput = z.object({
   sizeBytes: z.number().int(),
 });
 
+/** The message to show when this visitor's IP is over `limit`, or null. */
+async function overLimit(limit: RateLimit, what: string): Promise<string | null> {
+  const result = await hit(db, limit, ipSubject(clientIp(await headers())));
+  return result.ok ? null : `Too many ${what} from your network. Try again in ${Math.ceil(result.retryAfterSeconds / 60)} minutes.`;
+}
+
 export async function requestUpload(input: z.input<typeof uploadInput>) {
   const parsed = uploadInput.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: "Invalid upload request." };
+  const limited = await overLimit(RATE_LIMITS.uploadsPerIp, "uploads");
+  if (limited) return { ok: false as const, error: limited };
   const workspaceId = await ensureWorkspace();
   return startUpload(db, getStorage(), { workspaceId, ...parsed.data });
 }
@@ -38,6 +48,8 @@ export async function finishUpload(id: string) {
 export async function retryExtraction(id: string) {
   const workspaceId = await readWorkspace();
   if (!workspaceId || typeof id !== "string") return { ok: false as const, error: "That document wasn't found." };
+  const closed = await capReached(db, "retry");
+  if (closed) return { ok: false as const, error: closed };
   if (!(await retryDocument(db, { workspaceId, id }))) return { ok: false as const, error: "This document can't be read again." };
   after(() => processDocument(db, getStorage(), getModel(), id));
   refresh();

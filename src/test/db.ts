@@ -28,5 +28,5 @@ export type TestDb = Awaited<ReturnType<typeof createTestDb>>["db"];
 /** Empties every table (one database per test file, reset between tests: much faster than re-migrating). */
 export async function resetTestDb(db: TestDb) {
   // documents cascades to extractions → fields / line_items.
-  await db.execute(sql`TRUNCATE documents, api_keys, eval_runs CASCADE`);
+  await db.execute(sql`TRUNCATE documents, api_keys, eval_runs, rate_limits CASCADE`);
 }

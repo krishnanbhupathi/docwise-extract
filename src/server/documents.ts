@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { and, asc, count, desc, eq, gt, inArray, lt, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, inArray, lt, or, sql } from "drizzle-orm";
 import { documents, extractions, fields, lineItems } from "@/db/schema";
 import type { Database } from "@/db/types";
 import { extractInvoice, type ExtractResult, type FailureKind } from "@/extraction/extract";
@@ -9,10 +9,8 @@ import { EFFORT, MODEL, PROMPT_VERSION } from "@/extraction/prompt";
 import { allHigh, scoreConfidence } from "@/lib/confidence";
 import { FIELD_NAMES, HEADER_FIELDS, type FieldName, type HeaderField, type InvoiceData, type LineItem } from "@/lib/invoice";
 import { checkInvoice } from "@/lib/rules";
+import { capReached, type CapOptions } from "./limits";
 import type { FileStorage } from "./storage";
-
-/** Uploads accepted per rolling 24 hours across the whole public demo (cost cap on the API key). */
-export const DAILY_UPLOAD_LIMIT = Number(process.env.DOCWISE_DAILY_UPLOADS || 50);
 
 /** Extraction runs per document, the first included; each one can cost up to two model calls. */
 export const MAX_RUNS = 3;
@@ -40,20 +38,13 @@ const isMediaType = (value: string): value is MediaType => (MEDIA_TYPES as reado
 export type StartUpload = { workspaceId: string; fileName: string; mediaType: string; sizeBytes: number };
 export type StartUploadResult = { ok: true; id: string; uploadUrl: string } | { ok: false; error: string };
 
-/** Step 1 of an upload: checks type, size and the daily cap, records the document, and hands out a signed upload URL. */
-export async function startUpload(db: Database, storage: FileStorage, input: StartUpload, { dailyLimit = DAILY_UPLOAD_LIMIT, now = new Date() } = {}): Promise<StartUploadResult> {
+/** Step 1 of an upload: checks type, size and the daily caps, records the document, and hands out a signed upload URL. */
+export async function startUpload(db: Database, storage: FileStorage, input: StartUpload, caps: CapOptions = {}): Promise<StartUploadResult> {
   if (!isMediaType(input.mediaType)) return { ok: false, error: "Upload a PDF, or a JPEG, PNG or WebP photo." };
   if (!Number.isInteger(input.sizeBytes) || input.sizeBytes <= 0) return { ok: false, error: "That file is empty." };
   if (input.sizeBytes > MAX_BYTES) return { ok: false, error: "Files can be up to 10 MB." };
-
-  const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const [{ uploads }] = await db
-    .select({ uploads: count() })
-    .from(documents)
-    .where(and(eq(documents.source, "upload"), gt(documents.createdAt, since)));
-  if (uploads >= dailyLimit) {
-    return { ok: false, error: `The demo has reached today's limit of ${dailyLimit} uploads. Try a sample invoice, or come back tomorrow.` };
-  }
+  const closed = await capReached(db, "upload", caps);
+  if (closed) return { ok: false, error: closed };
 
   const id = newDocumentId();
   const fileKey = `uploads/${id}/${storageName(input.fileName, input.mediaType)}`;
