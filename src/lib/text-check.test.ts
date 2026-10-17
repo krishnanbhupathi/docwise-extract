@@ -88,6 +88,9 @@ describe("matching values against the text", () => {
   it("notices fields the model may have missed", () => {
     expect(taxMentioned(indexText("VAT 20% 50.00"))).toBe(true);
     expect(taxMentioned(indexText("Total 250.00"))).toBe(false);
+    expect(taxMentioned(indexText("Sales tax (6%) $483.48"))).toBe(true);
+    expect(taxMentioned(indexText("VAT Reg. No. GB 123 4567 89   Total £250.00"))).toBe(false);
+    expect(taxMentioned(indexText("TAX INVOICE  Invoice No. 2041"))).toBe(false);
     expect(dueDateMentioned(indexText("Payment due: 30 Nov 2026"))).toBe(true);
     expect(dueDateMentioned(indexText("Due on receipt"))).toBe(false);
     expect(subtotalMentioned(indexText("Sub-total 250.00"))).toBe(true);

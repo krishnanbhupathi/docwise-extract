@@ -1,0 +1,18 @@
+{
+  "supplier_name": "Meridian Row Logistics Inc.",
+  "invoice_number": "INV-4498",
+  "invoice_date": "2026-09-28",
+  "due_date": null,
+  "currency": "USD",
+  "subtotal": "1100.00",
+  "tax": "66.00",
+  "total": "1166.00",
+  "line_items": [
+    {
+      "description": "USB-C cables, 2 m (pack of 5)",
+      "quantity": "1",
+      "unit_price": "1100.00",
+      "amount": "1100.00"
+    }
+  ]
+}

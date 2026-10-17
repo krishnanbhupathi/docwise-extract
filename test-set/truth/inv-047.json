@@ -1,0 +1,30 @@
+{
+  "supplier_name": "Fernhill Office Solutions GmbH",
+  "invoice_number": "RE-2026-4108",
+  "invoice_date": "2026-03-31",
+  "due_date": null,
+  "currency": "EUR",
+  "subtotal": "3442.15",
+  "tax": "722.85",
+  "total": "4165.00",
+  "line_items": [
+    {
+      "description": "Copywriting",
+      "quantity": "16",
+      "unit_price": "172.00",
+      "amount": "2752.00"
+    },
+    {
+      "description": "Accessibility audit",
+      "quantity": "6",
+      "unit_price": "79.00",
+      "amount": "474.00"
+    },
+    {
+      "description": "Project management",
+      "quantity": "3",
+      "unit_price": "72.05",
+      "amount": "216.15"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "supplier_name": "Northwind Lane Digital SARL",
+  "invoice_number": "RE-2026-8319",
+  "invoice_date": "2026-07-26",
+  "due_date": null,
+  "currency": "EUR",
+  "subtotal": "20224.80",
+  "tax": "4044.96",
+  "total": "24269.76",
+  "line_items": [
+    {
+      "description": "UPS battery backup, 1500 VA",
+      "quantity": "2",
+      "unit_price": "885.40",
+      "amount": "1770.80"
+    },
+    {
+      "description": "USB-C cables, 2 m (pack of 5)",
+      "quantity": "40",
+      "unit_price": "445.15",
+      "amount": "17806.00"
+    },
+    {
+      "description": "27-inch 4K monitor",
+      "quantity": "1",
+      "unit_price": "648.00",
+      "amount": "648.00"
+    }
+  ]
+}

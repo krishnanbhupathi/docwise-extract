@@ -1,0 +1,18 @@
+{
+  "supplier_name": "Silverbirch Logistics Pvt. Ltd.",
+  "invoice_number": "INV/26-27/0016",
+  "invoice_date": "2026-03-15",
+  "due_date": "2026-04-29",
+  "currency": "INR",
+  "subtotal": "268760.00",
+  "tax": "48376.80",
+  "total": "317136.80",
+  "line_items": [
+    {
+      "description": "Design tool licence (annual)",
+      "quantity": "40",
+      "unit_price": "6719.00",
+      "amount": "268760.00"
+    }
+  ]
+}

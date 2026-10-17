@@ -200,5 +200,6 @@ const RENDERERS: Record<TemplateName, Render> = { classic, modern, minimal, gst,
 
 /** The full HTML document for an invoice; `fontCss` holds the embedded @font-face rules. */
 export function renderInvoiceHtml(inv: GeneratedInvoice, fontCss: string): string {
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss}</style></head><body>${RENDERERS[inv.template](inv)}</body></html>`;
+  // Rows never split across pages on long invoices; table headers repeat on each page by default.
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${fontCss} tr{break-inside:avoid}</style></head><body>${RENDERERS[inv.template](inv)}</body></html>`;
 }

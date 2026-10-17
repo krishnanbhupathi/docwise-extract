@@ -73,10 +73,12 @@ describe("scoreConfidence", () => {
 });
 
 // The text check must not flag correct values: score each tuning invoice's true values against its own PDF.
+// Tuning split only: the held-out invoices are never used to adjust anything.
 describe("text check on the generated tuning invoices", async () => {
   const root = path.resolve(import.meta.dirname, "../../test-set");
   const manifest: ManifestEntry[] = JSON.parse(await readFile(path.join(root, "manifest.json"), "utf8"));
-  const cases = manifest.filter((e) => e.split === "tuning" && e.slice === "clean" && e.file.endsWith(".pdf"));
+  // Every tuning invoice with a text layer whose true values add up (the deliberate mismatches fail rules by design).
+  const cases = manifest.filter((e) => e.split === "tuning" && e.textLayer && e.expectedRuleFailures.length === 0);
 
   it.each(cases.map((e) => [e.id, e] as const))("%s: true values are all high", async (_, entry) => {
     const truth: InvoiceData = JSON.parse(await readFile(path.join(root, entry.truth), "utf8"));

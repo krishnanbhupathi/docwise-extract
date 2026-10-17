@@ -1,0 +1,48 @@
+{
+  "supplier_name": "Oakhollow Office Solutions Pte. Ltd.",
+  "invoice_number": "SG-2026-0568",
+  "invoice_date": "2026-04-14",
+  "due_date": null,
+  "currency": "SGD",
+  "subtotal": "9235.40",
+  "tax": "831.19",
+  "total": "10066.59",
+  "line_items": [
+    {
+      "description": "Fresh fruit platter (serves 10)",
+      "quantity": "12",
+      "unit_price": "39.40",
+      "amount": "472.80"
+    },
+    {
+      "description": "Afternoon pastries (per person)",
+      "quantity": "74",
+      "unit_price": "25.00",
+      "amount": "1850.00"
+    },
+    {
+      "description": "Breakfast buffet (per person)",
+      "quantity": "11",
+      "unit_price": "65.00",
+      "amount": "715.00"
+    },
+    {
+      "description": "Working lunch (per person)",
+      "quantity": "15",
+      "unit_price": "16.00",
+      "amount": "240.00"
+    },
+    {
+      "description": "Breakfast buffet (per person) (second batch)",
+      "quantity": "34",
+      "unit_price": "57.00",
+      "amount": "1938.00"
+    },
+    {
+      "description": "Coffee and tea service (per person)",
+      "quantity": "52",
+      "unit_price": "77.30",
+      "amount": "4019.60"
+    }
+  ]
+}

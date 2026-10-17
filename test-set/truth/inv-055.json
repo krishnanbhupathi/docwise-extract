@@ -1,0 +1,18 @@
+{
+  "supplier_name": "Tidewater Catering Pty Ltd",
+  "invoice_number": "INV-00522",
+  "invoice_date": "2026-08-10",
+  "due_date": null,
+  "currency": "AUD",
+  "subtotal": "237.00",
+  "tax": "23.70",
+  "total": "260.70",
+  "line_items": [
+    {
+      "description": "Cloud storage, 1 TB (monthly)",
+      "quantity": "1",
+      "unit_price": "237.00",
+      "amount": "237.00"
+    }
+  ]
+}

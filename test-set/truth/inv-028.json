@@ -1,0 +1,84 @@
+{
+  "supplier_name": "Meridian Row Logistics Ltd",
+  "invoice_number": "INV04018",
+  "invoice_date": "2026-05-23",
+  "due_date": "2026-06-22",
+  "currency": "GBP",
+  "subtotal": "6364.00",
+  "tax": null,
+  "total": "6364.00",
+  "line_items": [
+    {
+      "description": "Design tool licence (annual)",
+      "quantity": "5",
+      "unit_price": "101.05",
+      "amount": "505.25"
+    },
+    {
+      "description": "Team plan seat (monthly)",
+      "quantity": "25",
+      "unit_price": "47.30",
+      "amount": "1182.50"
+    },
+    {
+      "description": "Cloud storage, 1 TB (monthly)",
+      "quantity": "10",
+      "unit_price": "52.75",
+      "amount": "527.50"
+    },
+    {
+      "description": "Backup service (monthly)",
+      "quantity": "4",
+      "unit_price": "41.00",
+      "amount": "164.00"
+    },
+    {
+      "description": "Team plan seat (monthly) (extra)",
+      "quantity": "20",
+      "unit_price": "23.60",
+      "amount": "472.00"
+    },
+    {
+      "description": "Backup service (monthly) (second batch)",
+      "quantity": "2",
+      "unit_price": "138.00",
+      "amount": "276.00"
+    },
+    {
+      "description": "Team plan seat (monthly) (second batch)",
+      "quantity": "12",
+      "unit_price": "91.85",
+      "amount": "1102.20"
+    },
+    {
+      "description": "Cloud storage, 1 TB (monthly) (second batch)",
+      "quantity": "6",
+      "unit_price": "46.75",
+      "amount": "280.50"
+    },
+    {
+      "description": "Video conferencing seat (monthly)",
+      "quantity": "1",
+      "unit_price": "20.80",
+      "amount": "20.80"
+    },
+    {
+      "description": "Cloud storage, 1 TB (monthly) (extra)",
+      "quantity": "5",
+      "unit_price": "23.00",
+      "amount": "115.00"
+    },
+    {
+      "description": "Team plan seat (monthly) (replacement)",
+      "quantity": "25",
+      "unit_price": "65.05",
+      "amount": "1626.25"
+    },
+    {
+      "description": "Rush handling",
+      "quantity": null,
+      "unit_price": null,
+      "amount": "92.00"
+    }
+  ]
+}

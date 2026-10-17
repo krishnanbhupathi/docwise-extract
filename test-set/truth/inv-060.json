@@ -1,0 +1,60 @@
+{
+  "supplier_name": "Ashgrove Catering Ltd.",
+  "invoice_number": "21049",
+  "invoice_date": "2026-03-13",
+  "due_date": "2026-04-12",
+  "currency": "CAD",
+  "subtotal": "15971.20",
+  "tax": "2076.26",
+  "total": "18047.46",
+  "line_items": [
+    {
+      "description": "Monitor stand",
+      "quantity": "2",
+      "unit_price": "6.10",
+      "amount": "12.20"
+    },
+    {
+      "description": "Courier, same day",
+      "quantity": "5",
+      "unit_price": "314.55",
+      "amount": "1572.75"
+    },
+    {
+      "description": "Packaging materials",
+      "quantity": "1",
+      "unit_price": "267.00",
+      "amount": "267.00"
+    },
+    {
+      "description": "Ballpoint pens (pack of 50)",
+      "quantity": "40",
+      "unit_price": "185.00",
+      "amount": "7400.00"
+    },
+    {
+      "description": "Shredder bags (roll of 50)",
+      "quantity": "1",
+      "unit_price": "170.00",
+      "amount": "170.00"
+    },
+    {
+      "description": "Whiteboard markers (set of 8)",
+      "quantity": "2",
+      "unit_price": "296.50",
+      "amount": "593.00"
+    },
+    {
+      "description": "Pallet delivery",
+      "quantity": "25",
+      "unit_price": "238.25",
+      "amount": "5956.25"
+    },
+    {
+      "description": "Pallet delivery (additional)",
+      "quantity": "4",
+      "unit_price": "337.55",
+      "amount": "1350.20"
+    }
+  ]
+}

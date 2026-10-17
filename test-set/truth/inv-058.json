@@ -1,0 +1,54 @@
+{
+  "supplier_name": "Tidewater Office Solutions LLP",
+  "invoice_number": "INV04793",
+  "invoice_date": "2026-06-13",
+  "due_date": null,
+  "currency": "GBP",
+  "subtotal": "8739.55",
+  "tax": "436.98",
+  "total": "9176.53",
+  "line_items": [
+    {
+      "description": "Courier, same day",
+      "quantity": "20",
+      "unit_price": "102.45",
+      "amount": "2151.45"
+    },
+    {
+      "description": "Pallet delivery",
+      "quantity": "12",
+      "unit_price": "39.00",
+      "amount": "468.00"
+    },
+    {
+      "description": "Courier, same day (replacement)",
+      "quantity": "25",
+      "unit_price": "204.25",
+      "amount": "5106.25"
+    },
+    {
+      "description": "Customs handling fee",
+      "quantity": "2",
+      "unit_price": "205.80",
+      "amount": "411.60"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week)",
+      "quantity": "2",
+      "unit_price": "200.00",
+      "amount": "400.00"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week) (additional)",
+      "quantity": "1",
+      "unit_price": "186.00",
+      "amount": "186.00"
+    },
+    {
+      "description": "Delivery",
+      "quantity": null,
+      "unit_price": null,
+      "amount": "16.25"
+    }
+  ]
+}

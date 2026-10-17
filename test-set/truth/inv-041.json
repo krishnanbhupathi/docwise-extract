@@ -1,0 +1,36 @@
+{
+  "supplier_name": "Kestrel Logistics LLC",
+  "invoice_number": "INV-4127",
+  "invoice_date": "2026-04-11",
+  "due_date": null,
+  "currency": "USD",
+  "subtotal": "45130.60",
+  "tax": "2707.84",
+  "total": "47838.44",
+  "line_items": [
+    {
+      "description": "Laptop docking station",
+      "quantity": "2",
+      "unit_price": "1078.80",
+      "amount": "2157.60"
+    },
+    {
+      "description": "Label printer",
+      "quantity": "1",
+      "unit_price": "1075.00",
+      "amount": "1075.00"
+    },
+    {
+      "description": "Data migration",
+      "quantity": "4",
+      "unit_price": "85.00",
+      "amount": "340.00"
+    },
+    {
+      "description": "Wireless keyboard and mouse set",
+      "quantity": "40",
+      "unit_price": "1038.95",
+      "amount": "41558.00"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "supplier_name": "Tidewater Consulting LLC",
+  "invoice_number": "2026-0496",
+  "invoice_date": "2026-09-09",
+  "due_date": "2026-10-24",
+  "currency": "USD",
+  "subtotal": "3518.75",
+  "tax": null,
+  "total": "3518.75",
+  "line_items": [
+    {
+      "description": "Customs handling fee",
+      "quantity": "25",
+      "unit_price": "140.75",
+      "amount": "3518.75"
+    }
+  ]
+}

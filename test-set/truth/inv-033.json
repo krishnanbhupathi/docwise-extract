@@ -1,0 +1,30 @@
+{
+  "supplier_name": "Bluestone Studio Ltd",
+  "invoice_number": "#001218",
+  "invoice_date": "2026-08-09",
+  "due_date": null,
+  "currency": "GBP",
+  "subtotal": "5262.65",
+  "tax": "263.13",
+  "total": "5525.78",
+  "line_items": [
+    {
+      "description": "Warehouse storage (per pallet per week)",
+      "quantity": "40",
+      "unit_price": "113.35",
+      "amount": "4534.00"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week) (additional)",
+      "quantity": "1",
+      "unit_price": "14.65",
+      "amount": "14.65"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week) (second batch)",
+      "quantity": "20",
+      "unit_price": "35.70",
+      "amount": "714.00"
+    }
+  ]
+}

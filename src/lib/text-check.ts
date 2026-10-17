@@ -159,9 +159,18 @@ export function dueDateMentioned(index: TextIndex): boolean {
   return false;
 }
 
-/** True if the text names a tax (so a null tax was probably missed). */
+/**
+ * True if the text shows a tax line, a tax name followed closely by a number
+ * (so a null tax was probably missed). Identifiers ("VAT Reg. No.", "Tax ID")
+ * and headings ("Tax invoice") don't count: untaxed invoices print those too.
+ */
 export function taxMentioned(index: TextIndex): boolean {
-  return /\b(tax|vat|gst|cgst|sgst|igst|hst|pst|mwst|tva|iva|ust|btw)\b/.test(index.flat);
+  for (const match of index.flat.matchAll(/\b(tax|vat|gst|cgst|sgst|igst|hst|pst|mwst|tva|iva|ust|btw)\b/g)) {
+    const after = index.flat.slice(match.index! + match[0].length, match.index! + match[0].length + 30);
+    if (/^[\s.:]*(reg|id\b|no\b|number|invoice|exempt|#)/.test(after)) continue;
+    if (/\d/.test(after)) return true;
+  }
+  return false;
 }
 
 /** True if a number is printed shortly after "subtotal" (so a null subtotal was probably missed). */

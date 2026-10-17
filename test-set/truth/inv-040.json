@@ -1,0 +1,24 @@
+{
+  "supplier_name": "Kestrel Consulting K.K.",
+  "invoice_number": "202605-253",
+  "invoice_date": "2026-01-30",
+  "due_date": "2026-02-13",
+  "currency": "JPY",
+  "subtotal": "23690",
+  "tax": "2369",
+  "total": "26059",
+  "line_items": [
+    {
+      "description": "QA testing",
+      "quantity": "0.5",
+      "unit_price": "9640",
+      "amount": "4820"
+    },
+    {
+      "description": "Delivery",
+      "quantity": null,
+      "unit_price": null,
+      "amount": "18870"
+    }
+  ]
+}

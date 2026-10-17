@@ -1,0 +1,48 @@
+{
+  "supplier_name": "Ridgeway Workshop Inc.",
+  "invoice_number": "2026-0596",
+  "invoice_date": "2026-09-25",
+  "due_date": "2026-10-25",
+  "currency": "USD",
+  "subtotal": "11573.60",
+  "tax": "954.82",
+  "total": "12528.42",
+  "line_items": [
+    {
+      "description": "Label printer",
+      "quantity": "10",
+      "unit_price": "452.00",
+      "amount": "4520.00"
+    },
+    {
+      "description": "QA testing",
+      "quantity": "10",
+      "unit_price": "101.05",
+      "amount": "1010.50"
+    },
+    {
+      "description": "UPS battery backup, 1500 VA",
+      "quantity": "1",
+      "unit_price": "557.10",
+      "amount": "557.10"
+    },
+    {
+      "description": "Laptop docking station",
+      "quantity": "2",
+      "unit_price": "194.00",
+      "amount": "388.00"
+    },
+    {
+      "description": "Network switch, 24-port",
+      "quantity": "1",
+      "unit_price": "918.00",
+      "amount": "918.00"
+    },
+    {
+      "description": "Wi-Fi access point",
+      "quantity": "4",
+      "unit_price": "1045.00",
+      "amount": "4180.00"
+    }
+  ]
+}

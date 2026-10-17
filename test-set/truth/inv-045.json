@@ -1,0 +1,48 @@
+{
+  "supplier_name": "Silverbirch Hardware GmbH",
+  "invoice_number": "R-369915",
+  "invoice_date": "2026-02-07",
+  "due_date": null,
+  "currency": "CHF",
+  "subtotal": "11535.60",
+  "tax": "934.38",
+  "total": "12469.98",
+  "line_items": [
+    {
+      "description": "Breakfast buffet (per person)",
+      "quantity": "61",
+      "unit_price": "23.00",
+      "amount": "1403.00"
+    },
+    {
+      "description": "Data migration",
+      "quantity": "7.5",
+      "unit_price": "180.00",
+      "amount": "1350.00"
+    },
+    {
+      "description": "Fresh fruit platter (serves 10)",
+      "quantity": "44",
+      "unit_price": "42.40",
+      "amount": "1865.60"
+    },
+    {
+      "description": "Fresh fruit platter (serves 10) (replacement)",
+      "quantity": "80",
+      "unit_price": "21.00",
+      "amount": "1680.00"
+    },
+    {
+      "description": "Working lunch (per person)",
+      "quantity": "49",
+      "unit_price": "53.00",
+      "amount": "2597.00"
+    },
+    {
+      "description": "Design review",
+      "quantity": "20",
+      "unit_price": "132.00",
+      "amount": "2640.00"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import type { InvoiceData, LineItem } from "@/lib/invoice";
 import { formatMicros, minorDigits, multiplyMicros, toMicros } from "@/lib/money";
+import type { RuleCode } from "@/lib/rules";
 import { seeded, type Random } from "./random";
 
 /**
@@ -11,6 +12,31 @@ import { seeded, type Random } from "./random";
  */
 
 export const TEMPLATES = ["classic", "modern", "minimal", "gst", "studio"] as const;
+
+/**
+ * What makes an invoice hard. Clean invoices are crisp PDFs with a text
+ * layer. The hard slice (46–60) adds what real inboxes contain: scans (an
+ * image-only PDF, tilted, blurred, low contrast), phone photos (JPEG, at an
+ * angle, on a desk, with shadow), long invoices over several pages,
+ * handwritten notes on a scanned printout, and invoices that don't add up.
+ */
+export const KINDS = ["clean", "scan", "photo", "multipage", "handwritten", "mismatch"] as const;
+export type InvoiceKind = (typeof KINDS)[number];
+
+// Every third invoice is held out (48, 51, 54, 57, 60), one of each hard kind.
+const HARD: Record<number, InvoiceKind> = {
+  46: "scan", 47: "scan", 48: "scan", 49: "photo", 50: "photo", 51: "photo", 52: "multipage", 53: "multipage",
+  54: "multipage", 55: "handwritten", 56: "mismatch", 57: "handwritten", 58: "mismatch", 59: "scan", 60: "mismatch",
+};
+
+export const invoiceKind = (n: number): InvoiceKind => HARD[n] ?? "clean";
+
+/** How each deliberately inconsistent invoice is wrong; its true values are what's printed. */
+const MISMATCH: Record<number, { error: "total" | "line" | "sum"; rule: RuleCode }> = {
+  56: { error: "total", rule: "total_mismatch" }, // two digits of the total transposed
+  58: { error: "line", rule: "line_amount_mismatch" }, // one line billed for one unit more than its quantity
+  60: { error: "sum", rule: "line_items_sum_mismatch" }, // the subtotal leaves out the last line
+};
 export type TemplateName = (typeof TEMPLATES)[number];
 
 type TaxLine = { label: string; rate: number };
@@ -220,6 +246,9 @@ export type PrintedLine = { description: string; quantity: string; unitPrice: st
 
 export type GeneratedInvoice = {
   id: string;
+  kind: InvoiceKind;
+  /** Rules the true values fail on purpose (the invoice itself is wrong); empty for every other invoice. */
+  expectedRuleFailures: RuleCode[];
   template: TemplateName;
   profile: string;
   paper: "A4" | "Letter";
@@ -236,6 +265,8 @@ export type GeneratedInvoice = {
     taxes: Array<{ label: string; amount: string }>;
     total: string;
     currencyNote: string | null;
+    /** Handwritten annotations (only on `handwritten` invoices); none of them changes a true value. */
+    notes: string[];
   };
 };
 
@@ -275,9 +306,11 @@ export function generateInvoice(n: number): GeneratedInvoice {
   const dueDate = dueMode === "date" ? new Date(invoiceDate.getTime() + termDays * 86_400_000) : null;
   const formatDate = r.pick(profile.dates);
 
-  // Line items from one or two categories, sometimes with a lump sum at the end.
-  const categories = r.sample(Object.keys(CATALOG), r.chance(0.6) ? 1 : 2).map((k) => CATALOG[k]);
-  const count = r.pick([1, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 10, 12, 15]);
+  // Line items from one or two categories (three for a long invoice), sometimes with a lump sum at the end.
+  const kind = invoiceKind(n);
+  const mismatch = MISMATCH[n] ?? null;
+  const categories = r.sample(Object.keys(CATALOG), kind === "multipage" ? 3 : r.chance(0.6) ? 1 : 2).map((k) => CATALOG[k]);
+  const count = kind === "multipage" ? r.int(30, 40) : mismatch ? r.int(4, 8) : r.pick([1, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 10, 12, 15]);
   const lines: LineItem[] = [];
   const used = new Set<string>();
   while (lines.length < count) {
@@ -298,13 +331,18 @@ export function generateInvoice(n: number): GeneratedInvoice {
     lines.push({ description, quantity: qty, unit_price: unit, amount });
   }
 
-  const subtotal = lines.reduce((sum, l) => sum + toMicros(l.amount)!, 0n);
+  if (mismatch?.error === "line") {
+    const line = lines[0];
+    line.amount = formatMicros(multiplyMicros(toMicros(line.quantity!)! + 1_000_000n, toMicros(line.unit_price!)!), digits);
+  }
+  const lineSum = lines.reduce((sum, l) => sum + toMicros(l.amount)!, 0n);
+  const subtotal = mismatch?.error === "sum" ? lineSum - toMicros(lines.at(-1)!.amount)! : lineSum;
   const taxLines = r.pick(profile.taxes).map((t) => {
     const amount = Math.round((Number(formatMicros(subtotal, digits)) * t.rate) * 10 ** digits) / 10 ** digits;
     return { label: t.label, amount: amount.toFixed(digits) };
   });
   const tax = taxLines.reduce((sum, t) => sum + toMicros(t.amount)!, 0n);
-  const total = subtotal + tax;
+  const total = mismatch?.error === "total" ? transposeDigits(subtotal + tax, digits) : subtotal + tax;
 
   // In the EU profile, the legal form and VAT prefix follow the supplier's country.
   const supplierCity = r.pick(profile.cities);
@@ -326,6 +364,8 @@ export function generateInvoice(n: number): GeneratedInvoice {
   const domain = supplierName.split(" ")[0].toLowerCase().replace(/[^a-z]/g, "") + ".example";
   return {
     id,
+    kind,
+    expectedRuleFailures: mismatch ? [mismatch.rule] : [],
     template,
     profile: profileKey,
     paper: profile.paper,
@@ -353,6 +393,30 @@ export function generateInvoice(n: number): GeneratedInvoice {
       taxes: taxLines.map((t) => ({ label: t.label, amount: profile.money(t.amount) })),
       total: profile.money(truth.total!),
       currencyNote: profile.currencyNote ?? null,
+      notes: kind === "handwritten" ? handwrittenNotes(seeded(`docwise-testset-v1/${id}/notes`), profile, invoiceDate) : [],
     },
   };
+}
+
+/** A typo a person makes copying a total: two adjacent digits of the whole part swapped (1,284.40 → 1,248.40). */
+function transposeDigits(micros: bigint, digits: number): bigint {
+  const [whole, fraction] = formatMicros(micros, digits).split(".");
+  for (let i = whole.length - 1; i > 0; i--) {
+    if (whole[i] !== whole[i - 1]) {
+      const swapped = whole.slice(0, i - 1) + whole[i] + whole[i - 1] + whole.slice(i + 1);
+      return toMicros(fraction ? `${swapped}.${fraction}` : swapped)!;
+    }
+  }
+  return micros + 10n * 1_000_000n;
+}
+
+/** Notes an accounts clerk scribbles on a printout. Several carry numbers, dates or amounts that are not the invoice's. */
+function handwrittenNotes(r: Random, profile: Profile, invoiceDate: Date): string[] {
+  const later = new Date(invoiceDate.getTime() + r.int(5, 20) * 86_400_000);
+  const initials = r.pick(["JM", "AK", "R.T.", "SB", "LP"]);
+  return [
+    r.pick([`Approved for payment – ${initials}`, `OK to pay ${initials}`, `checked ✓ ${initials}`]),
+    r.pick([`PO ${r.int(40000, 89999)}`, `GL ${r.int(5000, 6999)} / PO ${r.int(40000, 89999)}`, `cost centre ${r.int(100, 480)}`]),
+    r.pick([`paid ${pad(later.getUTCDate())}/${pad(later.getUTCMonth() + 1)} by transfer`, `query: credit of ${profile.money(String(r.int(2, 9) * 10))}?`, `chase delivery note, call ${r.int(100, 999)} ${r.int(1000, 9999)}`]),
+  ];
 }

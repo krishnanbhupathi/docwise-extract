@@ -1,0 +1,84 @@
+{
+  "supplier_name": "Oakhollow Workshop Pty Ltd",
+  "invoice_number": "INV-00590",
+  "invoice_date": "2026-09-30",
+  "due_date": "2026-10-30",
+  "currency": "AUD",
+  "subtotal": "51058.70",
+  "tax": "5105.87",
+  "total": "56164.57",
+  "line_items": [
+    {
+      "description": "Wi-Fi access point",
+      "quantity": "6",
+      "unit_price": "1570.00",
+      "amount": "9420.00"
+    },
+    {
+      "description": "Customs handling fee",
+      "quantity": "1",
+      "unit_price": "217.80",
+      "amount": "217.80"
+    },
+    {
+      "description": "USB-C cables, 2 m (pack of 5)",
+      "quantity": "2",
+      "unit_price": "1709.00",
+      "amount": "3418.00"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week)",
+      "quantity": "5",
+      "unit_price": "75.70",
+      "amount": "378.50"
+    },
+    {
+      "description": "Network switch, 24-port",
+      "quantity": "20",
+      "unit_price": "455.00",
+      "amount": "9100.00"
+    },
+    {
+      "description": "Courier, same day",
+      "quantity": "1",
+      "unit_price": "99.55",
+      "amount": "99.55"
+    },
+    {
+      "description": "USB-C cables, 2 m (pack of 5) (replacement)",
+      "quantity": "20",
+      "unit_price": "330.00",
+      "amount": "6600.00"
+    },
+    {
+      "description": "USB-C cables, 2 m (pack of 5) (extra)",
+      "quantity": "20",
+      "unit_price": "964.55",
+      "amount": "19291.00"
+    },
+    {
+      "description": "Warehouse storage (per pallet per week) (additional)",
+      "quantity": "20",
+      "unit_price": "39.00",
+      "amount": "780.00"
+    },
+    {
+      "description": "Pallet delivery",
+      "quantity": "6",
+      "unit_price": "236.00",
+      "amount": "1416.00"
+    },
+    {
+      "description": "Wireless keyboard and mouse set",
+      "quantity": "1",
+      "unit_price": "277.00",
+      "amount": "277.00"
+    },
+    {
+      "description": "Installation",
+      "quantity": null,
+      "unit_price": null,
+      "amount": "60.85"
+    }
+  ]
+}
