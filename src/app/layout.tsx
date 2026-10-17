@@ -25,9 +25,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </svg>
               Docwise
             </Link>
-            <nav className="text-sm text-muted">
+            <nav className="flex gap-4 text-sm text-muted">
               <Link href="/" className="hover:text-ink">
                 Upload
+              </Link>
+              <Link href="/review" className="hover:text-ink">
+                Review
               </Link>
             </nav>
             <a href="https://github.com/krishnanbhupathi/docwise-extract" className="ml-auto text-sm text-muted hover:text-ink">

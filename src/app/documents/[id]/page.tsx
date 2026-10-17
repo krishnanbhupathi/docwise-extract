@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AutoRefresh } from "@/components/auto-refresh";
+import { RetryButton } from "@/components/retry-button";
+import { ReviewForm, type FieldFlags } from "@/components/review-form";
 import { StatusBadge } from "@/components/status";
 import { db } from "@/db";
-import { FIELD_LABELS, HEADER_FIELDS, type FieldName, type InvoiceData } from "@/lib/invoice";
+import { REASON_LABELS, type ConfidenceReason } from "@/lib/confidence";
+import { FIELD_LABELS, HEADER_FIELDS, type FieldName } from "@/lib/invoice";
 import { costUsd } from "@/lib/pricing";
 import { checkInvoice } from "@/lib/rules";
-import { getDocument, type DocumentView } from "@/server/documents";
+import { MAX_RUNS, canRetry, currentInvoice, extractedInvoice, getDocument, type DocumentView } from "@/server/documents";
 import { getStorage } from "@/server/storage";
 import { readWorkspace } from "@/server/workspace";
 
@@ -17,15 +20,20 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function DocumentPage({ params }: Props) {
   const { id } = await params;
-  const view = await getDocument(db, id, await readWorkspace());
+  const workspaceId = await readWorkspace();
+  const view = await getDocument(db, id, workspaceId);
   if (!view) notFound();
   const { doc } = view;
+  // Demo documents are visible to everyone but only reviewed by the browser that owns them.
+  const own = workspaceId !== null && doc.workspaceId === workspaceId;
   const fileUrl = await getStorage().createDownloadUrl(doc.fileKey);
   const working = doc.status === "queued" || doc.status === "extracting" || doc.status === "uploading";
+  const retryable = own && canRetry(doc);
+  const stuck = working && retryable;
 
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-2">
-      {working && <AutoRefresh />}
+      {working && !stuck && <AutoRefresh />}
       <section aria-label="Original document" className="lg:sticky lg:top-6 lg:self-start">
         <div className="overflow-hidden rounded-xl border border-line bg-panel">
           {doc.mediaType === "application/pdf" ? (
@@ -54,46 +62,102 @@ export default async function DocumentPage({ params }: Props) {
           </p>
         </div>
 
-        {working && <p className="rounded-lg border border-line bg-panel px-4 py-3 text-sm">Reading the invoice. This usually takes 10 to 30 seconds.</p>}
+        {working && !stuck && <p className="rounded-lg border border-line bg-panel px-4 py-3 text-sm">Reading the invoice. This usually takes 10 to 30 seconds.</p>}
+        {stuck && (
+          <div className="flex flex-col gap-3 rounded-lg border border-line bg-panel px-4 py-3 text-sm">
+            <p>This is taking much longer than it should; the reading was probably interrupted.</p>
+            <RetryButton documentId={doc.id} />
+          </div>
+        )}
         {doc.status === "failed" && (
-          <p role="alert" className="rounded-lg border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">
-            {doc.error ?? "This invoice couldn't be read."}
+          <div role="alert" className="flex flex-col gap-3 rounded-lg border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">
+            <p>
+              {doc.error ?? "This invoice couldn't be read."}
+              {doc.runs >= MAX_RUNS && ` It was tried ${doc.runs} times.`}
+            </p>
+            {retryable && <RetryButton documentId={doc.id} />}
+          </div>
+        )}
+        {doc.status === "approved" && <Approved view={view} />}
+        {doc.status === "needs_review" && (
+          <p className="rounded-lg border border-flag/30 bg-flag-bg px-4 py-3 text-sm text-flag">
+            {own
+              ? "Some values need a person to check them. Compare the flagged fields with the original, correct anything that's wrong and approve."
+              : "Some values need a person to check them."}
           </p>
         )}
 
-        {view.fields.length > 0 && <Extracted view={view} />}
+        {view.fields.length > 0 &&
+          (doc.status === "needs_review" && own ? (
+            <ReviewForm documentId={doc.id} initial={currentInvoice(view.fields, view.lineItems)} extracted={extractedInvoice(view.fields, view.lineItems)} flags={fieldFlags(view)} />
+          ) : (
+            <Extracted view={view} />
+          ))}
+        {doc.hasText === false && view.fields.length > 0 && (
+          <p className="text-xs text-muted">This document has no text layer (a scan or a photo), so values were checked by the rules and the model&apos;s own doubts only.</p>
+        )}
         {view.extractions.length > 0 && <ExtractionLog view={view} />}
       </section>
     </main>
   );
 }
 
+/** The extraction's own flags per field (rule failures excluded: those are recomputed from the current values). */
+function fieldFlags(view: DocumentView): FieldFlags {
+  const flags: FieldFlags = {};
+  for (const field of view.fields) {
+    const reasons = (field.confidenceReasons as ConfidenceReason[]).filter((r) => !r.startsWith("rule:"));
+    if (reasons.length) flags[field.name as FieldName] = { reasons, note: field.modelUncertain };
+  }
+  return flags;
+}
+
+function Approved({ view }: { view: DocumentView }) {
+  const corrections = view.fields.filter((f) => f.correctedAt).length;
+  return (
+    <div className="flex flex-col gap-1 rounded-lg bg-ok-bg px-4 py-3 text-sm text-ok">
+      <p className="font-medium">
+        {view.doc.approval === "auto"
+          ? "Approved automatically."
+          : `Approved by a reviewer${corrections ? ` with ${corrections} correction${corrections === 1 ? "" : "s"}` : ""}.`}
+      </p>
+      {view.doc.approval === "auto" && (
+        <p>
+          Every rule check passed and the model reported nothing unclear
+          {view.doc.hasText ? ", and every value was found in the document's own text." : "."}
+        </p>
+      )}
+      <a href="/export.csv" className="mt-1 self-start font-medium underline underline-offset-4">
+        Download approved invoices (CSV)
+      </a>
+    </div>
+  );
+}
+
+/** Read-only view: the current values (corrections applied), with what was flagged and what a reviewer changed. */
 function Extracted({ view }: { view: DocumentView }) {
-  const value = (name: FieldName) => view.fields.find((f) => f.name === name)?.value ?? null;
-  const data: InvoiceData = {
-    ...(Object.fromEntries(HEADER_FIELDS.map((name) => [name, value(name)])) as Record<(typeof HEADER_FIELDS)[number], string | null>),
-    line_items: view.lineItems.map((l) => ({ description: l.description, quantity: l.quantity, unit_price: l.unitPrice, amount: l.amount })),
-  };
-  // Messages are recomputed from the stored values; the stored rule codes say which fields they flag.
+  const data = currentInvoice(view.fields, view.lineItems);
+  const extracted = extractedInvoice(view.fields, view.lineItems);
   const { failures } = checkInvoice(data);
-  const uncertain = view.fields.filter((f) => f.modelUncertain);
+  const field = (name: FieldName) => view.fields.find((f) => f.name === name);
+  const lowReasons = (name: FieldName) => {
+    const row = field(name);
+    if (row?.confidence !== "low") return null;
+    const reasons = (row.confidenceReasons as ConfidenceReason[]).map((r) => (r === "model_uncertain" && row.modelUncertain ? `${REASON_LABELS[r]}: ${row.modelUncertain}` : REASON_LABELS[r]));
+    return `flagged at extraction: ${reasons.join(" · ")}`;
+  };
 
   return (
     <>
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Checks</h2>
-        {failures.length === 0 && uncertain.length === 0 ? (
-          <p className="rounded-lg bg-ok-bg px-4 py-3 text-sm text-ok">All rule checks passed, and the model reported nothing unclear.</p>
+        {failures.length === 0 ? (
+          <p className="rounded-lg bg-ok-bg px-4 py-3 text-sm text-ok">All rule checks pass.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {failures.map((f, i) => (
               <li key={i} className="rounded-lg bg-flag-bg px-4 py-2.5 text-sm text-flag">
                 <span className="font-semibold">{f.fields.map((name) => FIELD_LABELS[name]).join(", ")}:</span> {f.message}
-              </li>
-            ))}
-            {uncertain.map((f) => (
-              <li key={f.id} className="rounded-lg bg-flag-bg px-4 py-2.5 text-sm text-flag">
-                <span className="font-semibold">{FIELD_LABELS[f.name as FieldName]}:</span> the model wasn&apos;t sure ({f.modelUncertain})
               </li>
             ))}
           </ul>
@@ -105,15 +169,22 @@ function Extracted({ view }: { view: DocumentView }) {
           <caption className="sr-only">Extracted fields</caption>
           <tbody className="divide-y divide-line">
             {HEADER_FIELDS.map((name) => {
-              const field = view.fields.find((f) => f.name === name);
-              const flagged = Boolean(field?.ruleFailures.length || field?.modelUncertain);
+              const row = field(name);
+              const reasons = lowReasons(name);
               return (
-                <tr key={name} className={flagged ? "bg-flag-bg/60" : undefined}>
-                  <th scope="row" className="w-40 px-4 py-2.5 text-left font-medium text-muted">
+                <tr key={name} className={reasons ? "bg-flag-bg/60" : undefined}>
+                  <th scope="row" className="w-40 px-4 py-2.5 text-left align-top font-medium text-muted">
                     {FIELD_LABELS[name]}
                   </th>
-                  <td className="px-4 py-2.5 font-mono break-all">{field?.value ?? <span className="font-sans text-muted italic">not found</span>}</td>
-                  <td className="w-8 pr-3 text-right">{flagged && <span title="Needs checking" aria-label="Needs checking" className="text-flag">⚑</span>}</td>
+                  <td className="px-4 py-2.5">
+                    <span className="font-mono break-all">{data[name] ?? <span className="font-sans text-muted italic">not found</span>}</span>
+                    {row?.correctedAt && (
+                      <span className="block text-xs text-muted">
+                        corrected · extracted: <span className="font-mono">{extracted[name] ?? "empty"}</span>
+                      </span>
+                    )}
+                    {reasons && <span className="block text-xs text-flag">{reasons}</span>}
+                  </td>
                 </tr>
               );
             })}
@@ -122,7 +193,10 @@ function Extracted({ view }: { view: DocumentView }) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Line items ({view.lineItems.length})</h2>
+        <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">
+          Line items ({data.line_items.length}){field("line_items")?.correctedAt && <span className="ml-2 font-normal normal-case">corrected by the reviewer</span>}
+        </h2>
+        {lowReasons("line_items") && <p className="text-xs text-flag">{lowReasons("line_items")}</p>}
         <div className="overflow-x-auto rounded-xl border border-line bg-panel">
           <table className="w-full min-w-[32rem] text-sm">
             <thead className="border-b border-line text-left text-muted">
@@ -135,12 +209,12 @@ function Extracted({ view }: { view: DocumentView }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
-              {view.lineItems.map((item) => (
-                <tr key={item.id}>
-                  <td className="px-3 py-2 text-muted">{item.position}</td>
+              {data.line_items.map((item, i) => (
+                <tr key={i}>
+                  <td className="px-3 py-2 text-muted">{i + 1}</td>
                   <td className="px-3 py-2">{item.description}</td>
                   <td className="px-3 py-2 text-right font-mono">{item.quantity ?? "–"}</td>
-                  <td className="px-3 py-2 text-right font-mono">{item.unitPrice ?? "–"}</td>
+                  <td className="px-3 py-2 text-right font-mono">{item.unit_price ?? "–"}</td>
                   <td className="px-3 py-2 text-right font-mono">{item.amount}</td>
                 </tr>
               ))}
@@ -163,7 +237,7 @@ function ExtractionLog({ view }: { view: DocumentView }) {
         {view.extractions.map((e) => (
           <li key={e.id} className="font-mono text-xs">
             #{e.attempt} {e.model} · prompt {e.promptVersion} · effort {e.effort} · {e.tokensIn} in / {e.tokensOut} out · {(e.ms / 1000).toFixed(1)} s ·{" "}
-            {e.accepted ? "accepted" : `rejected: ${e.errors.join("; ")}`}
+            {e.accepted ? "accepted" : e.rawJson === null ? "the API call failed" : `rejected: ${e.errors.join("; ")}`}
             {e.fallbackUsed && " · answered by fallback model"}
           </li>
         ))}
