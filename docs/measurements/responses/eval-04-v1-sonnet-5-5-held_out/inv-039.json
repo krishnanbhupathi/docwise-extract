@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Northwind Lane Supplies LLP\",\"invoice_number\":\"GST-55803\",\"invoice_date\":\"2026-03-26\",\"due_date\":\"2026-04-25\",\"currency\":\"INR\",\"subtotal\":\"1059036.50\",\"tax\":\"190626.57\",\"total\":\"1249663.07\",\"line_items\":[{\"description\":\"User research interviews\",\"quantity\":\"10\",\"unit_price\":\"12556.00\",\"amount\":\"125560.00\"},{\"description\":\"Strategy workshop\",\"quantity\":\"2\",\"unit_price\":\"14429.00\",\"amount\":\"28858.00\"},{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"57\",\"unit_price\":\"1763.00\",\"amount\":\"100491.00\"},{\"description\":\"Project management\",\"quantity\":\"2.5\",\"unit_price\":\"15393.00\",\"amount\":\"38482.50\"},{\"description\":\"Working lunch (per person)\",\"quantity\":\"78\",\"unit_price\":\"1573.00\",\"amount\":\"122694.00\"},{\"description\":\"Staff training session\",\"quantity\":\"1.5\",\"unit_price\":\"10877.00\",\"amount\":\"16315.50\"},{\"description\":\"QA testing\",\"quantity\":\"0.5\",\"unit_price\":\"17471.00\",\"amount\":\"8735.50\"},{\"description\":\"Project management (additional)\",\"quantity\":\"0.5\",\"unit_price\":\"10780.00\",\"amount\":\"5390.00\"},{\"description\":\"Afternoon pastries (per person)\",\"quantity\":\"73\",\"unit_price\":\"676.00\",\"amount\":\"49348.00\"},{\"description\":\"Fresh fruit platter (serves 10)\",\"quantity\":\"66\",\"unit_price\":\"4762.00\",\"amount\":\"314292.00\"},{\"description\":\"Coffee and tea service (per person) (additional)\",\"quantity\":\"75\",\"unit_price\":\"3213.00\",\"amount\":\"240975.00\"},{\"description\":\"Setup fee\",\"quantity\":null,\"unit_price\":null,\"amount\":\"7895.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4212,
+    "outputTokens": 629,
+    "fallbackUsed": false,
+    "ms": 4182
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Kestrel Logistics Inc.\",\"invoice_number\":\"2026-0750\",\"invoice_date\":\"2026-01-17\",\"due_date\":null,\"currency\":\"USD\",\"subtotal\":\"550.00\",\"tax\":\"45.38\",\"total\":\"595.38\",\"line_items\":[{\"description\":\"Password manager seat (annual)\",\"quantity\":\"25\",\"unit_price\":\"22.00\",\"amount\":\"550.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3679,
+    "outputTokens": 148,
+    "fallbackUsed": false,
+    "ms": 2905
+  }
+]

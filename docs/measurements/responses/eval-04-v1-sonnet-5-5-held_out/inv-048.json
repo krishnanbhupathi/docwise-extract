@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Bluestone Hardware Ltd\",\"invoice_number\":\"#008658\",\"invoice_date\":\"2026-09-15\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"67141.15\",\"tax\":null,\"total\":\"67141.15\",\"line_items\":[{\"description\":\"Wi-Fi access point\",\"quantity\":\"25\",\"unit_price\":\"235.50\",\"amount\":\"5887.50\"},{\"description\":\"USB-C cables, 2 m (pack of 5)\",\"quantity\":\"2\",\"unit_price\":\"633.90\",\"amount\":\"1267.80\"},{\"description\":\"Laptop docking station\",\"quantity\":\"6\",\"unit_price\":\"93.00\",\"amount\":\"558.00\"},{\"description\":\"Label printer\",\"quantity\":\"20\",\"unit_price\":\"935.20\",\"amount\":\"18704.00\"},{\"description\":\"UPS battery backup, 1500 VA\",\"quantity\":\"6\",\"unit_price\":\"893.75\",\"amount\":\"5362.50\"},{\"description\":\"Network switch, 24-port\",\"quantity\":\"3\",\"unit_price\":\"56.00\",\"amount\":\"168.00\"},{\"description\":\"Laptop docking station (additional)\",\"quantity\":\"5\",\"unit_price\":\"681.55\",\"amount\":\"3407.75\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"2\",\"unit_price\":\"658.80\",\"amount\":\"1317.60\"},{\"description\":\"Laptop docking station (extra)\",\"quantity\":\"40\",\"unit_price\":\"678.00\",\"amount\":\"27120.00\"},{\"description\":\"Network switch, 24-port (additional)\",\"quantity\":\"3\",\"unit_price\":\"1116.00\",\"amount\":\"3348.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3490,
+    "outputTokens": 543,
+    "fallbackUsed": false,
+    "ms": 3659
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Ashgrove Supplies Ltd\",\"invoice_number\":\"#005110\",\"invoice_date\":\"2026-05-25\",\"due_date\":\"2026-06-24\",\"currency\":\"GBP\",\"subtotal\":\"5078.65\",\"tax\":\"253.93\",\"total\":\"5332.58\",\"line_items\":[{\"description\":\"Video conferencing seat (monthly)\",\"quantity\":\"12\",\"unit_price\":\"63.85\",\"amount\":\"766.20\"},{\"description\":\"Cloud storage, 1 TB (monthly)\",\"quantity\":\"2\",\"unit_price\":\"106.40\",\"amount\":\"212.80\"},{\"description\":\"Cloud storage, 1 TB (monthly) (additional)\",\"quantity\":\"1\",\"unit_price\":\"50.85\",\"amount\":\"50.85\"},{\"description\":\"Cloud storage, 1 TB (monthly) (second batch)\",\"quantity\":\"20\",\"unit_price\":\"82.85\",\"amount\":\"1657.00\"},{\"description\":\"Cloud storage, 1 TB (monthly) (extra)\",\"quantity\":\"25\",\"unit_price\":\"93.00\",\"amount\":\"2325.00\"},{\"description\":\"Password manager seat (annual)\",\"quantity\":\"2\",\"unit_price\":\"20.90\",\"amount\":\"41.80\"},{\"description\":\"Delivery\",\"quantity\":null,\"unit_price\":null,\"amount\":\"25.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3901,
+    "outputTokens": 445,
+    "fallbackUsed": false,
+    "ms": 3929
+  }
+]

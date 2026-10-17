@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Ridgeway Hardware Co., Ltd.\",\"invoice_number\":\"202608-406\",\"invoice_date\":\"2026-05-14\",\"due_date\":\"2026-05-28\",\"currency\":\"JPY\",\"subtotal\":\"252950\",\"tax\":\"25295\",\"total\":\"278245\",\"line_items\":[{\"description\":\"Team plan seat (monthly)\",\"quantity\":\"20\",\"unit_price\":\"10680\",\"amount\":\"213600\"},{\"description\":\"Design tool licence (annual)\",\"quantity\":\"1\",\"unit_price\":\"26920\",\"amount\":\"26920\"},{\"description\":\"Delivery\",\"quantity\":null,\"unit_price\":null,\"amount\":\"12430\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3766,
+    "outputTokens": 227,
+    "fallbackUsed": false,
+    "ms": 2207
+  }
+]

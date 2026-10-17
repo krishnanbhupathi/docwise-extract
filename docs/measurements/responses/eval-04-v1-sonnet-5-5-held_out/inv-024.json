@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Harbour & Pine Catering LLP\",\"invoice_number\":\"TI/26-27/0905\",\"invoice_date\":\"2026-05-26\",\"due_date\":\"2026-06-25\",\"currency\":\"INR\",\"subtotal\":\"5731743.00\",\"tax\":\"687809.16\",\"total\":\"6419552.16\",\"line_items\":[{\"description\":\"Laptop docking station\",\"quantity\":\"2\",\"unit_price\":\"79686.00\",\"amount\":\"159372.00\"},{\"description\":\"Network switch, 24-port\",\"quantity\":\"20\",\"unit_price\":\"6332.00\",\"amount\":\"126640.00\"},{\"description\":\"Label printer\",\"quantity\":\"10\",\"unit_price\":\"5779.00\",\"amount\":\"57790.00\"},{\"description\":\"Network switch, 24-port (replacement)\",\"quantity\":\"20\",\"unit_price\":\"86975.00\",\"amount\":\"1739500.00\"},{\"description\":\"UPS battery backup, 1500 VA\",\"quantity\":\"1\",\"unit_price\":\"52991.00\",\"amount\":\"52991.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5)\",\"quantity\":\"25\",\"unit_price\":\"77220.00\",\"amount\":\"1930500.00\"},{\"description\":\"27-inch 4K monitor\",\"quantity\":\"4\",\"unit_price\":\"59488.00\",\"amount\":\"237952.00\"},{\"description\":\"Wireless keyboard and mouse set\",\"quantity\":\"10\",\"unit_price\":\"12326.00\",\"amount\":\"123260.00\"},{\"description\":\"Wi-Fi access point\",\"quantity\":\"3\",\"unit_price\":\"74316.00\",\"amount\":\"222948.00\"},{\"description\":\"27-inch 4K monitor (additional)\",\"quantity\":\"10\",\"unit_price\":\"84469.00\",\"amount\":\"844690.00\"},{\"description\":\"Label printer (additional)\",\"quantity\":\"1\",\"unit_price\":\"46107.00\",\"amount\":\"46107.00\"},{\"description\":\"Network switch, 24-port (extra)\",\"quantity\":\"2\",\"unit_price\":\"10880.00\",\"amount\":\"21760.00\"},{\"description\":\"Wireless keyboard and mouse set (replacement)\",\"quantity\":\"1\",\"unit_price\":\"60441.00\",\"amount\":\"60441.00\"},{\"description\":\"USB-C cables, 2 m (pack of 5) (additional)\",\"quantity\":\"1\",\"unit_price\":\"104819.00\",\"amount\":\"104819.00\"},{\"description\":\"Laptop docking station (second batch)\",\"quantity\":\"1\",\"unit_price\":\"2973.00\",\"amount\":\"2973.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4412,
+    "outputTokens": 818,
+    "fallbackUsed": false,
+    "ms": 4857
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Lanternfish Catering B.V.\",\"invoice_number\":\"2026/230\",\"invoice_date\":\"2026-02-08\",\"due_date\":\"2026-03-10\",\"currency\":\"EUR\",\"subtotal\":\"573.60\",\"tax\":\"120.46\",\"total\":\"694.06\",\"line_items\":[{\"description\":\"Copywriting\",\"quantity\":\"3\",\"unit_price\":\"106.00\",\"amount\":\"318.00\"},{\"description\":\"Data migration\",\"quantity\":\"1\",\"unit_price\":\"191.60\",\"amount\":\"191.60\"},{\"description\":\"Strategy workshop\",\"quantity\":\"0.5\",\"unit_price\":\"128.00\",\"amount\":\"64.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3771,
+    "outputTokens": 225,
+    "fallbackUsed": false,
+    "ms": 3354
+  }
+]

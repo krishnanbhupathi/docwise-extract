@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Meridian Row Logistics Pvt. Ltd.\",\"invoice_number\":\"INV/26-27/0356\",\"invoice_date\":\"2026-01-27\",\"due_date\":null,\"currency\":\"INR\",\"subtotal\":\"717843.00\",\"tax\":\"129211.74\",\"total\":\"847054.74\",\"line_items\":[{\"description\":\"Copywriting\",\"quantity\":\"37.5\",\"unit_price\":\"13490.00\",\"amount\":\"505875.00\"},{\"description\":\"Design review\",\"quantity\":\"1.5\",\"unit_price\":\"17688.00\",\"amount\":\"26532.00\"},{\"description\":\"Staff training session\",\"quantity\":\"16\",\"unit_price\":\"11211.00\",\"amount\":\"179376.00\"},{\"description\":\"Rush handling\",\"quantity\":null,\"unit_price\":null,\"amount\":\"6060.00\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3911,
+    "outputTokens": 275,
+    "fallbackUsed": false,
+    "ms": 2823
+  }
+]

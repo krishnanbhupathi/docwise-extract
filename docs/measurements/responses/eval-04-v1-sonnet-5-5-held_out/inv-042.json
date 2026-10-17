@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Fernhill Consulting B.V.\",\"invoice_number\":\"2026/416\",\"invoice_date\":\"2026-07-09\",\"due_date\":\"2026-08-08\",\"currency\":\"EUR\",\"subtotal\":\"2300.10\",\"tax\":\"460.02\",\"total\":\"2760.12\",\"line_items\":[{\"description\":\"Staff training session\",\"quantity\":\"6\",\"unit_price\":\"129.00\",\"amount\":\"774.00\"},{\"description\":\"Data migration\",\"quantity\":\"12\",\"unit_price\":\"109.65\",\"amount\":\"1315.80\"},{\"description\":\"Accessibility audit\",\"quantity\":\"3\",\"unit_price\":\"70.10\",\"amount\":\"210.30\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3774,
+    "outputTokens": 226,
+    "fallbackUsed": false,
+    "ms": 2559
+  }
+]

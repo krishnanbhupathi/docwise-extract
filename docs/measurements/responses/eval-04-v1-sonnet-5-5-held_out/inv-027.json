@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Oakhollow Consulting SARL\",\"invoice_number\":\"2026/795\",\"invoice_date\":\"2026-09-08\",\"due_date\":\"2026-10-23\",\"currency\":\"EUR\",\"subtotal\":\"13582.80\",\"tax\":\"2852.39\",\"total\":\"16435.19\",\"line_items\":[{\"description\":\"Copywriting\",\"quantity\":\"16\",\"unit_price\":\"190.00\",\"amount\":\"3040.00\"},{\"description\":\"Copywriting (additional)\",\"quantity\":\"20\",\"unit_price\":\"160.00\",\"amount\":\"3200.00\"},{\"description\":\"Data migration\",\"quantity\":\"6\",\"unit_price\":\"147.85\",\"amount\":\"887.10\"},{\"description\":\"Coffee and tea service (per person)\",\"quantity\":\"32\",\"unit_price\":\"34.65\",\"amount\":\"1108.80\"},{\"description\":\"Working lunch (per person)\",\"quantity\":\"60\",\"unit_price\":\"45.00\",\"amount\":\"2700.00\"},{\"description\":\"Staff training session\",\"quantity\":\"20\",\"unit_price\":\"87.60\",\"amount\":\"1752.00\"},{\"description\":\"Fresh fruit platter (serves 10)\",\"quantity\":\"19\",\"unit_price\":\"12.70\",\"amount\":\"241.30\"},{\"description\":\"Front-end development\",\"quantity\":\"8\",\"unit_price\":\"81.70\",\"amount\":\"653.60\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 3916,
+    "outputTokens": 439,
+    "fallbackUsed": false,
+    "ms": 3665
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "text": "{\"supplier_name\":\"Brightfield Catering Ltd\",\"invoice_number\":\"SI08513\",\"invoice_date\":\"2026-07-04\",\"due_date\":null,\"currency\":\"GBP\",\"subtotal\":\"20890.00\",\"tax\":\"4178.00\",\"total\":\"25068.00\",\"line_items\":[{\"description\":\"User research interviews\",\"quantity\":\"37.5\",\"unit_price\":\"140.40\",\"amount\":\"5265.00\"},{\"description\":\"Project management\",\"quantity\":\"20\",\"unit_price\":\"172.00\",\"amount\":\"3440.00\"},{\"description\":\"Packaging materials\",\"quantity\":\"1\",\"unit_price\":\"142.95\",\"amount\":\"142.95\"},{\"description\":\"Packaging materials (second batch)\",\"quantity\":\"25\",\"unit_price\":\"77.70\",\"amount\":\"1942.50\"},{\"description\":\"Warehouse storage (per pallet per week)\",\"quantity\":\"1\",\"unit_price\":\"142.30\",\"amount\":\"142.30\"},{\"description\":\"Warehouse storage (per pallet per week) (additional)\",\"quantity\":\"10\",\"unit_price\":\"10.15\",\"amount\":\"101.50\"},{\"description\":\"Packaging materials (extra)\",\"quantity\":\"20\",\"unit_price\":\"200.00\",\"amount\":\"4000.00\"},{\"description\":\"Warehouse storage (per pallet per week) (extra)\",\"quantity\":\"5\",\"unit_price\":\"156.00\",\"amount\":\"780.00\"},{\"description\":\"Customs handling fee\",\"quantity\":\"40\",\"unit_price\":\"38.25\",\"amount\":\"1530.00\"},{\"description\":\"Pallet delivery\",\"quantity\":\"1\",\"unit_price\":\"68.00\",\"amount\":\"68.00\"},{\"description\":\"Copywriting\",\"quantity\":\"6\",\"unit_price\":\"138.00\",\"amount\":\"828.00\"},{\"description\":\"Courier, same day\",\"quantity\":\"5\",\"unit_price\":\"78.45\",\"amount\":\"392.25\"},{\"description\":\"Packaging materials (additional)\",\"quantity\":\"3\",\"unit_price\":\"165.00\",\"amount\":\"495.00\"},{\"description\":\"Customs handling fee (additional)\",\"quantity\":\"4\",\"unit_price\":\"150.00\",\"amount\":\"600.00\"},{\"description\":\"Pallet delivery (extra)\",\"quantity\":\"6\",\"unit_price\":\"193.75\",\"amount\":\"1162.50\"}],\"uncertain\":[]}",
+    "model": "claude-sonnet-5-5",
+    "stopReason": "end_turn",
+    "inputTokens": 4044,
+    "outputTokens": 741,
+    "fallbackUsed": false,
+    "ms": 4727
+  }
+]
