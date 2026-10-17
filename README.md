@@ -6,6 +6,8 @@ The app is the demo; the evaluation is the proof. A generated, labelled test set
 
 > **Status: complete (Day 5 of 5).** Upload, extraction, validation, rule checks, per-field confidence, automatic approval, the review queue with corrections, CSV export, the 60-invoice test set, the eval with its [final held-out score](#final-score-held-out-split), the public demo with samples, the JSON API and the cost caps all work. See [PROGRESS.md](PROGRESS.md).
 
+**Walkthrough video (86 s, narrated):** https://videos.bhupathi.dev/case-studies/docwise.mp4
+
 ## Try it
 
 **https://docwise-extract.vercel.app**: no sign-up. Nine samples from the test set open straight away: a clean PDF, a German-format one, an Indian GST invoice, a scan, a phone photo, two pages, handwritten notes, and two that don't add up. They show the model's saved answers from [eval-02](docs/measurements/eval-02-v1-sonnet-5-5-tuning.md), so opening one makes no model call. A sample that waits for review can be copied into your browser and reviewed there, without changing it for anyone else. You can also upload your own invoice, or create an API key on [/developers](https://docwise-extract.vercel.app/developers).
