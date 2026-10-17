@@ -9,6 +9,7 @@ export function getModel(): CallModel {
     return fakeModel;
   }
   const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) throw new Error("ANTHROPIC_API_KEY is not set (or set DOCWISE_FAKE_MODEL=1 for local development)");
+  // Fail the call, not the setup: the document is then marked failed instead of staying queued.
+  if (!key) return async () => Promise.reject(new Error("ANTHROPIC_API_KEY is not set (or set DOCWISE_FAKE_MODEL=1 for local development)"));
   return anthropicModel(key);
 }
